@@ -564,24 +564,35 @@ tee /tmp/aws.yml << EOF
       inputs:
         username: "{{ aws_access_key }}"
         password: "{{ aws_secret_key }}"
-  - name: Ensure AWS EC2 dynamic inventory exists
+
+  - name: Ensure inventory exists
     ansible.controller.inventory:
       controller_host: "https://localhost"
       controller_username: admin
       controller_password: ansible123!
       name: "AWS Inventory example"
       organization: Default
-      kind: smart
-      inventory_source:
-        name: "AWS EC2 Instances Source"
-        source: ec2
-        credential: "AWS Credential"
-        source_regions: "[{{ aws_default_region }}]"
-        overwrite: true
-        overwrite_vars: true
-        update_on_launch: true
-        update_cache_timeout: 300
       state: present
+    register: aws_inventory_result
+  
+  - name: Ensure AWS EC2 inventory source exists
+    ansible.controller.inventory_source:
+      controller_host: "https://localhost"
+      controller_username: admin
+      controller_password: ansible123!
+      name: "AWS EC2 Instances Source"
+      inventory: "AWS Inventory example"
+      source: ec2
+      credential: "AWS Credential"
+      source_vars: |
+        regions: [{{ aws_default_region }}]
+      overwrite: true
+      overwrite_vars: true
+      update_on_launch: true
+      update_cache_timeout: 300
+      state: present
+    register: aws_inventory_source_result
+      
 EOF
 ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-automation-platform-containerized-setup-bundle-2.5-9-x86_64/collections/:/root/.ansible/collections/ansible_collections/ ansible-playbook -i /tmp/inventory /tmp/aws.yml
 
