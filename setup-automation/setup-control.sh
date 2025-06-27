@@ -587,7 +587,7 @@ tee /tmp/aws.yml << EOF
       source: ec2
       credential: "AWS Credential"
       source_vars:
-        regions: [{{ aws_default_region }}]
+        regions: ["{{ aws_default_region }}"]
       overwrite: true
       overwrite_vars: true
       update_on_launch: true
