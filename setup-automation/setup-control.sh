@@ -562,8 +562,8 @@ tee /tmp/aws.yml << EOF
       controller_password: ansible123!
       validate_certs: false
       inputs:
-        aws_access_key_id: "{{ aws_access_key }}"
-        aws_secret_access_key: "{{ aws_secret_key }}"
+        username: "{{ aws_access_key }}"
+        password: "{{ aws_secret_key }}"
   - name: Ensure AWS EC2 dynamic inventory exists
     ansible.controller.inventory:
       controller_host: "https://localhost"
