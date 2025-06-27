@@ -570,6 +570,7 @@ tee /tmp/aws.yml << EOF
       controller_host: "https://localhost"
       controller_username: admin
       controller_password: ansible123!
+      validate_certs: false
       name: "AWS Inventory example"
       organization: Default
       state: present
