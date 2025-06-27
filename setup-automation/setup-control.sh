@@ -552,7 +552,7 @@ tee /tmp/aws.yml << EOF
     aws_default_region: "{{ lookup('env', 'AWS_DEFAULT_REGION') | default('AWS_DEFAULT_REGION_NOT_FOUND', true) }}"
   tasks:
 
-  - name: (EXECUTION) add App machine credential
+  - name: Add AWS credential
     ansible.controller.credential:
       name: 'AWS Credential'
       organization: Default
@@ -581,6 +581,7 @@ tee /tmp/aws.yml << EOF
       controller_host: "https://localhost"
       controller_username: admin
       controller_password: ansible123!
+      validate_certs: false
       name: "AWS EC2 Instances Source"
       inventory: "AWS Inventory example"
       source: ec2
