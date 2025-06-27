@@ -585,7 +585,7 @@ tee /tmp/aws.yml << EOF
       inventory: "AWS Inventory example"
       source: ec2
       credential: "AWS Credential"
-      source_vars: |
+      source_vars:
         regions: [{{ aws_default_region }}]
       overwrite: true
       overwrite_vars: true
