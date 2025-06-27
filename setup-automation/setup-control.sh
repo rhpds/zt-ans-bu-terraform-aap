@@ -571,7 +571,7 @@ tee /tmp/aws.yml << EOF
       controller_password: ansible123!
       name: "AWS Inventory example"
       organization: Default
-      kind: ec2
+      kind: smart
       inventory_source:
         name: "AWS EC2 Instances Source"
         source: ec2
