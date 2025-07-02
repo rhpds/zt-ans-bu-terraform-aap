@@ -532,6 +532,69 @@ EOF
 
 # # # execute above playbook
 
-
-
 ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-automation-platform-containerized-setup-bundle-2.5-9-x86_64/collections/:/root/.ansible/collections/ansible_collections/ ansible-playbook -i /tmp/inventory /tmp/setup.yml
+
+# AWS EXAMPLE
+
+# # # creates a playbook to setup environment
+tee /tmp/aws.yml << EOF
+---
+### Automation Controller setup 
+###
+- name: Setup Controller 
+  hosts: localhost
+  connection: local
+  collections:
+    - ansible.controller
+  vars:
+    aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') | default('AWS_ACCESS_KEY_ID_NOT_FOUND', true) }}"
+    aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') | default('AWS_SECRET_ACCESS_KEY_NOT_FOUND', true) }}"
+    aws_default_region: "{{ lookup('env', 'AWS_DEFAULT_REGION') | default('AWS_DEFAULT_REGION_NOT_FOUND', true) }}"
+  tasks:
+
+  - name: Add AWS credential
+    ansible.controller.credential:
+      name: 'AWS Credential'
+      organization: Default
+      credential_type:  "Amazon Web Services"
+      controller_host: "https://localhost"
+      controller_username: admin
+      controller_password: ansible123!
+      validate_certs: false
+      inputs:
+        username: "{{ aws_access_key }}"
+        password: "{{ aws_secret_key }}"
+
+  - name: Ensure inventory exists
+    ansible.controller.inventory:
+      controller_host: "https://localhost"
+      controller_username: admin
+      controller_password: ansible123!
+      validate_certs: false
+      name: "AWS Inventory example"
+      organization: Default
+      state: present
+    register: aws_inventory_result
+  
+  - name: Ensure AWS EC2 inventory source exists
+    ansible.controller.inventory_source:
+      controller_host: "https://localhost"
+      controller_username: admin
+      controller_password: ansible123!
+      validate_certs: false
+      name: "AWS EC2 Instances Source"
+      inventory: "AWS Inventory example"
+      source: ec2
+      credential: "AWS Credential"
+      source_vars:
+        regions: ["{{ aws_default_region }}"]
+      overwrite: true
+      overwrite_vars: true
+      update_on_launch: true
+      update_cache_timeout: 300
+      state: present
+    register: aws_inventory_source_result
+      
+EOF
+ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-automation-platform-containerized-setup-bundle-2.5-9-x86_64/collections/:/root/.ansible/collections/ansible_collections/ ansible-playbook -i /tmp/inventory /tmp/aws.yml
+
