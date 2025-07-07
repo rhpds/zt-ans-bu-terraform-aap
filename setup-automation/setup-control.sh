@@ -3,598 +3,102 @@
 systemctl stop systemd-tmpfiles-setup.service
 systemctl disable systemd-tmpfiles-setup.service
 
-# Install collection(s)
-ansible-galaxy collection install ansible.eda
-ansible-galaxy collection install community.general
-ansible-galaxy collection install ansible.windows
-ansible-galaxy collection install microsoft.ad
+#!/bin/bash
 
-# # ## setup rhel user
-# touch /etc/sudoers.d/rhel_sudoers
-# echo "%rhel ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/rhel_sudoers
-# cp -a /root/.ssh/* /home/$USER/.ssh/.
-# chown -R rhel:rhel /home/$USER/.ssh
-
-# Create an inventory file for this environment
-tee /tmp/inventory << EOF
-[nodes]
-node01
-node02
-
-[storage]
-storage01
-
-[all]
-node01
-node02
-
-[all:vars]
-ansible_user = rhel
-ansible_password = ansible123!
-ansible_ssh_common_args='-o StrictHostKeyChecking=no'
-ansible_python_interpreter=/usr/bin/python3
-
+# Setup rhel user
+cp -a /root/.ssh/* /home/rhel/.ssh/.
+chown -R rhel:rhel /home/rhel/.ssh
+mkdir -p /home/rhel/lab_exercises/1.Terraform_Basics
+mkdir -p /home/rhel/lab_exercises/2.Terraform_Ansible
+mkdir -p /home/rhel/lab_exercises/3.Terraform_Provider
+mkdir -p /home/rhel/lab_exercises/4.Terraform_AAP_Provider
+mkdir -p /home/rhel/terraform-ee
+mkdir /tmp/terraform_lab/
+mkdir /tmp/terraform-ansible
+mkdir /tmp/terraform-aap-provider
+mkdir -p /home/rhel/.terraform.d/plugin-cache
+#
+#
+#chown rhel:rhel /home/rhel/.terraformrc
+chown -R rhel:rhel /home/rhel/lab_exercises/
+chown rhel:rhel /home/rhel/.terraform.d/plugin-cache
+chmod -R 777 /home/rhel/lab_exercises/
+#
+firewall-cmd --permanent --add-port=8043/tcp
+firewall-cmd --reload
+#
+yum install -y unzip
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip -qq awscliv2.zip
+sudo ./aws/install
+chown -R rhel:rhel /home/rhel/lab_exercises
+chmod -R 777 /home/rhel/lab_exercises
+#
+yum install -y dnf
+dnf config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+yum install terraform -y
+#
+#
+tee /home/rhel/lab_exercises/4.Terraform_AAP_Provider/main.tf << EOF
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.2.0"
+    }
+####### UNCOMMENT the lines BELOW #######
+#    aap = {
+#      source = "ansible/aap"
+#    }
+  }
+}
+#
+provider "aws" {
+  region = "us-east-1"
+}
+#
+resource "aws_instance" "tf-instance-aap-provider" {
+  ami           = "ami-0005e0cfe09cc9050"
+  instance_type = "t2.micro"
+  tags = {
+    Name = "tf-instance-aap-provider"
+  }
+}
+####### UNCOMMENT the lines BELOW #######
+#provider "aap" {
+#  host     = "https://controller"
+#  username = "admin"
+#  password = "ansible123!"
+#  insecure_skip_verify = true
+#}
+####### UNCOMMENT the lines BELOW #######
+#resource "aap_host" "tf-instance-aap-provider" {
+#  inventory_id = 2
+#  name = "aws_instance_tf"
+#  description = "An EC2 instance created by Terraform"
+#  variables = jsonencode(aws_instance.tf-instance-aap-provider)
+#}
+#
 EOF
-# sudo chown rhel:rhel /tmp/inventory
-
-
-# # # creates a playbook to setup environment
-tee /tmp/setup.yml << EOF
----
-### Automation Controller setup 
-###
-- name: Setup Controller 
-  hosts: localhost
-  connection: local
-  collections:
-    - ansible.controller
-  vars:
-    GUID: "{{ lookup('env', 'GUID') | default('GUID_NOT_FOUND', true) }}"
-    DOMAIN: "{{ lookup('env', 'DOMAIN') | default('DOMAIN_NOT_FOUND', true) }}"
-  tasks:
-
-  - name: (EXECUTION) add App machine credential
-    ansible.controller.credential:
-      name: 'Application Nodes'
-      organization: Default
-      credential_type: Machine
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-      inputs:
-        username: rhel
-        password: ansible123!
-
-  - name: (EXECUTION) add Windows machine credential
-    ansible.controller.credential:
-      name: 'Windows Nodes'
-      organization: Default
-      credential_type: Machine
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-      inputs:
-        username: Administrator
-        password: Ansible123!
-
-  - name: (EXECUTION) add Arista credential
-    ansible.controller.credential:
-      name: 'Arista Network'
-      organization: Default
-      credential_type: Machine
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-      inputs:
-        username: ansible
-        password: ansible
-
-  - name: Add Network EE
-    ansible.controller.execution_environment:
-      name: "Edge_Network_ee"
-      image: quay.io/acme_corp/network-ee
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-
-  - name: Add Windows EE
-    ansible.controller.execution_environment:
-      name: "Windows_ee"
-      image: quay.io/acme_corp/windows-ee
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-
-  - name: Add RHEL EE
-    ansible.controller.execution_environment:
-      name: "Rhel_ee"
-      image: quay.io/acme_corp/rhel_90_ee
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-
-  - name: Add Video platform inventory
-    ansible.controller.inventory:
-      name: "Video Platform Inventory"
-      description: "Nodes used for streaming"
-      organization: "Default"
-      state: present
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-
-  - name: Add Streaming Server hosts
-    ansible.controller.host:
-      name: "{{ item }}"
-      description: "Application Nodes"
-      inventory: "Video Platform Inventory"
-      state: present
-      enabled: true
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-    loop:
-      - node01
-      - node02
-      - node03
- 
-  - name: Add Streaming server group
-    ansible.controller.group:
-      name: "Streaming_Infrastucture"
-      description: "Streaming Nodes"
-      inventory: "Video Platform Inventory"
-      hosts:
-        - node01
-        - node02
-        - node03
-      variables:
-        ansible_user: rhel
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-
-  - name: Add Streaming server group
-    ansible.controller.group:
-      name: "Reporting"
-      description: "Report Servers"
-      inventory: "Video Platform Inventory"
-      hosts:
-        - node03
-      variables:
-        ansible_user: rhel
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-
-
-  #   # Network
- 
-  - name: Add Edge Network Devices
-    ansible.controller.inventory:
-      name: "Edge Network"
-      description: "Network for delivery"
-      organization: "Default"
-      state: present
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-
-  - name: Add CEOS1
-    ansible.controller.host:
-      name: "ceos01"
-      description: "Edge Leaf"
-      inventory: "Edge Network"
-      state: present
-      enabled: true
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-      variables:
-        ansible_host: node02
-        ansible_port: 2001
-
-  - name: Add CEOS2
-    ansible.controller.host:
-      name: "ceos02"
-      description: "Edge Leaf"
-      inventory: "Edge Network"
-      state: present
-      enabled: true
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-      variables:
-        ansible_host: node02
-        ansible_port: 2002
-
-  - name: Add CEOS3
-    ansible.controller.host:
-      name: "ceos03"
-      description: "Edge Leaf"
-      inventory: "Edge Network"
-      state: present
-      enabled: true
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-      variables:
-        ansible_host: node02
-        ansible_port: 2003
-
-  - name: Add EOS Network Group
-    ansible.controller.group:
-      name: "Delivery_Network"
-      description: "EOS Network"
-      inventory: "Edge Network"
-      hosts:
-        - ceos01
-        - ceos02
-        - ceos03
-      variables:
-        ansible_user: ansible
-        ansible_connection: ansible.netcommon.network_cli 
-        ansible_network_os: arista.eos.eos 
-        ansible_password: ansible 
-        ansible_become: yes 
-        ansible_become_method: enable
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-      
-  #   ## Extra Inventories 
-
-  # - name: Add Storage Infrastructure
-  #   ansible.controller.inventory:
-  #    name: "Cache Storage"
-  #    description: "Edge NAS Storage"
-  #    organization: "Default"
-  #    state: present
-  #    controller_host: "https://localhost"
-  #    controller_username: admin
-  #    controller_password: ansible123!
-  #    validate_certs: false
-
-  # - name: Add Storage Node
-  #   ansible.controller.host:
-  #    name: "Storage01"
-  #    description: "Edge NAS Storage"
-  #    inventory: "Cache Storage"
-  #    state: present
-  #    enabled: true
-  #    controller_host: "https://localhost"
-  #    controller_username: admin
-  #    controller_password: ansible123!
-  #    validate_certs: false
-
-  - name:  Add Windows Inventory
-    ansible.controller.inventory:
-     name: "Windows Directory Servers"
-     description: "AD Infrastructure"
-     organization: "Default"
-     state: present
-     controller_host: "https://localhost"
-     controller_username: admin
-     controller_password: ansible123!
-     validate_certs: false
-
-  - name: Add Windows Inventory Host
-    ansible.controller.host:
-     name: "windows"
-     description: "Directory Servers"
-     inventory: "Windows Directory Servers"
-     state: present
-     enabled: true
-     controller_host: "https://localhost"
-     controller_username: admin
-     controller_password: ansible123!
-     validate_certs: false
-     variables:
-       ansible_host: windows
-
-  - name: Create group with extra vars
-    ansible.controller.group:
-      name: "domain_controllers"
-      inventory: "Windows Directory Servers"
-      hosts:
-        - windows
-      state: present
-      variables:
-        ansible_connection: winrm
-        ansible_port: 5986
-        ansible_winrm_server_cert_validation: ignore
-        ansible_winrm_transport: credssp
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-        
-  - name: (EXECUTION) Add project
-    ansible.controller.project:
-      name: "Roadshow"
-      description: "Roadshow Content"
-      organization: "Default"
-      scm_type: git
-      scm_url: http://gitea:3000/student/aap25-roadshow-content.git       ##ttps://github.com/nmartins0611/aap25-roadshow-content.git
-      state: present
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-
-  #- name: (DECISIONS) Create an AAP Credential
-  #  ansible.eda.credential:
-  #    name: "AAP"
-  #    description: "To execute jobs from EDA"
-  #    inputs:
-  #      host: "https://control-{{ GUID }}.{{ DOMAIN }}/api/controller/"
-  #      username: "admin"
-  #      password: "ansible123!"
-  #    credential_type_name: "Red Hat Ansible Automation Platform"
-  #    organization_name: Default
-  #    controller_host: https://localhost
-  #    controller_username: admin
-  #    controller_password: ansible123!
-  #    validate_certs: false
-
-###############TEMPLATES###############
-
-  # - name: Add System Report
-  #   ansible.controller.job_template:
-  #     name: "System Report"
-  #     job_type: "run"
-  #     organization: "Default"
-  #     inventory: "Video Platform Inventory"
-  #     project: "Roadshow"
-  #     playbook: "playbooks/section01/server_re[ort].yml"
-  #     execution_environment: "RHEL EE"
-  #     credentials:
-  #       - "Application Nodes"
-  #     state: "present"
-  #     controller_host: "https://localhost"
-  #     controller_username: admin
-  #     controller_password: ansible123!
-  #     validate_certs: false
-
-  # - name: Add Windows Setup Template
-  #   ansible.controller.job_template:
-  #     name: "Windows Patching Report"
-  #     job_type: "run"
-  #     organization: "Default"
-  #     inventory: "Windows Directory Servers"
-  #     project: "Roadshow"
-  #     playbook: "playbooks/section01/windows_report.yml"
-  #     execution_environment: "Windows_ee"
-  #     credentials:
-  #       - "Windows Nodes"
-  #     state: "present"
-  #     controller_host: "https://localhost"
-  #     controller_username: admin
-  #     controller_password: ansible123!
-  #     validate_certs: false
-
-  - name: Add Rhel Report Template
-    ansible.controller.job_template:
-      name: "Application Server Report"
-      job_type: "run"
-      organization: "Default"
-      inventory: "Video Platform Inventory"
-      project: "Roadshow"
-      playbook: "playbooks/section01/rhel_report.yml"
-      execution_environment: "Rhel_ee"
-      credentials:
-        - "Application Nodes"
-      state: "present"
-      survey_enabled: true
-      survey_spec:
-           {
-             "name": "Report Details",
-             "description": "Report components needed",
-             "spec": [
-               {
-    	          "type": "multiplechoice",
-    	          "question_name": "What data are you looking for ?",
-              	"question_description": "Defined data",
-              	"variable": "report_type",
-                "choices": ["All","Storage Usage","User List","OS Versions"],
-                "required": true
-               }
-             ]
-           }
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-
-  - name: Add OSCAP Setup Template
-    ansible.controller.job_template:
-      name: "OpenSCAP Report"
-      job_type: "run"
-      organization: "Default"
-      inventory: "Video Platform Inventory"
-      project: "Roadshow"
-      playbook: "playbooks/section01/rhel_compliance_report.yml"
-      execution_environment: "Rhel_ee"
-      credentials:
-        - "Application Nodes"
-      state: "present"
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-
-  - name: Add Windows Update Report Template
-    ansible.controller.job_template:
-      name: "Windows Update Report"
-      job_type: "run"
-      organization: "Default"
-      inventory: "Windows Directory Servers"
-      project: "Roadshow"
-      playbook: "playbooks/section01/windows_update_report.yml"
-      execution_environment: "Windows_ee"
-      credentials:
-        - "Windows Nodes"
-      state: "present"
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-
-  - name: Add RHEL Backup
-    ansible.controller.job_template:
-      name: "Server Backup - XFS/RHEL"
-      job_type: "run"
-      organization: "Default"
-      inventory: "Video Platform Inventory"
-      project: "Roadshow"
-      playbook: "playbooks/section01/xfs_backup.yml"
-      execution_environment: "Rhel_ee"
-      credentials:
-        - "Application Nodes"
-      state: "present"
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-
-  - name: Add RHEL Backup Check
-    ansible.controller.job_template:
-      name: "Check RHEL Backup"
-      job_type: "run"
-      organization: "Default"
-      inventory: "Video Platform Inventory"
-      project: "Roadshow"
-      playbook: "playbooks/section01/check_backups.yml"
-      execution_environment: "Rhel_ee"
-      credentials:
-        - "Application Nodes"
-      state: "present"
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-
-
-  - name: Add Windows Backup 
-    ansible.controller.job_template:
-      name: "Server Backup - VSS/Windows"
-      job_type: "run"
-      organization: "Default"
-      inventory: "Windows Directory Servers"
-      project: "Roadshow"
-      playbook: "playbooks/section01/vss_windows.yml"
-      execution_environment: "Windows_ee"
-      credentials:
-        - "Windows Nodes"
-      state: "present"
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-
-  - name: Add Windows Backup Check
-    ansible.controller.job_template:
-      name: "Check Windows Backups"
-      job_type: "run"
-      organization: "Default"
-      inventory: "Windows Directory Servers"
-      project: "Roadshow"
-      playbook: "playbooks/section01/check_windowsvss.yml"
-      execution_environment: "Windows_ee"
-      credentials:
-        - "Windows Nodes"
-      state: "present"
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-
-EOF
-
-# # # chown files
-# sudo chown rhel:rhel /tmp/setup.yml
-# sudo chown rhel:rhel /tmp/inventory
-# sudo chown rhel:rhel /tmp/git-setup.yml
-
-# # # execute above playbook
-
-ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-automation-platform-containerized-setup-bundle-2.5-9-x86_64/collections/:/root/.ansible/collections/ansible_collections/ ansible-playbook -i /tmp/inventory /tmp/setup.yml
-
-# AWS EXAMPLE
-
-# # # creates a playbook to setup environment
-tee /tmp/aws.yml << EOF
----
-### Automation Controller setup 
-###
-- name: Setup Controller 
-  hosts: localhost
-  connection: local
-  collections:
-    - ansible.controller
-  vars:
-    aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') | default('AWS_ACCESS_KEY_ID_NOT_FOUND', true) }}"
-    aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') | default('AWS_SECRET_ACCESS_KEY_NOT_FOUND', true) }}"
-    aws_default_region: "{{ lookup('env', 'AWS_DEFAULT_REGION') | default('AWS_DEFAULT_REGION_NOT_FOUND', true) }}"
-  tasks:
-
-  - name: Add AWS credential
-    ansible.controller.credential:
-      name: 'AWS Credential'
-      organization: Default
-      credential_type:  "Amazon Web Services"
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-      inputs:
-        username: "{{ aws_access_key }}"
-        password: "{{ aws_secret_key }}"
-
-  - name: Ensure inventory exists
-    ansible.controller.inventory:
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-      name: "AWS Inventory example"
-      organization: Default
-      state: present
-    register: aws_inventory_result
-  
-  - name: Ensure AWS EC2 inventory source exists
-    ansible.controller.inventory_source:
-      controller_host: "https://localhost"
-      controller_username: admin
-      controller_password: ansible123!
-      validate_certs: false
-      name: "AWS EC2 Instances Source"
-      inventory: "AWS Inventory example"
-      source: ec2
-      credential: "AWS Credential"
-      source_vars:
-        regions: ["{{ aws_default_region }}"]
-      overwrite: true
-      overwrite_vars: true
-      update_on_launch: true
-      update_cache_timeout: 300
-      state: present
-    register: aws_inventory_source_result
-      
-EOF
-ANSIBLE_COLLECTIONS_PATH=/tmp/ansible-automation-platform-containerized-setup-bundle-2.5-9-x86_64/collections/:/root/.ansible/collections/ansible_collections/ ansible-playbook -i /tmp/inventory /tmp/aws.yml
-
+#
+chown rhel:rhel /home/rhel/lab_exercises/4.Terraform_AAP_Provider/main.tf
+#
+#
+#
+#Create the DEFAULT AWS VPC
+aws ec2 create-default-vpc --region us-east-1
+#
+#
+#Create the S3 bucket for the users of this AAP / Terraform lab
+# Variables
+BUCKET_PREFIX="aap-tf-bucket"  # Change this to your desired bucket prefix
+RANDOM_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')  # Generate a random UUID and convert to lowercase
+BUCKET_NAME="${BUCKET_PREFIX}-${RANDOM_ID}"
+AWS_REGION="us-east-1"  # Change this to your desired AWS region
+#
+#
+# Create the S3 STORAGE BUCKET NEEDED BY THE AAP 2.X CHALLENGE
+echo "Creating S3 bucket: $BUCKET_NAME in region $AWS_REGION"
+aws s3api create-bucket --bucket $BUCKET_NAME --region $AWS_REGION
+#
+#
