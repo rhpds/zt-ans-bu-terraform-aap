@@ -109,23 +109,15 @@ aws s3api create-bucket --bucket $BUCKET_NAME --region $AWS_REGION
 echo "search $_SANDBOX_ID.svc.cluster.local." >> /etc/resolv.conf
 echo "127.0.0.1 ansible-1 controller localhost" >> /etc/hosts
 #
-## wait for instruqt boot
-set -euxo pipefail
-while [ ! -f /opt/instruqt/bootstrap/host-bootstrap-completed ]
-do
-    echo "Waiting for Instruqt to finish booting the VM"
-    sleep 1
-done
-#
-## set user name
-USER=rhel
-CONTROLLER_FQDN=controller.${_SANDBOX_ID}.svc.cluster.local
 
-## setup rhel user
-touch /etc/sudoers.d/rhel_sudoers
-echo "%rhel ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/rhel_sudoers
-cp -a /root/.ssh/* /home/$USER/.ssh/.
-chown -R rhel:rhel /home/$USER/.ssh
+##### TEST
+
+
+# ## setup rhel user
+# touch /etc/sudoers.d/rhel_sudoers
+# echo "%rhel ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/rhel_sudoers
+# cp -a /root/.ssh/* /home/$USER/.ssh/.
+# chown -R rhel:rhel /home/$USER/.ssh
 
 ## ansible home
 mkdir /home/$USER/ansible
