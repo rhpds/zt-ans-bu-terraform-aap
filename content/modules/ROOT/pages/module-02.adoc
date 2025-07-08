@@ -1,4 +1,4 @@
----
+
 👋 Challenge introduction.
 ===
 ==== Estimated time to complete: _30 minutes_
