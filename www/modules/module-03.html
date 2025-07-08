@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Untitled :: Ansible Automation Roadshow - Scenario 01</title>
+    <title>Windows Patching Report with Ansible :: Ansible Automation Roadshow - Scenario 01</title>
     <link rel="canonical" href="https://redhat-scholars.github.io/course-template/modules/module-03.html">
     <link rel="prev" href="module-02.html">
     <meta name="generator" content="Antora 3.1.10">
@@ -118,14 +118,43 @@
 </div>
   <div class="content">
 <article class="doc">
+<h1 class="page">Windows Patching Report with Ansible</h1>
+<div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introduction">Introduction</a>
+<ul class="sectlevel2">
+<li><a href="#_lab_environment_setup">Lab Environment Setup</a></li>
+</ul>
+</li>
+<li><a href="#_lab_exercise">Lab Exercise</a>
+<ul class="sectlevel2">
+<li><a href="#_exercise_1_creating_a_windows_update_report">Exercise 1: Creating a Windows Update Report</a></li>
+<li><a href="#_exercise_2_verifying_scheduled_tasks">Exercise 2: Verifying Scheduled Tasks</a></li>
+</ul>
+</li>
+<li><a href="#_code_reference">Code Reference</a>
+<ul class="sectlevel2">
+<li><a href="#_windows_update_report_implementation">Windows Update Report Implementation</a></li>
+<li><a href="#_key_components_explained">Key Components Explained</a></li>
+</ul>
+</li>
+<li><a href="#_key_takeaways">Key Takeaways</a></li>
+</ul>
+</div>
+<div class="sect1">
+<h2 id="_introduction"><a class="anchor" href="#_introduction"></a>Introduction</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Another great report to generate is a patching report!
-Our Windows server is sure to need some patches but we dont have access to the system.
-So lets get Ansible to get the required patches and we can provide this back to our Windows team.</p>
+<p>Generating patch reports is a critical operational task for maintaining system security and compliance. When you don&#8217;t have direct access to Windows systems, Ansible becomes an invaluable tool for gathering patch information and delivering actionable reports to your Windows administration teams.</p>
 </div>
 <div class="paragraph">
-<p>Below are credentials for our Ansible Automation Platform that you should use:</p>
+<p>This lab demonstrates how to use Ansible to scan Windows systems for required patches and generate comprehensive reports that can be easily shared with stakeholders.</p>
 </div>
+<div class="sect2">
+<h3 id="_lab_environment_setup"><a class="anchor" href="#_lab_environment_setup"></a>Lab Environment Setup</h3>
+<div class="sect3">
+<h4 id="_access_credentials"><a class="anchor" href="#_access_credentials"></a>Access Credentials</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -142,61 +171,96 @@ So lets get Ansible to get the required patches and we can provide this back to 
 <td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ansible123!</p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
 </tbody>
 </table>
-<div class="paragraph">
-<p>Your DNS domain for this lab is: <strong>[[ Instruqt-Var key="DOMAIN" hostname="control" ]]</strong></p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Server</th>
-<th class="tableblock halign-left valign-top">FQDN</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Windows Server</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">windows.[[ Instruqt-Var key="DOMAIN" hostname="control" ]]</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Node01</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">node01.[[ Instruqt-Var key="DOMAIN" hostname="control" ]]</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Node02</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">node02.[[ Instruqt-Var key="DOMAIN" hostname="control" ]]</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Node03</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">node03.[[ Instruqt-Var key="DOMAIN" hostname="control" ]]</p></td>
-</tr>
-</tbody>
-</table>
-<h1 id="_we_need_a_patch_report" class="sect0"><a class="anchor" href="#_we_need_a_patch_report"></a>☑️ We need a patch report</h1>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_lab_exercise"><a class="anchor" href="#_lab_exercise"></a>Lab Exercise</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_exercise_1_creating_a_windows_update_report"><a class="anchor" href="#_exercise_1_creating_a_windows_update_report"></a>Exercise 1: Creating a Windows Update Report</h3>
 <div class="paragraph">
-<p>We can gather all the details and then create a report using jinja templates again.
-We will even post the report as a web page on our Windows host!</p>
+<p>We&#8217;ll create a dynamic patch report using Ansible&#8217;s templating capabilities and publish it as a web page directly on the Windows host for easy access.</p>
+</div>
+<div class="sect3">
+<h4 id="_step_1_access_the_windows_update_template"><a class="anchor" href="#_step_1_access_the_windows_update_template"></a>Step 1: Access the Windows Update Template</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navigate to <strong>Automation Execution</strong> → <strong>Templates</strong></p>
+</li>
+<li>
+<p>Select the <strong>Windows Update Report</strong> template</p>
+</li>
+</ol>
 </div>
 <div class="paragraph">
-<p>Navigate  to <strong>Automation Execution</strong> &gt; <strong>Templates</strong>, and select <strong>Windows Update Report</strong>.
-Before we can launch it we need to create a survey so we can decide which updates we are looking for.</p>
+<p>Before launching the template, we need to configure a survey to allow users to specify which type of updates they want to scan for.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/update-template.png" alt="Update_tem">
+<img src="_images/update-template.png" alt="Update Template Interface">
+</div>
+<div class="title">Figure 1. Windows Update Template</div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_step_2_configure_the_survey"><a class="anchor" href="#_step_2_configure_the_survey"></a>Step 2: Configure the Survey</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navigate to the <strong>Survey</strong> tab</p>
+</li>
+<li>
+<p>Create a new survey question with the following details:</p>
+</li>
+</ol>
+</div>
+<div class="sect4">
+<h5 id="_survey_configuration"><a class="anchor" href="#_survey_configuration"></a>Survey Configuration:</h5>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Question:</strong> <code>Which update category are you wanting to search for?</code></p>
+</li>
+<li>
+<p><strong>Description:</strong> <code>Windows Update Category</code></p>
+</li>
+<li>
+<p><strong>Answer variable name:</strong> <code>update_category</code></p>
+</li>
+<li>
+<p><strong>Answer type:</strong> <code>Multiple Choice (single select)</code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_multiple_choice_options"><a class="anchor" href="#_multiple_choice_options"></a>Multiple Choice Options:</h5>
 <div class="paragraph">
-<p>Navigate to the <code>Survey</code> tab and add the following details:</p>
+<p>Add each of the following options (click the + button after entering each option):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Security Updates</p>
+</li>
+<li>
+<p>Critical Updates</p>
+</li>
+<li>
+<p>Tools</p>
+</li>
+<li>
+<p>Definition Updates</p>
+</li>
+<li>
+<p>Updates</p>
+</li>
+</ul>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -205,103 +269,235 @@ Before we can launch it we need to create a survey so we can decide which update
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-To add each multiple choice option you will need fill in the field and then click on the + to add it to the list.
+<div class="paragraph">
+<p>To add each multiple choice option, fill in the field and then click the + button to add it to the list.</p>
+</div>
 </td>
 </tr>
 </table>
 </div>
-<div class="literalblock">
+<div class="imageblock">
 <div class="content">
-<pre>Question: Which update catagory are you wanting to search for?
-Description: Windows Update Catagory
-Answer variable name: update_catagory
-Answer type: Multiple Choice (single select)
-Multiple Choice Options: Security Updates, Critical Updates, Tools, Definition Updates, Updates</pre>
+<img src="_images/survey.png" alt="Survey Setup Interface">
 </div>
+<div class="title">Figure 2. Survey Configuration</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_3_enable_and_save_the_survey"><a class="anchor" href="#_step_3_enable_and_save_the_survey"></a>Step 3: Enable and Save the Survey</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Click <strong>Create survey question</strong> to save your configuration</p>
+</li>
+<li>
+<p>Enable the survey using the toggle at the top of the panel</p>
+</li>
+</ol>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/survey.png" alt="SURVEY">
+<img src="_images/survey-enable.png" alt="Survey Enable Toggle">
 </div>
+<div class="title">Figure 3. Survey Enablement</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_4_execute_the_patch_scan"><a class="anchor" href="#_step_4_execute_the_patch_scan"></a>Step 4: Execute the Patch Scan</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Launch the template</p>
+</li>
+<li>
+<p>From the survey dropdown, select <strong>Security Updates</strong></p>
+</li>
+<li>
+<p>Wait for the template execution to complete</p>
+</li>
+</ol>
 </div>
 <div class="paragraph">
-<p>You can then click on <strong>Create survey question</strong>.
-Make sure you enable the Survey at the top of the pane with the toggle.</p>
+<p>The Ansible playbook will connect to the Windows server, scan for available security updates, and generate a comprehensive HTML report.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_5_review_the_generated_report"><a class="anchor" href="#_step_5_review_the_generated_report"></a>Step 5: Review the Generated Report</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Once the template completes, navigate to the <strong>Windows Report</strong> tab</p>
+</li>
+<li>
+<p>Review the outstanding updates that are needed for the system</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The report will display all available security updates, including:
+- Update titles and descriptions
+- Knowledge Base (KB) numbers
+- Installation requirements
+- Download sizes</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/survey-enable.png" alt="SURVEY_EN">
+<img src="_images/update-report.png" alt="Windows Update Report Results">
 </div>
+<div class="title">Figure 4. Windows Update Report</div>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>Once enabled, we can now launch the template and select <strong>Security Updates</strong> from the drop down list.</p>
+<p>You can re-run the template with different update categories to generate focused reports for specific types of patches (Critical Updates, Definition Updates, etc.).</p>
 </div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_exercise_2_verifying_scheduled_tasks"><a class="anchor" href="#_exercise_2_verifying_scheduled_tasks"></a>Exercise 2: Verifying Scheduled Tasks</h3>
 <div class="paragraph">
-<p>Once the template has completed, navigate to the <code>Windows Report</code> tab.
-You should be presented with the outstanding update that is needed for this system.</p>
+<p>Let&#8217;s verify that our previously scheduled backup tasks are running correctly.</p>
+</div>
+<div class="sect3">
+<h4 id="_step_1_check_scheduled_job_execution"><a class="anchor" href="#_step_1_check_scheduled_job_execution"></a>Step 1: Check Scheduled Job Execution</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navigate to <strong>Automation Execution</strong> → <strong>Jobs</strong></p>
+</li>
+<li>
+<p>Observe that your <strong>Server Backup - VSS/Windows</strong> jobs that were scheduled earlier have been running automatically</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_2_verify_vss_snapshots"><a class="anchor" href="#_step_2_verify_vss_snapshots"></a>Step 2: Verify VSS Snapshots</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Execute the <strong>Check Windows Backups</strong> template</p>
+</li>
+<li>
+<p>Confirm that VSS snapshots are being created successfully</p>
+</li>
+</ol>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/update-report.png" alt="WIN-REPORT">
+<img src="_images/vss-snaps.png" alt="VSS Snapshots Status">
 </div>
+<div class="title">Figure 5. VSS Snapshots Verification</div>
 </div>
 <div class="paragraph">
-<p>Well done!
-you have just automated a number of backups and you have gathered data and presented it as a report for your team!
-all without affecting production and with Ansible!</p>
+<p>This verification confirms that your automated backup strategy is working correctly alongside your new patch reporting capabilities.</p>
 </div>
-<h1 id="lastCheck" class="sect0"><a class="anchor" href="#lastCheck"></a>☑️ Last check!</h1>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_code_reference"><a class="anchor" href="#_code_reference"></a>Code Reference</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_windows_update_report_implementation"><a class="anchor" href="#_windows_update_report_implementation"></a>Windows Update Report Implementation</h3>
 <div class="paragraph">
-<p>Before we finish off, navigate  to <strong>Automation Execution</strong> &gt; <strong>Jobs</strong> and observe that your Server Backup -VSS/Windows jobs that you have scheduled earlier have run.
-You can also run the template Check Windows Backups to see if you have some VSS snapshots!</p>
+<p>Here&#8217;s the key Ansible code used for generating Windows patch reports:</p>
 </div>
-<div class="imageblock">
+<div class="listingblock">
 <div class="content">
-<img src="_images/vss-snaps.png" alt="VSS_SNAPS">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">tasks:
+  - name: Create site directory structure
+    ansible.windows.win_file:
+      path: "{{ report_path }}"
+      state: directory
+
+  - name: Show us the updates
+    debug:
+      msg: "{{ update_category }}"
+
+  - name: Check available updates
+    ansible.windows.win_updates:
+      category_names:
+       - "{{ update_category | default(omit) }}"
+      state: searched
+    register: update_result
+
+  - name: Generate HTML report
+    ansible.windows.win_template:
+      src: templates/win_patch_report.html.j2
+      dest: C:\inetpub\wwwroot\index.html
+      force: true
+    notify: restart_iis
+    vars:
+      updates: "{{ update_result.updates }}"
+
+handlers:
+  - name: restart_iis
+    ansible.windows.win_service:
+      name: W3Svc
+      state: restarted
+      start_mode: auto</code></pre>
 </div>
 </div>
-<h1 id="codeSnippets" class="sect0"><a class="anchor" href="#codeSnippets"></a>☑️ Code Snippets for Review</h1>
+</div>
+<div class="sect2">
+<h3 id="_key_components_explained"><a class="anchor" href="#_key_components_explained"></a>Key Components Explained</h3>
 <div class="paragraph">
-<p>Some key code snippets if you are interested:</p>
+<p><strong>Update Scanning:</strong>
+- Uses <code>ansible.windows.win_updates</code> module in search mode
+- Filters by specified update categories
+- Registers results for report generation</p>
 </div>
 <div class="paragraph">
-<p>Generating a Windows report:</p>
+<p><strong>Report Generation:</strong>
+- Leverages Jinja2 templating for dynamic HTML creation
+- Publishes reports directly to IIS web server
+- Provides accessible, shareable format for stakeholders</p>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>     tasks:
-
-          - name: Create site directory structure
-      ansible.windows.win_file:
-        path: "{{ report_path }}"
-        state: directory
-
-    - name: Show us the updates
-      debug:
-        msg: "{{ update_catagory }}"
-
-    - name: Check available updates
-      ansible.windows.win_updates:
-        category_names:
-         - "{{ update_catagory | default(omit) }}"
-        state: searched
-      register: update_result
-
-    - name: Generate HTML report
-      ansible.windows.win_template:
-        src: templates/win_patch_report.html.j2
-        dest: C:\inetpub\wwwroot\index.html
-        force: true
-      notify: restart_iis
-      vars:
-        updates: "{{ update_result.updates }}"
-
-  handlers:
-    - name: restart_iis
-      ansible.windows.win_service:
-        name: W3Svc
-        state: restarted
-        start_mode: auto</pre>
+<div class="paragraph">
+<p><strong>Service Management:</strong>
+- Automatically restarts IIS after report publication
+- Ensures web service availability for report access</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_key_takeaways"><a class="anchor" href="#_key_takeaways"></a>Key Takeaways</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Congratulations! You&#8217;ve successfully automated multiple critical IT operations tasks:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>✅ <strong>Automated Backup Operations</strong>: Implemented XFS backups for Linux and VSS snapshots for Windows</p>
+</li>
+<li>
+<p>✅ <strong>Infrastructure Data Collection</strong>: Gathered comprehensive system facts and generated dynamic reports</p>
+</li>
+<li>
+<p>✅ <strong>Security Compliance</strong>: Automated OpenSCAP compliance scanning and reporting</p>
+</li>
+<li>
+<p>✅ <strong>Patch Management</strong>: Created dynamic Windows update reports with configurable survey options</p>
+</li>
+<li>
+<p>✅ <strong>Scheduled Automation</strong>: Configured recurring tasks that run without manual intervention</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 <nav class="pagination">

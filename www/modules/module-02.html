@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Untitled :: Ansible Automation Roadshow - Scenario 01</title>
+    <title>Infrastructure Data Gathering with Ansible :: Ansible Automation Roadshow - Scenario 01</title>
     <link rel="canonical" href="https://redhat-scholars.github.io/course-template/modules/module-02.html">
     <link rel="prev" href="module-01.html">
     <link rel="next" href="module-03.html">
@@ -119,15 +119,44 @@
 </div>
   <div class="content">
 <article class="doc">
+<h1 class="page">Infrastructure Data Gathering with Ansible</h1>
+<div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introduction">Introduction</a>
+<ul class="sectlevel2">
+<li><a href="#_lab_environment_setup">Lab Environment Setup</a></li>
+</ul>
+</li>
+<li><a href="#_lab_exercises">Lab Exercises</a>
+<ul class="sectlevel2">
+<li><a href="#_exercise_1_gathering_server_information">Exercise 1: Gathering Server Information</a></li>
+<li><a href="#_exercise_2_generating_infrastructure_reports_at_scale">Exercise 2: Generating Infrastructure Reports at Scale</a></li>
+<li><a href="#_exercise_3_compliance_reporting_with_openscap">Exercise 3: Compliance Reporting with OpenSCAP</a></li>
+</ul>
+</li>
+<li><a href="#_code_reference">Code Reference</a>
+<ul class="sectlevel2">
+<li><a href="#_openscap_automation_implementation">OpenSCAP Automation Implementation</a></li>
+</ul>
+</li>
+<li><a href="#_key_takeaways">Key Takeaways</a></li>
+<li><a href="#_next_steps">Next Steps</a></li>
+</ul>
+</div>
+<div class="sect1">
+<h2 id="_introduction"><a class="anchor" href="#_introduction"></a>Introduction</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Sometimes you just need data about your systems, and you can get this data with Ansible!
-Ansible can automate almost everything but one of the best tasks to start on is the gathering of infrastructure data.
-You know you have servers, networks etc but trying to audit or gather all the system data can be a big exercise.
-Luckly, you can use Ansible at scale for this.</p>
+<p>Gathering comprehensive data about your infrastructure is one of the best starting points for automation with Ansible. While you know you have servers and networks, auditing and collecting all system data can be a massive undertaking. Fortunately, Ansible excels at this task and can scale to handle infrastructure of any size.</p>
 </div>
 <div class="paragraph">
-<p>Below are credentials for our Ansible Automation Platform that you should use:</p>
+<p>This lab will guide you through using Ansible to collect system information, generate reports, and perform compliance audits across your infrastructure.</p>
 </div>
+<div class="sect2">
+<h3 id="_lab_environment_setup"><a class="anchor" href="#_lab_environment_setup"></a>Lab Environment Setup</h3>
+<div class="sect3">
+<h4 id="_access_credentials"><a class="anchor" href="#_access_credentials"></a>Access Credentials</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -144,232 +173,425 @@ Luckly, you can use Ansible at scale for this.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ansible123!</p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
 </tbody>
 </table>
-<div class="paragraph">
-<p>Your DNS domain for this lab is: <strong>[[ Instruqt-Var key="DOMAIN" hostname="control" ]]</strong></p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_lab_exercises"><a class="anchor" href="#_lab_exercises"></a>Lab Exercises</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_exercise_1_gathering_server_information"><a class="anchor" href="#_exercise_1_gathering_server_information"></a>Exercise 1: Gathering Server Information</h3>
+<div class="paragraph">
+<p>Let&#8217;s start by collecting detailed system facts from individual servers using Ansible&#8217;s built-in capabilities.</p>
+</div>
+<div class="sect3">
+<h4 id="_step_1_access_the_inventory"><a class="anchor" href="#_step_1_access_the_inventory"></a>Step 1: Access the Inventory</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navigate to your lab <code>aap</code> tab and login using the credentials above</p>
+</li>
+<li>
+<p>Navigate to <strong>Automation Execution</strong> → <strong>Infrastructure</strong> → <strong>Inventories</strong></p>
+</li>
+<li>
+<p>Select the <strong>Video Platform Inventory</strong></p>
+</li>
+<li>
+<p>Click on the <strong>Hosts</strong> tab</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>This inventory contains the systems we&#8217;ll be automating. You should see several hosts already configured for you.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/node01-setup.png" alt="Node Setup Interface">
+</div>
+<div class="title">Figure 1. Node Setup View</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_2_run_ad_hoc_commands"><a class="anchor" href="#_step_2_run_ad_hoc_commands"></a>Step 2: Run Ad-hoc Commands</h4>
+<div class="paragraph">
+<p>We&#8217;ll use Ansible Automation Platform&#8217;s ad-hoc command feature to gather system facts:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Select the host <code>node01</code></p>
+</li>
+<li>
+<p>Click on <strong>Run command</strong></p>
+</li>
+<li>
+<p>From the module dropdown list, select the <strong>Setup</strong> module</p>
+</li>
+<li>
+<p>Click <strong>Next</strong></p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/setup.png" alt="Setup Module Interface">
+</div>
+<div class="title">Figure 2. Setup Module Selection</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_3_configure_execution_environment"><a class="anchor" href="#_step_3_configure_execution_environment"></a>Step 3: Configure Execution Environment</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Select the <strong>Default execution environment</strong> from the dropdown</p>
+</li>
+<li>
+<p>Click <strong>Next</strong></p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_4_choose_credentials"><a class="anchor" href="#_step_4_choose_credentials"></a>Step 4: Choose Credentials</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Select the <strong>Application Nodes</strong> credential</p>
+</li>
+<li>
+<p>Click <strong>Next</strong></p>
+</li>
+<li>
+<p>Click <strong>Finish</strong> to execute the command</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_5_review_system_facts"><a class="anchor" href="#_step_5_review_system_facts"></a>Step 5: Review System Facts</h4>
+<div class="paragraph">
+<p>Once the command executes, you&#8217;ll see comprehensive system facts displayed. This includes all the information Ansible can automatically gather from the target system.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/setup-output.png" alt="Setup Output Results">
+</div>
+<div class="title">Figure 3. System Facts Output</div>
+</div>
+<div class="admonitionblock note">
+<table>
 <tr>
-<th class="tableblock halign-left valign-top">Server</th>
-<th class="tableblock halign-left valign-top">FQDN</th>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The Setup module collects extensive system information including hardware details, network configuration, installed packages, and operating system specifics. This data forms the foundation for infrastructure automation and reporting.</p>
+</div>
+</td>
 </tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Windows Server</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">windows.[[ Instruqt-Var key="DOMAIN" hostname="control" ]]</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Node01</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">node01.[[ Instruqt-Var key="DOMAIN" hostname="control" ]]</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Node02</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">node02.[[ Instruqt-Var key="DOMAIN" hostname="control" ]]</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Node03</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">node03.[[ Instruqt-Var key="DOMAIN" hostname="control" ]]</p></td>
-</tr>
-</tbody>
 </table>
-<h1 id="_tell_me_about_my_servers" class="sect0"><a class="anchor" href="#_tell_me_about_my_servers"></a>☑️ Tell me about my servers</h1>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_exercise_2_generating_infrastructure_reports_at_scale"><a class="anchor" href="#_exercise_2_generating_infrastructure_reports_at_scale"></a>Exercise 2: Generating Infrastructure Reports at Scale</h3>
 <div class="paragraph">
-<p>Nagivate to your lab <code>aap</code> tab and login.
-Navigate to <strong>Automation Execution</strong> &gt; <strong>Infrastructure</strong> &gt; Inventories.
-This is where we keep track of the systems we automate, you will see a few inventories already built for you.
-Select the <strong>Video Platform Inventory</strong>, and then select the <strong>Hosts</strong> tab.</p>
+<p>Now let&#8217;s leverage Ansible&#8217;s templating capabilities to create dynamic reports based on collected facts and task results.</p>
+</div>
+<div class="sect3">
+<h4 id="_understanding_infrastructure_awareness"><a class="anchor" href="#_understanding_infrastructure_awareness"></a>Understanding Infrastructure Awareness</h4>
+<div class="paragraph">
+<p>Infrastructure awareness is crucial for effective IT operations. Ansible makes this easy by combining fact collection with Jinja templating to generate comprehensive, dynamic reports.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_1_generate_application_server_report"><a class="anchor" href="#_step_1_generate_application_server_report"></a>Step 1: Generate Application Server Report</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navigate to <strong>Automation Execution</strong> → <strong>Templates</strong></p>
+</li>
+<li>
+<p>Execute the <strong>Application Server Report</strong> template</p>
+</li>
+<li>
+<p>When prompted with options, click <strong>All</strong></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>This template will collect information from all your application servers and generate a comprehensive report.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_2_view_the_generated_report"><a class="anchor" href="#_step_2_view_the_generated_report"></a>Step 2: View the Generated Report</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Once the template execution completes, navigate to the <strong>Report Server</strong> tab</p>
+</li>
+<li>
+<p>Refresh the page to see the newly generated report</p>
+</li>
+</ol>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/node01-setup.png" alt="SETUP-NODE">
+<img src="_images/srv-report.png" alt="Server Report Dashboard">
 </div>
+<div class="title">Figure 4. Server Report Overview</div>
 </div>
 <div class="paragraph">
-<p>We are going to use the Ansible Automation Platform&#8217;s ability to run adhoc commands to gather system facts or system data.
-Select the host: <code>node01</code> and then click on <code>Run command</code>.
-You have a number of prompts now on what command you want to run against this host.
-Select the <strong>Setup</strong>  module from the module drop down list and then click next.</p>
+<p>Notice that the report includes backup information alongside system details, providing a holistic view of your infrastructure status.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/setup.png" alt="SETUP">
+<img src="_images/backup-data.png" alt="Backup Report Section">
 </div>
+<div class="title">Figure 5. Backup Data Integration</div>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>We need to pick an execution environment to run this module.
-In the Ansible Automation Platform, we use Execution Environments to launch templates/playbooks.
-Select the <strong>Default execution environment</strong> and click next.</p>
+<p>You can re-run the report template and select different options to create targeted reports for specific criteria or server subsets.</p>
 </div>
-<div class="paragraph">
-<p>We will need to choose the credentials we should use for the host we want to interact with.
-Select the <strong>Application Nodes</strong> credential and click next before click on Finish.</p>
+</td>
+</tr>
+</table>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_exercise_3_compliance_reporting_with_openscap"><a class="anchor" href="#_exercise_3_compliance_reporting_with_openscap"></a>Exercise 3: Compliance Reporting with OpenSCAP</h3>
 <div class="paragraph">
-<p>Once the command executes, we will be presented with the system facts.</p>
+<p>Security compliance is a critical requirement for most organizations. Let&#8217;s generate a compliance report using OpenSCAP integration.</p>
+</div>
+<div class="sect3">
+<h4 id="_background_why_compliance_reports_matter"><a class="anchor" href="#_background_why_compliance_reports_matter"></a>Background: Why Compliance Reports Matter</h4>
+<div class="paragraph">
+<p>Information Security teams require regular compliance reports to ensure systems meet organizational and regulatory requirements. Ansible can automate OpenSCAP scans to provide these reports consistently and at scale.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_1_generate_compliance_report"><a class="anchor" href="#_step_1_generate_compliance_report"></a>Step 1: Generate Compliance Report</h4>
+<div class="paragraph">
+<p>Security has specifically requested a compliance report for <code>Node02</code>. Let&#8217;s fulfill this request:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navigate to <strong>Automation Execution</strong> → <strong>Templates</strong></p>
+</li>
+<li>
+<p>Execute the <strong>OpenSCAP Report</strong> template</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_2_access_compliance_results"><a class="anchor" href="#_step_2_access_compliance_results"></a>Step 2: Access Compliance Results</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Once the job completes, navigate to the <strong>Compliance Report</strong> tab</p>
+</li>
+<li>
+<p>You&#8217;ll see the generated compliance report files</p>
+</li>
+</ol>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/setup-output.png" alt="SETUP-OUTPUT">
+<img src="_images/compliance_report_folder.png" alt="Compliance Report Folder">
+</div>
+<div class="title">Figure 6. Compliance Report Directory</div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_step_3_review_detailed_results"><a class="anchor" href="#_step_3_review_detailed_results"></a>Step 3: Review Detailed Results</h4>
 <div class="paragraph">
-<p>This is all the infromation that Ansible can gather from the system,</p>
+<p>Click on the report file to view the detailed compliance results, including:</p>
 </div>
-<h1 id="morescale" class="sect0"><a class="anchor" href="#morescale"></a>☑️ More info, more scale ?</h1>
-<div class="paragraph">
-<p>We need infrastructure awareness!
-and with Ansible its super easy.
-We can use Ansible and jinja templates to create dynamic reports based on facts and Ansible tasks.
-Lets dive in!</p>
-</div>
-<div class="paragraph">
-<p>Navigate  to <strong>Automation Execution</strong> &gt; <strong>Templates</strong>, and execute <strong>Application Server Report</strong>.
-This template will prompt you with a few options, click <strong>All</strong>.</p>
-</div>
-<div class="paragraph">
-<p>Once completed, navigate to the <code>Report Server tab</code> and refresh it to see the report.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Security control assessments</p>
+</li>
+<li>
+<p>Pass/fail status for each check</p>
+</li>
+<li>
+<p>Remediation recommendations</p>
+</li>
+<li>
+<p>Risk severity levels</p>
+</li>
+</ul>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/srv-report.png" alt="REPORT">
+<img src="_images/compliance_report.png" alt="Compliance Report Details">
+</div>
+<div class="title">Figure 7. Detailed Compliance Report</div>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_code_reference"><a class="anchor" href="#_code_reference"></a>Code Reference</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_openscap_automation_implementation"><a class="anchor" href="#_openscap_automation_implementation"></a>OpenSCAP Automation Implementation</h3>
 <div class="paragraph">
-<p>Notice we also have the backups reported in this report too!</p>
+<p>Here&#8217;s the key Ansible code used for automated compliance reporting:</p>
 </div>
-<div class="imageblock">
+<div class="listingblock">
 <div class="content">
-<img src="_images/backup-data.png" alt="REPORT_bk">
-</div>
-</div>
-<div class="paragraph">
-<p>You can re-run the report template and choose other options if you want to create other reports for specific criteria.</p>
-</div>
-<h1 id="compliance" class="sect0"><a class="anchor" href="#compliance"></a>☑️ Is our server compliant ?</h1>
-<div class="paragraph">
-<p>We love reports!
-but do you know who else loves reports ?
-Infosec!!
-Well we can run an OpenSCAP compliance report as we that template available to us!
-Security has asked for the compliance report for <code>Node02</code> so lets have a look!</p>
-</div>
-<div class="paragraph">
-<p>Navigate  to <strong>Automation Execution</strong> &gt; <strong>Templates</strong>, and execute <strong>OpenSCAP Report</strong>.
-Once this job is completed, navigate to the <code>Compliance Report tab</code> to see the report.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/compliance_report_folder.png" alt="SCAP">
-</div>
-</div>
-<div class="paragraph">
-<p>You can click on the report to view the results!</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/compliance_report.png" alt="SCAP">
-</div>
-</div>
-<h1 id="codeSnippets" class="sect0"><a class="anchor" href="#codeSnippets"></a>☑️ Code Snippets for Review</h1>
-<div class="paragraph">
-<p>Some key code snippets if you are interested:</p>
-</div>
-<div class="paragraph">
-<p>Automating and OpenSCAP:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    tasks:
-
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">tasks:
   - name: Check if the system is RHEL 8
-      ansible.builtin.debug:
-        msg: "This playbook is not compatible with {{ inventory_hostname }} (not RHEL 8)"
-      when: ansible_distribution != "RedHat" or ansible_distribution_major_version != "8"
-      failed_when: false
+    ansible.builtin.debug:
+      msg: "This playbook is not compatible with {{ inventory_hostname }} (not RHEL 8)"
+    when: ansible_distribution != "RedHat" or ansible_distribution_major_version != "8"
+    failed_when: false
 
-    - name: Run compliance tasks on RHEL 8 systems only
-      when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
-      block:
-        - name: Get our facts straight
-          ansible.builtin.set_fact:
-            _profile: '{{ compliance_profile | replace("pci_dss", "pci-dss") }}'
-            _report_dir: /tmp/oscap-reports
+  - name: Run compliance tasks on RHEL 8 systems only
+    when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
+    block:
+      - name: Get our facts straight
+        ansible.builtin.set_fact:
+          _profile: '{{ compliance_profile | replace("pci_dss", "pci-dss") }}'
+          _report_dir: /tmp/oscap-reports
 
-        - name: Ensure OpenSCAP tools are installed
-          ansible.builtin.dnf:
-            name: '{{ openscap_packages }}'
-            state: present
+      - name: Ensure OpenSCAP tools are installed
+        ansible.builtin.dnf:
+          name: '{{ openscap_packages }}'
+          state: present
 
-        - name: Configure httpd
-          when: use_httpd | bool
-          block:
-            - name: Install httpd
-              ansible.builtin.dnf:
-                name: httpd
-                state: present
-              notify: Restart httpd
+      - name: Configure httpd
+        when: use_httpd | bool
+        block:
+          - name: Install httpd
+            ansible.builtin.dnf:
+              name: httpd
+              state: present
+            notify: Restart httpd
 
-            - name: Override report directory
-              ansible.builtin.set_fact:
-                _report_dir: /var/www/html/oscap-reports
+          - name: Override report directory
+            ansible.builtin.set_fact:
+              _report_dir: /var/www/html/oscap-reports
 
-            - name: Gather service facts
-              ansible.builtin.service_facts:
+          - name: Gather service facts
+            ansible.builtin.service_facts:
 
-            - name: Enable firewall http service
-              ansible.posix.firewalld:
-                service: http
-                state: enabled
-                immediate: true
-                permanent: true
-              when: "'firewalld.service' in ansible_facts.services"
+          - name: Enable firewall http service
+            ansible.posix.firewalld:
+              service: http
+              state: enabled
+              immediate: true
+              permanent: true
+            when: "'firewalld.service' in ansible_facts.services"
 
-            - name: Disable httpd welcome page
-              ansible.builtin.file:
-                path: /etc/httpd/conf.d/welcome.conf
-                state: absent
-              notify: Restart httpd
+          - name: Disable httpd welcome page
+            ansible.builtin.file:
+              path: /etc/httpd/conf.d/welcome.conf
+              state: absent
+            notify: Restart httpd
 
-        - name: Create report on Report Server
-          block:
-            - name: Ensure report directory exists
-              ansible.builtin.file:
-                path: '{{ _report_dir }}/{{ _profile }}'
-                state: directory
-                owner: root
-                group: root
-                mode: 0755
+      - name: Create report on Report Server
+        block:
+          - name: Ensure report directory exists
+            ansible.builtin.file:
+              path: '{{ _report_dir }}/{{ _profile }}'
+              state: directory
+              owner: root
+              group: root
+              mode: 0755
 
-            - name: Set report name
-              ansible.builtin.set_fact:
-                _report: '{{ _report_dir }}/{{ _profile }}/report-{{ inventory_hostname }}-{{ ansible_date_time.iso8601 }}.html'
+          - name: Set report name
+            ansible.builtin.set_fact:
+              _report: '{{ _report_dir }}/{{ _profile }}/report-{{ inventory_hostname }}-{{ ansible_date_time.iso8601 }}.html'
 
-            - name: Generate compliance report
-              ansible.builtin.command: &gt;-
-                oscap xccdf eval --profile {{ _profile }} --report {{ _report }}
-                /usr/share/xml/scap/ssg/content/ssg-rhel{{ ansible_distribution_major_version }}-ds.xml
-              args:
-                creates: '{{ _report }}'
-              register: _oscap
-              failed_when: _oscap.rc not in [0, 2]
+          - name: Generate compliance report
+            ansible.builtin.command: &gt;-
+              oscap xccdf eval --profile {{ _profile }} --report {{ _report }}
+              /usr/share/xml/scap/ssg/content/ssg-rhel{{ ansible_distribution_major_version }}-ds.xml
+            args:
+              creates: '{{ _report }}'
+            register: _oscap
+            failed_when: _oscap.rc not in [0, 2]
 
-            - name: Set report permissions
-              ansible.builtin.file:
-                path: '{{ _report }}'
-                owner: root
-                group: root
-                mode: 0644</pre>
+          - name: Set report permissions
+            ansible.builtin.file:
+              path: '{{ _report }}'
+              owner: root
+              group: root
+              mode: 0644</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_key_takeaways"><a class="anchor" href="#_key_takeaways"></a>Key Takeaways</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You&#8217;ve successfully completed the infrastructure data gathering exercises! You now understand how to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>✅ <strong>Collect System Facts</strong>: Use Ansible&#8217;s Setup module to gather comprehensive system information</p>
+</li>
+<li>
+<p>✅ <strong>Generate Dynamic Reports</strong>: Leverage Jinja templating to create infrastructure reports at scale</p>
+</li>
+<li>
+<p>✅ <strong>Automate Compliance Audits</strong>: Implement OpenSCAP integration for security compliance reporting</p>
+</li>
+<li>
+<p>✅ <strong>Scale Data Collection</strong>: Apply these techniques across multiple systems simultaneously</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_next_steps"><a class="anchor" href="#_next_steps"></a>Next Steps</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>With these foundational skills in infrastructure data gathering, you&#8217;re ready to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Implement regular automated reporting schedules</p>
+</li>
+<li>
+<p>Expand compliance scanning to additional security frameworks</p>
+</li>
+<li>
+<p>Create custom reports tailored to your organization&#8217;s specific needs</p>
+</li>
+<li>
+<p>Build more complex automation workflows using the collected system data</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This infrastructure awareness foundation will serve as the basis for more advanced automation scenarios throughout your Ansible journey.</p>
+</div>
 </div>
 </div>
 <nav class="pagination">
