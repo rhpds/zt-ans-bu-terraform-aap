@@ -2,18 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://redhat-scholars.github.io/course-template/modules/index.html</loc>
-<lastmod>2025-07-08T14:50:54.962Z</lastmod>
+<lastmod>2025-07-12T00:32:39.901Z</lastmod>
 </url>
 <url>
 <loc>https://redhat-scholars.github.io/course-template/modules/module-01.html</loc>
-<lastmod>2025-07-08T14:50:54.962Z</lastmod>
+<lastmod>2025-07-12T00:32:39.901Z</lastmod>
 </url>
 <url>
 <loc>https://redhat-scholars.github.io/course-template/modules/module-02.html</loc>
-<lastmod>2025-07-08T14:50:54.962Z</lastmod>
+<lastmod>2025-07-12T00:32:39.901Z</lastmod>
 </url>
 <url>
 <loc>https://redhat-scholars.github.io/course-template/modules/module-03.html</loc>
-<lastmod>2025-07-08T14:50:54.962Z</lastmod>
+<lastmod>2025-07-12T00:32:39.901Z</lastmod>
+</url>
+<url>
+<loc>https://redhat-scholars.github.io/course-template/modules/module-04.html</loc>
+<lastmod>2025-07-12T00:32:39.901Z</lastmod>
 </url>
 </urlset>

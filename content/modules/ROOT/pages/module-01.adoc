@@ -106,11 +106,11 @@ ____
 ____
 
 ----
-bucket = "aap-tf-bucket-cfe5d5cb-b3fa-5555-555c-fe1efabbcdea"
+bucket = "aap-tf-bucket-cfe5d5cb-b3fa-5555-555c-blahblahblah"
 key = "johnsmith/tfstatefile"
 region = "us-east-1"
-access_key = "AKBCDE7W6FGHILSKJB2"
-secret_key = "Oz8vqJsY6zFFFq83xOBSBSofQ0g05WxtHnHlS"
+access_key = "AKBCDEBLAHBLAHBLAH"
+secret_key = "Oz8vqJsY6zFFFq83xblahblahblahblahblah"
 ----
 
 = ☑️ Task 2 - Terraform Inventory

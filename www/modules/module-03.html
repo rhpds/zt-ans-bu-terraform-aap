@@ -3,9 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Windows Patching Report with Ansible :: Ansible Automation Roadshow - Scenario 01</title>
+    <title>Untitled :: Ansible Automation Roadshow - Scenario 01</title>
     <link rel="canonical" href="https://redhat-scholars.github.io/course-template/modules/module-03.html">
     <link rel="prev" href="module-02.html">
+    <link rel="next" href="module-04.html">
     <meta name="generator" content="Antora 3.1.10">
     <link rel="stylesheet" href="../_/css/site.css">
 <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
@@ -44,7 +45,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="module-01.html">1. Automated Backups</a>
+    <a class="nav-link" href="module-01.html">1. Terraform and Ansible Automation Platform 2.5</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="module-01.html#backupLinux">Backing up Linux</a>
@@ -59,7 +60,7 @@
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="module-02.html">2. Infrastructure Awareness</a>
+    <a class="nav-link" href="module-02.html">2. Create a Terraform-enabled Execution Environment</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="module-02.html#atscale">System Reports</a>
@@ -74,13 +75,25 @@
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="module-03.html">3. Windows Reports</a>
+    <a class="nav-link" href="module-03.html">3. OPTIONAL - Terraform Basics</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="#lastCheck">Check Schedule</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="#codeSnippets">Code Snippets</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="module-04.html">4. OPTIONAL - Terraform and the Certified Collection for Terraform</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-04.html#lastCheck">Check Schedule</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-04.html#codeSnippets">Code Snippets</a>
   </li>
 </ul>
   </li>
@@ -112,396 +125,355 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Exercises</a></li>
-    <li><a href="module-03.html">3. Windows Reports</a></li>
+    <li><a href="module-03.html">3. OPTIONAL - Terraform Basics</a></li>
   </ul>
 </nav>
 </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Windows Patching Report with Ansible</h1>
-<div id="toc" class="toc">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_introduction">Introduction</a>
-<ul class="sectlevel2">
-<li><a href="#_lab_environment_setup">Lab Environment Setup</a></li>
-</ul>
-</li>
-<li><a href="#_lab_exercise">Lab Exercise</a>
-<ul class="sectlevel2">
-<li><a href="#_exercise_1_creating_a_windows_update_report">Exercise 1: Creating a Windows Update Report</a></li>
-<li><a href="#_exercise_2_verifying_scheduled_tasks">Exercise 2: Verifying Scheduled Tasks</a></li>
-</ul>
-</li>
-<li><a href="#_code_reference">Code Reference</a>
-<ul class="sectlevel2">
-<li><a href="#_windows_update_report_implementation">Windows Update Report Implementation</a></li>
-<li><a href="#_key_components_explained">Key Components Explained</a></li>
-</ul>
-</li>
-<li><a href="#_key_takeaways">Key Takeaways</a></li>
-</ul>
-</div>
-<div class="sect1">
-<h2 id="_introduction"><a class="anchor" href="#_introduction"></a>Introduction</h2>
+<div id="preamble">
 <div class="sectionbody">
+<hr>
 <div class="paragraph">
-<p>Generating patch reports is a critical operational task for maintaining system security and compliance. When you don&#8217;t have direct access to Windows systems, Ansible becomes an invaluable tool for gathering patch information and delivering actionable reports to your Windows administration teams.</p>
-</div>
-<div class="paragraph">
-<p>This lab demonstrates how to use Ansible to scan Windows systems for required patches and generate comprehensive reports that can be easily shared with stakeholders.</p>
-</div>
-<div class="sect2">
-<h3 id="_lab_environment_setup"><a class="anchor" href="#_lab_environment_setup"></a>Lab Environment Setup</h3>
-<div class="sect3">
-<h4 id="_access_credentials"><a class="anchor" href="#_access_credentials"></a>Access Credentials</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Username</th>
-<th class="tableblock halign-left valign-top">Password</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ansible123!</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_lab_exercise"><a class="anchor" href="#_lab_exercise"></a>Lab Exercise</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_exercise_1_creating_a_windows_update_report"><a class="anchor" href="#_exercise_1_creating_a_windows_update_report"></a>Exercise 1: Creating a Windows Update Report</h3>
-<div class="paragraph">
-<p>We&#8217;ll create a dynamic patch report using Ansible&#8217;s templating capabilities and publish it as a web page directly on the Windows host for easy access.</p>
-</div>
-<div class="sect3">
-<h4 id="_step_1_access_the_windows_update_template"><a class="anchor" href="#_step_1_access_the_windows_update_template"></a>Step 1: Access the Windows Update Template</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Navigate to <strong>Automation Execution</strong> → <strong>Templates</strong></p>
-</li>
-<li>
-<p>Select the <strong>Windows Update Report</strong> template</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>Before launching the template, we need to configure a survey to allow users to specify which type of updates they want to scan for.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/update-template.png" alt="Update Template Interface">
-</div>
-<div class="title">Figure 1. Windows Update Template</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_step_2_configure_the_survey"><a class="anchor" href="#_step_2_configure_the_survey"></a>Step 2: Configure the Survey</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Navigate to the <strong>Survey</strong> tab</p>
-</li>
-<li>
-<p>Create a new survey question with the following details:</p>
-</li>
-</ol>
-</div>
-<div class="sect4">
-<h5 id="_survey_configuration"><a class="anchor" href="#_survey_configuration"></a>Survey Configuration:</h5>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Question:</strong> <code>Which update category are you wanting to search for?</code></p>
-</li>
-<li>
-<p><strong>Description:</strong> <code>Windows Update Category</code></p>
-</li>
-<li>
-<p><strong>Answer variable name:</strong> <code>update_category</code></p>
-</li>
-<li>
-<p><strong>Answer type:</strong> <code>Multiple Choice (single select)</code></p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_multiple_choice_options"><a class="anchor" href="#_multiple_choice_options"></a>Multiple Choice Options:</h5>
-<div class="paragraph">
-<p>Add each of the following options (click the + button after entering each option):</p>
+<p>slug: tf-basics id: hxexl35cteyj type: challenge title: OPTIONAL - Terraform Basics teaser: Terraform is a fantastic tool used to provision immutable infrastructure.
+It is widely used for its declarative nature in Infrastructure as Code (IaC).
+notes:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Security Updates</p>
+<p>type: text contents: |-   # OPTIONAL - Terraform Basics</p>
+<div class="paragraph">
+<p><span class="image"><img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/main.png?raw=true" alt="main"></span>   Welcome!!!</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Grab a Coffee/Tea</p>
 </li>
 <li>
-<p>Critical Updates</p>
+<p>Sit back and relax</p>
 </li>
 <li>
-<p>Tools</p>
-</li>
-<li>
-<p>Definition Updates</p>
-</li>
-<li>
-<p>Updates</p>
+<p>You can get your hands dirty in a few minutes</p>
 </li>
 </ul>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
 <div class="paragraph">
-<p>To add each multiple choice option, fill in the field and then click the + button to add it to the list.</p>
+<p><strong>Please be patient as we build and connect all the components of this lab together</strong> tabs:</p>
 </div>
-</td>
-</tr>
-</table>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/survey.png" alt="Survey Setup Interface">
-</div>
-<div class="title">Figure 2. Survey Configuration</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_step_3_enable_and_save_the_survey"><a class="anchor" href="#_step_3_enable_and_save_the_survey"></a>Step 3: Enable and Save the Survey</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Click <strong>Create survey question</strong> to save your configuration</p>
 </li>
 <li>
-<p>Enable the survey using the toggle at the top of the panel</p>
-</li>
-</ol>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/survey-enable.png" alt="Survey Enable Toggle">
-</div>
-<div class="title">Figure 3. Survey Enablement</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_step_4_execute_the_patch_scan"><a class="anchor" href="#_step_4_execute_the_patch_scan"></a>Step 4: Execute the Patch Scan</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Launch the template</p>
+<p>id: u1hjnye78oak title: Terminal type: terminal hostname: devhost workdir: /home/rhel/lab_exercises cmd: su - rhel</p>
 </li>
 <li>
-<p>From the survey dropdown, select <strong>Security Updates</strong></p>
+<p>id: 75vhtqmbajye title: VSCode type: service hostname: devhost path: /editor/?folder=/home/rhel/lab_exercises port: 443</p>
 </li>
 <li>
-<p>Wait for the template execution to complete</p>
-</li>
-</ol>
+<p>id: dkltlhdmk5km title: AWS Console type: service hostname: cloud-client path: / port: 80 difficulty: "" timelimit: 9000 enhanced_loading: null&#8201;&#8212;&#8201;👋 Challenge 3 introduction.
+===</p>
+<div class="paragraph">
+<p>= <strong><em>OPTIONAL CHALLENGE</em></strong></p>
+</div>
+<h4 id="_estimated_time_to_complete_15_minutesp" class="discrete">Estimated time to complete: <em>15 minutes</em>&lt;p&gt;</h4>
+<div class="paragraph">
+<p>== OPTIONAL - Terraform Basics</p>
 </div>
 <div class="paragraph">
-<p>The Ansible playbook will connect to the Windows server, scan for available security updates, and generate a comprehensive HTML report.</p>
+<p>In this challenge you will learn</p>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_step_5_review_the_generated_report"><a class="anchor" href="#_step_5_review_the_generated_report"></a>Step 5: Review the Generated Report</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Once the template completes, navigate to the <strong>Windows Report</strong> tab</p>
 </li>
 <li>
-<p>Review the outstanding updates that are needed for the system</p>
+<p>Basic use of Terraform to deploy cloud infrastructure in AWS cloud</p>
 </li>
-</ol>
-</div>
-<div class="paragraph">
-<p>The report will display all available security updates, including:
-- Update titles and descriptions
-- Knowledge Base (KB) numbers
-- Installation requirements
-- Download sizes</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/update-report.png" alt="Windows Update Report Results">
-</div>
-<div class="title">Figure 4. Windows Update Report</div>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>You can re-run the template with different update categories to generate focused reports for specific types of patches (Critical Updates, Definition Updates, etc.).</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_exercise_2_verifying_scheduled_tasks"><a class="anchor" href="#_exercise_2_verifying_scheduled_tasks"></a>Exercise 2: Verifying Scheduled Tasks</h3>
-<div class="paragraph">
-<p>Let&#8217;s verify that our previously scheduled backup tasks are running correctly.</p>
-</div>
-<div class="sect3">
-<h4 id="_step_1_check_scheduled_job_execution"><a class="anchor" href="#_step_1_check_scheduled_job_execution"></a>Step 1: Check Scheduled Job Execution</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Navigate to <strong>Automation Execution</strong> → <strong>Jobs</strong></p>
-</li>
-<li>
-<p>Observe that your <strong>Server Backup - VSS/Windows</strong> jobs that were scheduled earlier have been running automatically</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_step_2_verify_vss_snapshots"><a class="anchor" href="#_step_2_verify_vss_snapshots"></a>Step 2: Verify VSS Snapshots</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Execute the <strong>Check Windows Backups</strong> template</p>
-</li>
-<li>
-<p>Confirm that VSS snapshots are being created successfully</p>
-</li>
-</ol>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/vss-snaps.png" alt="VSS Snapshots Status">
-</div>
-<div class="title">Figure 5. VSS Snapshots Verification</div>
-</div>
-<div class="paragraph">
-<p>This verification confirms that your automated backup strategy is working correctly alongside your new patch reporting capabilities.</p>
-</div>
-</div>
+</ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_code_reference"><a class="anchor" href="#_code_reference"></a>Code Reference</h2>
+<h2 id="_terraform_basics_optional"><a class="anchor" href="#_terraform_basics_optional"></a>Terraform Basics (OPTIONAL)</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_windows_update_report_implementation"><a class="anchor" href="#_windows_update_report_implementation"></a>Windows Update Report Implementation</h3>
 <div class="paragraph">
-<p>Here&#8217;s the key Ansible code used for generating Windows patch reports:</p>
+<p>Terraform is a great tool that uses Infrastructure as Code (IaC) to define infrastructure;
+build, change, and destroy these infrastructure resources.</p>
+</div>
+<div class="paragraph">
+<p>This challenge will introduce you to some basic Terraform concepts and to give you some experience in using Terraform to create and destroy cloud infrastructure resources.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>[!NOTE] You can perform the following steps at the TERMINAL, or in Visual Studio Code (VSCode).
+In VSCode you can open a terminal prompt.
+Choose either the <code>TERMINAL</code> tab, or the <code>VSCODE</code> tab from the top of the lab screen.
+We will walk through the steps using the <code>TERMINAL</code> but please feel free to do this in the <code>VSCODE</code> tab if you are more comfortable there!</p>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+<h1 id="_task_1_initialize_a_terraform_project" class="sect0"><a class="anchor" href="#_task_1_initialize_a_terraform_project"></a>☑️ Task 1 - Initialize a Terraform Project</h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="paragraph">
+<p>Open the <code>Terminal</code> tab from the top of the lab.</p>
+</div>
+<div class="paragraph">
+<p>Change to the <code>/home/rhel/lab_exercises/1.Terraform_Basics</code> folder</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">tasks:
-  - name: Create site directory structure
-    ansible.windows.win_file:
-      path: "{{ report_path }}"
-      state: directory
-
-  - name: Show us the updates
-    debug:
-      msg: "{{ update_category }}"
-
-  - name: Check available updates
-    ansible.windows.win_updates:
-      category_names:
-       - "{{ update_category | default(omit) }}"
-      state: searched
-    register: update_result
-
-  - name: Generate HTML report
-    ansible.windows.win_template:
-      src: templates/win_patch_report.html.j2
-      dest: C:\inetpub\wwwroot\index.html
-      force: true
-    notify: restart_iis
-    vars:
-      updates: "{{ update_result.updates }}"
-
-handlers:
-  - name: restart_iis
-    ansible.windows.win_service:
-      name: W3Svc
-      state: restarted
-      start_mode: auto</code></pre>
+<pre>cd /home/rhel/lab_exercises/1.Terraform_Basics</pre>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_key_components_explained"><a class="anchor" href="#_key_components_explained"></a>Key Components Explained</h3>
-<div class="paragraph">
-<p><strong>Update Scanning:</strong>
-- Uses <code>ansible.windows.win_updates</code> module in search mode
-- Filters by specified update categories
-- Registers results for report generation</p>
 </div>
 <div class="paragraph">
-<p><strong>Report Generation:</strong>
-- Leverages Jinja2 templating for dynamic HTML creation
-- Publishes reports directly to IIS web server
-- Provides accessible, shareable format for stakeholders</p>
+<p>Here you will find a <code>main.tf</code> file which has been created for you.</p>
 </div>
 <div class="paragraph">
-<p><strong>Service Management:</strong>
-- Automatically restarts IIS after report publication
-- Ensures web service availability for report access</p>
+<p>Take a quick look at this file</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>cat main.tf</pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_key_takeaways"><a class="anchor" href="#_key_takeaways"></a>Key Takeaways</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>Congratulations! You&#8217;ve successfully automated multiple critical IT operations tasks:</p>
+<p>It&#8217;s content will look like the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># Use AWS provider for Terraform
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "aws_instance" "basic_rhel" {
+  ami           = "ami-0005e0cfe09cc9050"
+  instance_type = "t2.micro"
+
+  }</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this simple example, the <code>main.tf</code> file will declare a few things.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>✅ <strong>Automated Backup Operations</strong>: Implemented XFS backups for Linux and VSS snapshots for Windows</p>
+<p>A <strong>provider</strong> for Terraform to work with.
+In this example the Terraform Provider in use is for AWS (Terraform Provider for AWS)</p>
 </li>
 <li>
-<p>✅ <strong>Infrastructure Data Collection</strong>: Gathered comprehensive system facts and generated dynamic reports</p>
-</li>
-<li>
-<p>✅ <strong>Security Compliance</strong>: Automated OpenSCAP compliance scanning and reporting</p>
-</li>
-<li>
-<p>✅ <strong>Patch Management</strong>: Created dynamic Windows update reports with configurable survey options</p>
-</li>
-<li>
-<p>✅ <strong>Scheduled Automation</strong>: Configured recurring tasks that run without manual intervention</p>
+<p>A <strong>resource</strong> to indicate the type of infrastructure resource, what AWS Machine Image (ami), and what instance type to use</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>Initialize the Terraform Project using the following command</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>terraform init</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will get Terraform to download and provision the backend with what it needs for the chosen AWS provider.</p>
+</div>
+<div class="paragraph">
+<p>Once this is done, run the following command</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>ls -al</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You will see the following has been created:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>.terraform</em>  <em>- This provides the backend requirements for Terraform</em></p>
+</li>
+<li>
+<p><em>.terraform.lock.hcl</em> - <em>This is the dependency lock file</em></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Now that you have initialized this Terraform Project, go ahead and build the resource(s)!</p>
+</div>
+</div>
+</div>
+<h1 id="_task_2_plan_and_apply_the_terraform_project" class="sect0"><a class="anchor" href="#_task_2_plan_and_apply_the_terraform_project"></a>☑️ Task 2 - Plan and Apply the Terraform Project</h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="paragraph">
+<p>From the project folder you have already initialized Terraform and you can now deploy, by running the <code>terraform plan</code>, then <code>terraform apply</code> commands</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>terraform plan -out myMagicalInstance</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This creates a plan of your build based on the <code>main.tf</code> file you have.
+You can look at the output and see all the components being added (+) to the infrastructure plan.</p>
+</div>
+<div class="paragraph">
+<p>Next let&#8217;s get Terraform to provision this plan</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>terraform apply myMagicalInstance</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Terraform will now create the infrastructure you have defined in your manifest.
+You will notice that the number of resources created should reflect the number of resources specified.</p>
+</div>
+<div class="paragraph">
+<p>Run the following AWS cli command to check for running instances and to get the <code>instance ID</code>.
+Simply copy and paste this command to the terminal prompt</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>aws ec2 describe-instances --filters "Name=instance-type,Values=t2.micro" --query "Reservations[*].Instances[*].[InstanceId]" --output table --region "us-east-1"</pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/basics1.png?raw=true" alt="basics1">
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>[!NOTE] <strong>Note that you may see more than 1 instance, and that&#8217;s becasue of the infrastructure you created in earlier challenges in this lab.</strong></p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Now, if you wanted to get detailed information about the AWS instance from Terraform you can look in the Terraform state file.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>cat terraform.tfstate</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here you will see only the resources created (1 ec2 instance) by this Terraform project.
+This file provides you with a wealth of information regarding the infrastructure that was just provisioned.</p>
+</div>
+<div class="paragraph">
+<p><strong><em>OPTIONAL:  Login to the <code>AWS Console</code> using the tab at the top of the lab to view the resource(s) created in AWS.</em></strong></p>
+</div>
+</div>
+</div>
+<h1 id="_task_3_make_changes_to_the_terraform_project" class="sect0"><a class="anchor" href="#_task_3_make_changes_to_the_terraform_project"></a>☑️ Task 3 - Make Changes to the Terraform Project</h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="paragraph">
+<p>You have created and deployed your first AWS instance with a simple Terraform project.
+What if you want to make a change of some sort?</p>
+</div>
+<div class="paragraph">
+<p>Edit the <code>main.tf</code> file and add more resources.
+<strong>Add a security group for example, and specify ports for ingess and egress.</strong>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>vim main.tf</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>resource "aws_security_group" "terraform_group" {
+  name = "myMagicalSecGroup"
+  ingress {
+	from_port = 22
+	to_port = 22
+	protocol = "tcp"
+	cidr_blocks = ["0.0.0.0/0"]
+}
+
+  ingress {
+	from_port = 80
+	to_port = 80
+	protocol = "tcp"
+	cidr_blocks = ["0.0.0.0/0"]
+}
+
+  egress {
+	from_port = 0
+	to_port = 0
+	protocol = "-1"
+	cidr_blocks = ["0.0.0.0/0"]
+}
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once you have made the these ADDITIONS, you will need to run <code>terraform plan</code> to update the plan.
+This will output the needed changes.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>terraform plan --out myMagicalInstance</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You will notice in the summary that the changes have been indicated with - and + for what has been added taken away.
+Please go ahead and apply the change.</p>
+</div>
+<div class="paragraph">
+<p>Example output:  <code>Plan: 1 to add, 0 to change, 0 to destroy.</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>terraform apply myMagicalInstance</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Terraform will make changes and add the additional resources specified by your <code>main.tf</code> file changes/additions.</p>
+</div>
+<div class="paragraph">
+<p><strong><em>OPTIONAL:  Login to the <code>AWS Console</code> using the tab at the top of the lab to view the modifications that took place.
+The addition of the security group and the ingress / egress ports.</em></strong></p>
+</div>
+</div>
+</div>
+<h1 id="_task_4_deprovisioning_resources_of_a_terraform_project" class="sect0"><a class="anchor" href="#_task_4_deprovisioning_resources_of_a_terraform_project"></a>☑️ Task 4 - Deprovisioning resources of a Terraform Project</h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="paragraph">
+<p>Terraform makes it really simple to <code>clean up / remove / deprovision</code> the project resources.
+Since you no longer need these resources, please destroy the infrastructure resources created by the Terraform project.
+Terraform will use the build files which act as a source of truth to de-provision all infrastructure and resources.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>terraform destroy</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You will be prompted if you want to continue, please enter <code>yes</code>.</p>
+</div>
+<div class="paragraph">
+<p>Momentarily you will see confirmation of the resources destruction (1 ec2 instance, and 1 security group).
+<span class="image"><img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/basics2.png?raw=true" alt="basics2"></span></p>
+</div>
+<div class="paragraph">
+<p><strong><em>OPTIONAL:  Login to the <code>AWS Console</code> and validate that the AWS resource(s) have been deleted.</em></strong></p>
+</div>
+<div class="paragraph">
+<p>This concludes the Terraform Basics challenge</p>
 </div>
 </div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="module-02.html" class="query-params-link">2. Infrastructure Awareness</a></span>
+  <span class="prev"><a href="module-02.html" class="query-params-link">2. Create a Terraform-enabled Execution Environment</a></span>
+  <span class="next"><a href="module-04.html" class="query-params-link">4. OPTIONAL - Terraform and the Certified Collection for Terraform</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

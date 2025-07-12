@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Ansible Automation Platform Lab Guide :: Ansible Automation Roadshow - Scenario 01</title>
+    <title>Untitled :: Ansible Automation Roadshow - Scenario 01</title>
     <link rel="canonical" href="https://redhat-scholars.github.io/course-template/modules/module-01.html">
     <link rel="prev" href="index.html">
     <link rel="next" href="module-02.html">
@@ -45,7 +45,7 @@
 <ul class="nav-list">
   <li class="nav-item is-current-page" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="module-01.html">1. Automated Backups</a>
+    <a class="nav-link" href="module-01.html">1. Terraform and Ansible Automation Platform 2.5</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="#backupLinux">Backing up Linux</a>
@@ -60,7 +60,7 @@
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="module-02.html">2. Infrastructure Awareness</a>
+    <a class="nav-link" href="module-02.html">2. Create a Terraform-enabled Execution Environment</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="module-02.html#atscale">System Reports</a>
@@ -75,13 +75,25 @@
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="module-03.html">3. Windows Reports</a>
+    <a class="nav-link" href="module-03.html">3. OPTIONAL - Terraform Basics</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="module-03.html#lastCheck">Check Schedule</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="module-03.html#codeSnippets">Code Snippets</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="module-04.html">4. OPTIONAL - Terraform and the Certified Collection for Terraform</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-04.html#lastCheck">Check Schedule</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-04.html#codeSnippets">Code Snippets</a>
   </li>
 </ul>
   </li>
@@ -113,45 +125,247 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Exercises</a></li>
-    <li><a href="module-01.html">1. Automated Backups</a></li>
+    <li><a href="module-01.html">1. Terraform and Ansible Automation Platform 2.5</a></li>
   </ul>
 </nav>
 </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Ansible Automation Platform Lab Guide</h1>
-<div id="toc" class="toc">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_welcome_to_the_team">Welcome to the Team!</a>
-<ul class="sectlevel2">
-<li><a href="#_lab_environment_setup">Lab Environment Setup</a></li>
-</ul>
+<div id="preamble">
+<div class="sectionbody">
+<hr>
+<div class="paragraph">
+<p>slug: tf-aap25 id: x5x50gnffrkx type: challenge title: Terraform and Ansible Automation Platform 2.5 notes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>type: text contents: |-   # Terraform &amp; Red Hat Ansible Automation Platform 2.5   <span class="image"><img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/main.png?raw=true" alt="main" width="600"></span>   Welcome!!!</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Grab a Coffee/Tea</p>
 </li>
-<li><a href="#_lab_exercises">Lab Exercises</a>
-<ul class="sectlevel2">
-<li><a href="#_exercise_1_backing_up_linux_file_systems">Exercise 1: Backing up Linux File Systems</a></li>
-<li><a href="#_exercise_2_windows_system_snapshots">Exercise 2: Windows System Snapshots</a></li>
-</ul>
+<li>
+<p>Sit back and relax</p>
 </li>
-<li><a href="#_code_reference">Code Reference</a>
-<ul class="sectlevel2">
-<li><a href="#_xfs_backup_automation">XFS Backup Automation</a></li>
-</ul>
+<li>
+<p>You can get your hands dirty in a few minutes</p>
 </li>
-<li><a href="#_next_steps">Next Steps</a></li>
 </ul>
 </div>
+<div class="paragraph">
+<p><strong>Please be patient as we build and connect all the components of this lab together</strong></p>
+</div>
+</li>
+<li>
+<p>type: text contents: |-   Terraform is a great tool you can use for deploying cloud infrastructure using Infrastructure as Code (IaC).
+It allows us to define infrastructure and then build, change and destroy these resources.
+Terraform can be a simple way to deploy infrastructure, however if you add Ansible into the mix you can bring Configuration as Code (CaC) to the party!
+and bring spice to your automation journey!</p>
+<div class="paragraph">
+<p><span class="image"><img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/main.png?raw=true" alt="main"></span> tabs:</p>
+</div>
+</li>
+<li>
+<p>id: xfkhth36xf32 title: Ansible Automation Platform type: service hostname: controller port: 443</p>
+</li>
+<li>
+<p>id: ocbtkkhorzdz title: AWS Console type: service hostname: cloud-client path: / port: 80 difficulty: "" timelimit: 0 enhanced_loading: null&#8201;&#8212;&#8201;👋 Challenge 1 introduction.
+===</p>
+<div class="paragraph">
+<p>==== Estimated time to complete: <em>45 minutes</em>&lt;p&gt;</p>
+</div>
+</li>
+<li>
+<p>Welcome to the <code>Terraform and Ansible Automation Platform</code> lab.
+In the following challenges and tasks we will guide you in using Ansible Automation Platform and Terraform together.
+From a central automation tool (Ansible Automation Platform), trigger Terraform to create cloud Infrastructure.</p>
+</li>
+<li>
+<p>In this first challenge you will learn</p>
+<div class="ulist">
+<ul>
+<li>
+<p>How to configure the Terraform Backend Credential in Ansible Automation Platform</p>
+</li>
+<li>
+<p>How to configure the Terraform Inventory</p>
+</li>
+<li>
+<p>How to create an Ansible job template and run it to create resources in AWS using Terraform</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<h1 id="_task_1_configure_the_terraform_backend_credential_in_ansible_automation_platform" class="sect0"><a class="anchor" href="#_task_1_configure_the_terraform_backend_credential_in_ansible_automation_platform"></a>☑️ Task 1 - Configure the Terraform Backend Credential in Ansible Automation Platform</h1>
 <div class="sect1">
-<h2 id="_welcome_to_the_team"><a class="anchor" href="#_welcome_to_the_team"></a>Welcome to the Team!</h2>
+<h2 id="_what_is_the_terraform_backend_credential_type"><a class="anchor" href="#_what_is_the_terraform_backend_credential_type"></a>What is the Terraform Backend Credential Type</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Congratulations on joining the team! This lab will introduce you to automation using Ansible Automation Platform. We&#8217;ll start with read-only tasks that are safe to automate, helping you build confidence before moving to more complex automation scenarios.</p>
+<p>The <code>Terraform Backend Credential Type</code> enables secure storage of configuration for any remote Terraform backend in Ansible Automation Platform.
+Then Ansible Automation Platform can access the Terraform State File wherever the customer may want to store it.
+In this lab you will be storing the Terraform State File on an AWS S3 storage bucket.</p>
 </div>
-<div class="sect2">
-<h3 id="_lab_environment_setup"><a class="anchor" href="#_lab_environment_setup"></a>Lab Environment Setup</h3>
-<div class="sect3">
-<h4 id="_access_credentials"><a class="anchor" href="#_access_credentials"></a>Access Credentials</h4>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_login_to_aws_and_retrieve_the_s3_bucket_name"><a class="anchor" href="#_login_to_aws_and_retrieve_the_s3_bucket_name"></a>Login to AWS and retrieve the S3 bucket name</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Before we can configure the <code>Terraform Backend Credential</code> in Ansible Automation Platform, we need to know the S3 bucket name where the Terraform state files will be stored.
+In order to do this we will need to log in to the AWS account provided for this lab, and <strong>capture the S3 bucket name.</strong></p>
+</div>
+<div class="paragraph">
+<p>Click on the <code>AWS Console</code> tab at the top of the lab.
+Here you will see your temporary AWS account details needed (now and later).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/awsconsole.png?raw=true" alt="awsconsole" width="800">
+</div>
+</div>
+<div class="paragraph">
+<p>Launch the AWS console from the <code>Account ID</code> launch link Login with the AWS credentials</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/awslogin.png?raw=true" alt="awslogin" width="800">
+</div>
+</div>
+<div class="paragraph">
+<p>Upon login to AWS in the search field type <code>S3</code> and then select the S3 service.
+In this service you will see the existing S3 storage bucket that we&#8217;ve already created for you.
+Please make note of it&#8217;s name.
+The S3 bucket will start with <code>aap-tf-bucket-<mark><mark>aLongListofCharacters</mark></mark></code>.
+We will need this shortly.
+<span class="image"><img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/awss3name.png?raw=true" alt="awss3name" width="800"></span> .</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_log_in_to_the_ansible_automation_platform_and_create_the_terraform_backend_credential"><a class="anchor" href="#_log_in_to_the_ansible_automation_platform_and_create_the_terraform_backend_credential"></a>Log in to the <code>Ansible Automation Platform</code> and create the Terraform Backend Credential</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Click on the <code>Ansible Automation Platform</code> tab at the top of lab.</p>
+</div>
+<div class="paragraph">
+<p>Log in using the following credentials: + <em>Login credentials:</em>&lt;p&gt; <code>User:  admin</code> &lt;p&gt; <code>Password:  ansible123!</code> &lt;p&gt;&#8201;&#8212;&#8201;</p>
+</div>
+<div class="paragraph">
+<p>Credentials are utilized for authentication when launching Jobs against machines, synchronizing with inventory sources, and importing project content from a version control system.
+In this lab, we have created some different credentials, for example.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>AWS_Credential</code> - This is the AWS credential for performing actions on AWS cloud.
+For example, creating a VPC, or other AWS resources, or shutting down an instance, or installing and configuring an OS or configuring other AWS services.
+Pretty much anything you need to perform in AWS.</p>
+</li>
+<li>
+<p><code>SSH Controller Credentials</code> - This is an SSH key for the Ansible Automation Platform.
+Often you will also have SSH machine credentials to gain SSH access to the Operating systems like RHEL.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Expand the <code>Automation Execution</code> menu on the left.
+<code>Automation Execution</code> -&gt; <code>Infrastructure</code> -&gt;<code> Credentials</code>.
+Click on the <code>Credentials</code> link and examine some of pre-configured credentials</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>[!NOTE] The keys are encrypted so no one, not even an administrator, can see the keys once placed in Ansible Automation Platfrom as a credential.</p>
+</div>
+</blockquote>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Click on <code>+ Create credential</code></p>
+</li>
+<li>
+<p>For the <code>Name</code> enter <code>Terraform Backend Credential</code></p>
+</li>
+<li>
+<p>Expand the <code>Credential Type</code> drop-down, and select <code>Terraform backend configuration</code></p>
+</li>
+<li>
+<p>In the <code>Backend configuration</code> section below you will enter the details similar to the following</p>
+</li>
+<li>
+<p>Start with the following code snippet and paste it into the <code>Backend configuration</code> section, but you <strong>MUST make changes to lines 1, 2, 4, and 5.</strong></p>
+</li>
+<li>
+<p>Update the <code>bucket</code>, <code>key</code>, <code>access_key</code>, and <code>secret_key</code> lines for your specific details</p>
+</li>
+<li>
+<p>Click on <code>Create credential</code> to save the credential</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>bucket = "aap-tf-bucket-ALONG-LISTOF-CHARACTERS-CHANGE-ME"
+key = "YOURNAME/tfstatefile"
+region = "us-east-1"
+access_key = "YOUR-LAB-awsaccesskey-CHANGE-ME"
+secret_key = "YOUR-LAB-awssecretkey-CHANGE-ME"</pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/tfbackendcred.png?raw=true" alt="tfbackendcred">
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>[!WARNING] <strong>Before you click on <code>Create credential</code> to save the <code>Backend configuration</code> section, yours will look SIMILAR to the following BUT WITH YOUR SPECIFIC AWS ENVIRONMENT DETAILS.</strong></p>
+</div>
+</blockquote>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>bucket = "aap-tf-bucket-cfe5d5cb-b3fa-5555-555c-blahblahblah"
+key = "johnsmith/tfstatefile"
+region = "us-east-1"
+access_key = "AKBCDEBLAHBLAHBLAH"
+secret_key = "Oz8vqJsY6zFFFq83xblahblahblahblahblah"</pre>
+</div>
+</div>
+</div>
+</div>
+<h1 id="_task_2_terraform_inventory" class="sect0"><a class="anchor" href="#_task_2_terraform_inventory"></a>☑️ Task 2 - Terraform Inventory</h1>
+<div class="sect1">
+<h2 id="_in_ansible_automation_platform_create_the_terraform_inventory_source"><a class="anchor" href="#_in_ansible_automation_platform_create_the_terraform_inventory_source"></a>In <code>Ansible Automation Platform</code>, create the Terraform inventory source</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An Inventory is a collection of hosts against which automation jobs may be launched.
+Inventories.
+You can source your inventory data from external sources and cloud providers.
+In this case we will be sourceing our data from Terraform.
+Hence, why will create a Terraform Inventory Source for this purpose.</p>
+</div>
+<div class="paragraph">
+<p>Click on the <code>Ansible Automation Platform</code> tab at the top of lab.
+(if not already)</p>
+</div>
+<div class="paragraph">
+<p>Expand the <code>Automation Execution</code> menu on the left.
+<code>Automation Execution</code> -&gt; <code>Infrastructure</code> -&gt;<code> Inventories</code>.</p>
+</div>
+<div class="paragraph">
+<p>Notice that there is an inventory that we&#8217;ve created for you called <code>Terraform Inventory</code>.
+<span class="image"><img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/tfinventory1.png?raw=true" alt="tfinventory1" width="800"></span> Click on this inventory, and then select the <code>Sources</code> tab.
+Click the <code>+ Create Source</code> and then enter the following details.</p>
+</div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -159,318 +373,320 @@
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Username</th>
-<th class="tableblock halign-left valign-top">Password</th>
+<th class="tableblock halign-left valign-top">Field</th>
+<th class="tableblock halign-left valign-top">Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ansible123!</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Terraform Source</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Execution environment</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Terraform Execution Environment</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Source</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Terraform State</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Credential</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Terraform Backend Credential</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Verbosity</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0 (Warning)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Overwrite</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Check</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Update on launch</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Check</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cache timeout (seconds)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Source variables</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">backend_type: s3</p></td>
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>Click on <code>Create source</code> to save this new Inventory Source.
+Now select the <code>Launch inventory update</code> button at the top to test the Terraform inventory source (and the credential that you created) <span class="image"><img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/tfinventorysource1.png?raw=true" alt="tfinventorysource1"></span></p>
 </div>
+<div class="paragraph">
+<p>Click on the <code>Launch inventory update</code> button to <code>validate the correct configuration of this inventory source</code>.
+This will synchronize/update the AWS hosts list.
+Wait for the Status to show <code>Success</code>.
+<span class="image"><img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/tfinventorysource2.png?raw=true" alt="tfinventorysource2" width="800"></span></p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>[!NOTE] <strong>If for some reason the inventory update doesn&#8217;t succeed, please re-update the Terraform Backend Credential.</strong></p>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+<h1 id="_task_3_create_a_job_template_to_kick_off_a_terraform_project_terraform_provider_for_aws" class="sect0"><a class="anchor" href="#_task_3_create_a_job_template_to_kick_off_a_terraform_project_terraform_provider_for_aws"></a>☑️ Task 3 - Create a Job Template to kick off a Terraform project (Terraform provider for AWS)</h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="paragraph">
+<p>In this Task we will create an Ansible Job Template that will kick off a Terrafrom project.
+The Terraform project is a simple project that will leverage the AWS provider to create an EC2 instance in the AWS cloud account you are using.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>[!NOTE] <strong>Please note that you can also do this in Azure and Google Cloud in the same way as you are doing here with AWS</strong></p>
+</div>
+</blockquote>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_lab_exercises"><a class="anchor" href="#_lab_exercises"></a>Lab Exercises</h2>
+<h2 id="_create_and_launch_the_job_template"><a class="anchor" href="#_create_and_launch_the_job_template"></a>Create and Launch the job template</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_exercise_1_backing_up_linux_file_systems"><a class="anchor" href="#_exercise_1_backing_up_linux_file_systems"></a>Exercise 1: Backing up Linux File Systems</h3>
 <div class="paragraph">
-<p>Managing backups across multiple Linux servers is a common operational task. Ansible can automate various snapshot mechanisms whether your infrastructure is cloud-based, virtualized, or bare metal.</p>
-</div>
-<div class="sect3">
-<h4 id="_step_1_check_current_backup_status"><a class="anchor" href="#_step_1_check_current_backup_status"></a>Step 1: Check Current Backup Status</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Navigate to the <code>aap</code> tab and login using the credentials above (<code>admin/ansible123!</code>)</p>
-</li>
-<li>
-<p>Click on the Menu dropdown icon (hamburger menu)</p>
-</li>
-<li>
-<p>Navigate to <strong>Automation Execution</strong> → <strong>Templates</strong></p>
-</li>
-<li>
-<p>Launch the template <strong>Check RHEL Backups</strong> by clicking the 🚀 icon</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>You should see that no backups are currently available.</p>
+<p>Click on the <code>Ansible Automation Platform</code> tab at the top of lab.
+(if not already) Expand the <code>Automation Execution</code> menu on the left.
+<code>Automation Execution</code> -&gt; <code>Templates</code>.
+Now click on <code>+ Create Template</code></p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/backupcheck.png" alt="Backup Check Results">
+<img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/create_templates1st.png?raw=true" alt="create templates1st" width="800">
 </div>
-<div class="title">Figure 1. Current Backup Status</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_step_2_create_xfs_backups"><a class="anchor" href="#_step_2_create_xfs_backups"></a>Step 2: Create XFS Backups</h4>
-<div class="paragraph">
-<p>Now let&#8217;s create backups of the XFS file systems on your RHEL servers:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Navigate back to <strong>Automation Execution</strong> → <strong>Templates</strong></p>
-</li>
-<li>
-<p>Launch the <strong>Server Backup - XFS/RHEL</strong> template</p>
-</li>
-<li>
-<p>This process will backup your three RHEL nodes using XFS dumps</p>
-</li>
-</ol>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>This backup process takes approximately 6-7 minutes. Feel free to proceed with other tasks while it runs - Ansible jobs can run in parallel safely!</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/xfsbackup.png" alt="XFS Backup in Progress">
-</div>
-<div class="title">Figure 2. XFS Backup Process</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_step_3_verify_backup_creation"><a class="anchor" href="#_step_3_verify_backup_creation"></a>Step 3: Verify Backup Creation</h4>
-<div class="paragraph">
-<p>Once the backup completes:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Launch the <strong>Check RHEL Backups</strong> template again</p>
-</li>
-<li>
-<p>Verify that backups are now available on each server</p>
-</li>
-</ol>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/afterbackupcheck.png" alt="Backup Check After Creation">
-</div>
-<div class="title">Figure 3. Backup Verification</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_exercise_2_windows_system_snapshots"><a class="anchor" href="#_exercise_2_windows_system_snapshots"></a>Exercise 2: Windows System Snapshots</h3>
-<div class="paragraph">
-<p>Windows systems have built-in Volume Shadow Copy Service (VSS) snapshotting capabilities. While your organization may use third-party backup tools, VSS snapshots are essential for database systems as they allow backups without locking active files.</p>
-</div>
-<div class="sect3">
-<h4 id="_step_1_create_vss_snapshots"><a class="anchor" href="#_step_1_create_vss_snapshots"></a>Step 1: Create VSS Snapshots</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Navigate to <strong>Automation Execution</strong> → <strong>Templates</strong></p>
-</li>
-<li>
-<p>Launch the <strong>Server Snapshot - VSS/Windows</strong> template</p>
-</li>
-</ol>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/vss-snap.png" alt="Windows VSS Snapshot Creation">
-</div>
-<div class="title">Figure 4. Windows VSS Snapshot</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_step_2_verify_snapshot_creation"><a class="anchor" href="#_step_2_verify_snapshot_creation"></a>Step 2: Verify Snapshot Creation</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Navigate to <strong>Automation Execution</strong> → <strong>Templates</strong></p>
-</li>
-<li>
-<p>Execute the <strong>Check Windows Backups</strong> template</p>
-</li>
-</ol>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/vss-snap-check.png" alt="VSS Snapshot Check">
-</div>
-<div class="title">Figure 5. VSS Snapshot Verification</div>
 </div>
 <div class="paragraph">
-<p>Great! The VSS snapshot has been successfully created.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_step_3_schedule_automated_snapshots"><a class="anchor" href="#_step_3_schedule_automated_snapshots"></a>Step 3: Schedule Automated Snapshots</h4>
-<div class="paragraph">
-<p>To automate recurring snapshots without manual intervention:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Navigate to <strong>Automation Execution</strong> → <strong>Templates</strong></p>
-</li>
-<li>
-<p>Select <strong>Server Backup - VSS/Windows</strong></p>
-</li>
-<li>
-<p>Click on the <strong>Schedules</strong> tab</p>
-</li>
-<li>
-<p>Click <strong>Create schedule</strong></p>
-</li>
-</ol>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/win-shed.png" alt="Windows Schedule Setup">
-</div>
-<div class="title">Figure 6. Schedule Configuration</div>
-</div>
-<div class="sect4">
-<h5 id="_schedule_configuration_details"><a class="anchor" href="#_schedule_configuration_details"></a>Schedule Configuration Details:</h5>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Schedule Name:</strong> <code>5 Min Snappy</code></p>
-</li>
-<li>
-<p><strong>Description:</strong> <code>Automated VSS Snaps</code></p>
-</li>
-<li>
-<p><strong>Start date/time:</strong> Leave as default</p>
-</li>
-<li>
-<p><strong>Time Zone:</strong> Leave as default</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_frequency_settings"><a class="anchor" href="#_frequency_settings"></a>Frequency Settings:</h5>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Click <strong>Next</strong></p>
-</li>
-<li>
-<p>Set <strong>Frequency</strong> to <code>Minutely</code></p>
-</li>
-<li>
-<p>Set <strong>Interval</strong> to <code>5</code></p>
-</li>
-<li>
-<p>Select <strong>Save rule</strong> and click <strong>Next</strong></p>
-</li>
-<li>
-<p>Skip exceptions (click <strong>Next</strong>)</p>
-</li>
-<li>
-<p>Click <strong>Finish</strong></p>
-</li>
-</ol>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/shed-details.png" alt="Schedule Configuration Details">
-</div>
-<div class="title">Figure 7. Schedule Details</div>
+<p>Fill out the following fields:<table><tr><th>Parameter</th><th>Value</th></tr>
+<tr><td>Name</td><td>Deploy AWS resources using Terraform AWS provider</td>
+<tr><td>Inventory</td><td>Terraform Inventory</td>
+<tr><td>Project</td><td>Terraform Demos Project</td>
+<tr><td>Playbook</td><td>playbooks/1deploy-terraform-aws-provider.yml</td>
+<tr><td>Execution environment</td><td>Terraform Execution Environment</td>
+<tr><td>Credentials</td><td>"AWS_Credential"  AND  "Terraform Backend Credential"</td>
+&lt;/table&gt;</p>
 </div>
 <div class="paragraph">
-<p>Perfect! Your automated snapshot schedule is now configured.</p>
+<p>Scroll to the bottom Click the blue <code>Create Job Template</code> button to <strong>save</strong> the job template.
+<img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/create_templates2.png?raw=true" style="display: block; margin: left"></img></p>
 </div>
+<div class="paragraph">
+<p>Launch the <code>Deploy AWS resources using Terraform AWS provider</code> job template by selecting it and clicking on <code>🚀 Launch template</code>, or by simply clicking the <code>Rocket Launcher</code> 🚀 icon, depending on where you are in the teplates view.  The job status will show <code>Running</code> momentarily.</p>
 </div>
-</div>
+<div class="paragraph">
+<p><code>Observe the output of the Job Template run.</code>
+<img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/jtresult1.png?raw=true" style="width:800px;margin-left:0px"></img></p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_code_reference"><a class="anchor" href="#_code_reference"></a>Code Reference</h2>
+<h2 id="_manually_synchronize_the_terraform_inventory_source"><a class="anchor" href="#_manually_synchronize_the_terraform_inventory_source"></a>Manually synchronize the Terraform Inventory Source</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_xfs_backup_automation"><a class="anchor" href="#_xfs_backup_automation"></a>XFS Backup Automation</h3>
 <div class="paragraph">
-<p>Here&#8217;s the key Ansible code used for XFS backups:</p>
+<p>Return to the <code>Inventories</code> menu in Ansible Automation Platform.
+Select the <code>Terraform Inventory</code>, and then click on the <code>Hosts</code> menu.  Notice that there is NO Terraform inventory available yet.
+<img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/tfinventoryhosts1.png?raw=true" style="width:800px;margin-left:0px"></img></p>
+</div>
+<div class="paragraph">
+<p>Now click on the <code>Sources</code> menu and click on  <code>🚀 Launch Inventory Update</code> icon.
+<img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/tfinventorysource3.png?raw=true" style="width:800px;margin-left:0px"></img></p>
+</div>
+<div class="paragraph">
+<p>Return to the <code>Hosts</code> menu, and notice that you have an EC2 instance that was create by Terraform now part of your inventory.
+<img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/tfinventoryhosts2.png?raw=true" style="width:800px;margin-left:0px"></img></p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>[!NOTE]
+<strong>The inventory updates can occur automatically,</strong> but here we didn&#8217;t because we wanted you to see the before and after results in the <code>Host</code> tab of the <code>Terraform Inventory</code>.</p>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_task_3_summary"><a class="anchor" href="#_task_3_summary"></a>Task 3 SUMMARY</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>In this task you created an AAP Job Template, that kicks off a Terraform Project.  The Terraform Project is using the Terrform Provider for AWS to trigger the creation of the AWS resource(s).  You then synchronized the inventory source that pulled in the inventory created by Terraform.  This is a great way to trigger Terraform Projects from Ansible Automation Platform! <strong>A BETTER TOGETHER STORY!</strong></strong></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_terraform_project_that_was_triggered_using_the_ansible_job_template"><a class="anchor" href="#_the_terraform_project_that_was_triggered_using_the_ansible_job_template"></a>The Terraform Project that was triggered using the Ansible job template</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Here&#8217;s the Terraform main.tf project file that was launched using Ansible Automation Platform, if you&#8217;d like to see it.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">tasks:
-  - name: Check if xfsdump is installed
-    ansible.builtin.yum:
-      name: xfsdump
-      state: present
-    when: ansible_facts.os_family == "RedHat"
+<pre class="highlightjs highlight"><code class="language-none hljs">terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.2.0"
+    }
+  }
+  backend "s3" {}
+}
 
-  - name: Ensure the backup directory exists
-    ansible.builtin.file:
-      path: "{{ backup_file | dirname }}"
-      state: directory
-      mode: '0755'
+provider "aws" {
+  region = "us-east-1"
+}
 
-  - name: Perform xfsdump backup
-    ansible.builtin.command:
-      cmd: &gt;
-        xfsdump -l 0 -L {{ backup_label }}
-        -f {{ backup_file }} {{ xfs_mount_point }}
-    register: backup_result
-    ignore_errors: no
+# Fetch the default VPC
+data "aws_vpc" "default" {
+  default = true
+}
 
-  - name: Verify xfsdump success
-    ansible.builtin.debug:
-      msg: "Backup completed successfully: {{ backup_result.stdout }}"</code></pre>
+resource "aws_instance" "tf-demo-aws-ec2-instance-1" {
+  ami           = "ami-0005e0cfe09cc9050"
+  instance_type = "t2.micro"
+  tags = {
+    Name = "tf-demo-aws-ec2-instance-1"
+  }
+
+}</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>☑️ Task 4 - Create a Job Template to kick off a Terraform project (Terraform provider for AWS &amp; Terraform Provider for ANSIBLE Automation Platform (AAP))
+===
+In this Task we will create an Ansible Job Template that will kick off a Terrafrom project.  <strong>The Terraform project is a simple project that will create some AWS resources.  It will leverage the ANSIBLE Automation Platform provider to then push the Terraform inventory (ec2 host(s)) created into the Ansible Automation Platform inventory.</strong></p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>[!NOTE]
+<strong>Please note that you can also do this in Azure and Google Cloud in the same way as you are doing here with AWS</strong></p>
+</div>
+</blockquote>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_next_steps"><a class="anchor" href="#_next_steps"></a>Next Steps</h2>
+<h2 id="_create_and_launch_the_job_template_2"><a class="anchor" href="#_create_and_launch_the_job_template_2"></a>Create and Launch the job template</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You&#8217;ve successfully completed the backup automation exercises! You now have:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>✅ Automated Linux XFS backups</p>
-</li>
-<li>
-<p>✅ Windows VSS snapshots</p>
-</li>
-<li>
-<p>✅ Scheduled recurring snapshots</p>
-</li>
-<li>
-<p>✅ Verification procedures for both systems</p>
-</li>
-</ul>
+<p>Click on the <code>Ansible Automation Platform</code> tab at the top of lab. (if not already)
+Expand the <code>Automation Execution</code> menu on the left.
+<code>Automation Execution</code> -&gt; <code>Templates</code>.
+Now click on <code>+ Create Template</code> then scroll down and click  <code>Create job template</code></p>
 </div>
 <div class="paragraph">
-<p>This foundation in read-only automation tasks will help you build confidence for more complex automation scenarios in the future.</p>
+<p><img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/create_templates.png?raw=true" style="width:800px;margin-left:0px"></img></p>
+</div>
+<div class="paragraph">
+<p>Fill out the following fields:</p>
+</div>
+<div class="paragraph">
+<p><table><tr><th>Parameter</th><th>Value</th></tr>
+<tr><td>Name</td><td>Deploy AWS resources using Terraform AWS &amp; ANSIBLE-AAP provider</td>
+<tr><td>Inventory</td><td>Terraform Inventory</td>
+<tr><td>Project</td><td>Terraform Demos Project</td>
+<tr><td>Playbook</td><td>playbooks/2deploy-terraform-ansible-provider.yml</td>
+<tr><td>Execution environment</td><td>Terraform Execution Environment</td>
+<tr><td>Credentials</td><td>"AWS_Credential"  AND  "Terraform Backend Credential"</td>
+&lt;/table&gt;</p>
+</div>
+<div class="paragraph">
+<p>Scroll to the bottom Click the blue <code>Create Job Template</code> button to <strong>save</strong> the job template.</p>
+</div>
+<div class="paragraph">
+<p>Launch the <code>Deploy AWS resources using Terraform AWS &amp; ANSIBLE-AAP provider</code> job template, by selecting it and clicking on <code>🚀 Launch template</code>, or by simply clicking the <code>Rocket Launcher</code> 🚀 icon, depending on where you are in the view.  The job status will show <code>Running</code> momentarily.
+<code>Observe the output of the Job Template run.</code></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_view_the_terraform_inventory"><a class="anchor" href="#_view_the_terraform_inventory"></a>View the Terraform Inventory</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Return to the <code>Inventories</code> menu in Ansible Automation Platform.
+Select the <code>Terraform Inventory</code>, and then click on the <code>Hosts</code> menu.
+Notice that you have an additional EC2 instance that was create by Terraform now also part of your inventory.</p>
+</div>
+<div class="paragraph">
+<p><strong>The Terrafrom Provider for ANSIBLE Automation Platform pushed the (ec2 host(s)) created into the Ansible Automation Platform inventory.</strong></p>
+</div>
+<div class="paragraph">
+<p><img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/tfinventoryhosts3.png?raw=true" style="width:800px;margin-left:0px"></img></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_task_4_summary"><a class="anchor" href="#_task_4_summary"></a>Task 4 SUMMARY</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>In this task you created an AAP Job Template, that kicks off a Terraform Project.  The Terraform Project is using the Terrform Provider for ANSIBLE AUTOMATION PLATORM to trigger the creation of the AWS resource(s).  Terraform (via the Terraform Provider for AAP) then automatically pushed the created resources into the Ansibe Automation Platform Inventory.  The Terraform Provider for AAP is something that Terraform users would most likely use at the Terraform command line.  Here you saw how you can still use this in Ansible Automation Platform.  The Terraform Provider for Ansible Automation Platform can also be used in Terraform projects to trigger Ansible Automation Platform Job Templates.  Further enhancing the <strong>BETTER TOGETHER STORY!</strong>, and additionally providing more options and choice for Automators and Infrastructure operators!</strong></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_terraform_project_that_was_triggered_using_the_ansible_job_template_2"><a class="anchor" href="#_the_terraform_project_that_was_triggered_using_the_ansible_job_template_2"></a>The Terraform Project that was triggered using the Ansible job template</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Here&#8217;s the Terraform main.tf project file that was launched using Ansible Automation Platform, if you&#8217;d like to see it.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.2.0"
+    }
+
+    aap = {
+      source = "ansible/aap"
+    }
+  }
+	backend "s3" {}
+}
+
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "aws_instance" "tf-demo-aws-ec2-instance-2" {
+  ami           = "ami-0005e0cfe09cc9050"
+  instance_type = "t2.micro"
+  tags = {
+    Name = "tf-demo-aws-ec2-instance-2"
+  }
+}
+
+provider "aap" {
+  host     = "https://controller"
+  username = "admin"
+  password = "ansible123!"
+  insecure_skip_verify = true
+}
+
+resource "aap_host" "tf-demo-aws-ec2-instance-2" {
+  inventory_id = 2
+  name = "aws_instance_tf-demo-aws-ec2-instance-2"
+  description = "An EC2 instance created by Terraform"
+  variables = jsonencode(aws_instance.tf-demo-aws-ec2-instance-2)
+}
+```+++&lt;/tr&gt;++++++&lt;/tr&gt;++++++&lt;/tr&gt;++++++&lt;/tr&gt;++++++&lt;/tr&gt;++++++&lt;/tr&gt;++++++&lt;/table&gt;++++++&lt;/tr&gt;++++++&lt;/tr&gt;++++++&lt;/tr&gt;++++++&lt;/tr&gt;++++++&lt;/tr&gt;++++++&lt;/tr&gt;++++++&lt;/table&gt;+++</code></pre>
+</div>
 </div>
 </div>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="index.html" class="query-params-link">Exercises</a></span>
-  <span class="next"><a href="module-02.html" class="query-params-link">2. Infrastructure Awareness</a></span>
+  <span class="next"><a href="module-02.html" class="query-params-link">2. Create a Terraform-enabled Execution Environment</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

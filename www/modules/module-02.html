@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Infrastructure Data Gathering with Ansible :: Ansible Automation Roadshow - Scenario 01</title>
+    <title>Untitled :: Ansible Automation Roadshow - Scenario 01</title>
     <link rel="canonical" href="https://redhat-scholars.github.io/course-template/modules/module-02.html">
     <link rel="prev" href="module-01.html">
     <link rel="next" href="module-03.html">
@@ -45,7 +45,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="module-01.html">1. Automated Backups</a>
+    <a class="nav-link" href="module-01.html">1. Terraform and Ansible Automation Platform 2.5</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="module-01.html#backupLinux">Backing up Linux</a>
@@ -60,7 +60,7 @@
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="module-02.html">2. Infrastructure Awareness</a>
+    <a class="nav-link" href="module-02.html">2. Create a Terraform-enabled Execution Environment</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="#atscale">System Reports</a>
@@ -75,13 +75,25 @@
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="module-03.html">3. Windows Reports</a>
+    <a class="nav-link" href="module-03.html">3. OPTIONAL - Terraform Basics</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="module-03.html#lastCheck">Check Schedule</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="module-03.html#codeSnippets">Code Snippets</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="module-04.html">4. OPTIONAL - Terraform and the Certified Collection for Terraform</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-04.html#lastCheck">Check Schedule</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-04.html#codeSnippets">Code Snippets</a>
   </li>
 </ul>
   </li>
@@ -113,50 +125,276 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Exercises</a></li>
-    <li><a href="module-02.html">2. Infrastructure Awareness</a></li>
+    <li><a href="module-02.html">2. Create a Terraform-enabled Execution Environment</a></li>
   </ul>
 </nav>
 </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Infrastructure Data Gathering with Ansible</h1>
-<div id="toc" class="toc">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_introduction">Introduction</a>
-<ul class="sectlevel2">
-<li><a href="#_lab_environment_setup">Lab Environment Setup</a></li>
-</ul>
+<div id="preamble">
+<div class="sectionbody">
+<hr>
+<div class="paragraph">
+<p>slug: tf-aap-ee id: 6rxwhe0js6j3 type: challenge title: Create a Terraform-enabled Execution Environment teaser: In this challenge you will create an Execution Environment that will enable   Terraform usage in Ansible Automation Platform notes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>type: text contents: |-   # Create a Terraform-enabled Execution Environment</p>
+<div class="paragraph">
+<p>## What is an Execution Environment?
+All automation in Red Hat Ansible Automation Platform runs on container images called automation execution environments.
+Automation execution environments create a common language for communicating automation dependencies, and offer a standard way to build and distribute the automation environment.</p>
+</div>
+<div class="paragraph">
+<p>In the previous challenge an Execution Environment called <code>Terraform Execution Environment</code> was already created for you.</p>
+</div>
+<div class="paragraph">
+<p><strong>To use Terraform in YOUR Ansible Automation Platform environment you must create and Execution Environment</strong> that includes the Cloud Terraform collection, the Terraform binary, other cloud collections, and other dependencies.
+<strong>Hence, why you will learn how to create an Execution Environment.</strong></p>
+</div>
+<div class="paragraph">
+<p>The tool needed to create an <code>execution environment</code> is called <code>ansible-builder</code> tabs:</p>
+</div>
 </li>
-<li><a href="#_lab_exercises">Lab Exercises</a>
-<ul class="sectlevel2">
-<li><a href="#_exercise_1_gathering_server_information">Exercise 1: Gathering Server Information</a></li>
-<li><a href="#_exercise_2_generating_infrastructure_reports_at_scale">Exercise 2: Generating Infrastructure Reports at Scale</a></li>
-<li><a href="#_exercise_3_compliance_reporting_with_openscap">Exercise 3: Compliance Reporting with OpenSCAP</a></li>
-</ul>
+<li>
+<p>id: yq147g6hvt3w title: Terminal type: terminal hostname: devhost workdir: /home/rhel/ cmd: su - rhel</p>
 </li>
-<li><a href="#_code_reference">Code Reference</a>
-<ul class="sectlevel2">
-<li><a href="#_openscap_automation_implementation">OpenSCAP Automation Implementation</a></li>
-</ul>
+<li>
+<p>id: r8uvoriehkdo title: VSCode type: service hostname: devhost path: /editor/?folder=/home/rhel/terraform-ee port: 443</p>
 </li>
-<li><a href="#_key_takeaways">Key Takeaways</a></li>
-<li><a href="#_next_steps">Next Steps</a></li>
+<li>
+<p>id: qo3m858hdeff title: Ansible Automation Platform type: service hostname: controller port: 443 difficulty: "" timelimit: 0 enhanced_loading: null&#8201;&#8212;&#8201;👋 Challenge introduction.
+===</p>
+<div class="paragraph">
+<p>==== Estimated time to complete: <em>30 minutes</em>&lt;p&gt;</p>
+</div>
+</li>
+<li>
+<p>In this challenge you will learn</p>
+<div class="ulist">
+<ul>
+<li>
+<p>How to create the necessary configuration files needed to create an execution environment</p>
+</li>
+<li>
+<p>How to create the execution environment container image using the <code>ansbile-builder</code> tool</p>
+</li>
+<li>
+<p>How to add the new execution environment to Ansible Automation Platform</p>
+</li>
 </ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
 </div>
 <div class="sect1">
-<h2 id="_introduction"><a class="anchor" href="#_introduction"></a>Introduction</h2>
+<h2 id="_execution_environments"><a class="anchor" href="#_execution_environments"></a>Execution Environments</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Gathering comprehensive data about your infrastructure is one of the best starting points for automation with Ansible. While you know you have servers and networks, auditing and collecting all system data can be a massive undertaking. Fortunately, Ansible excels at this task and can scale to handle infrastructure of any size.</p>
+<p><strong><em>To run Terraform commands from within Ansible Automation Platform, you will need to create an execution environment that contains the Terraform binary and the Red Hat certified collection for Terraform.
+This is easy to do using <a href="https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/latest/html/creating_and_using_execution_environments/assembly-using-builder">ansible-builder</a>.</em></strong></p>
 </div>
 <div class="paragraph">
-<p>This lab will guide you through using Ansible to collect system information, generate reports, and perform compliance audits across your infrastructure.</p>
+<p>In this challenge you will create an execution environment containing everything you need to run Terraform from the Ansible Automation Platform.</p>
 </div>
-<div class="sect2">
-<h3 id="_lab_environment_setup"><a class="anchor" href="#_lab_environment_setup"></a>Lab Environment Setup</h3>
-<div class="sect3">
-<h4 id="_access_credentials"><a class="anchor" href="#_access_credentials"></a>Access Credentials</h4>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>[!NOTE] You can perform the following steps at the TERMINAL, or in Visual Studio Code (VSCode).
+In VSCode you can open a terminal prompt.
+Choose either the <code>TERMINAL</code> tab, or the <code>VSCODE</code> tab from the top of the lab screen.
+We will walk through the steps using the <code>TERMINAL</code> but please feel free to do this in the <code>VSCODE</code> tab if you are more comfortable there!</p>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+<h1 id="_task_1_create_the_configuration_files_for_the_execution_environment" class="sect0"><a class="anchor" href="#_task_1_create_the_configuration_files_for_the_execution_environment"></a>☑️ Task 1 - Create the configuration files for the execution environment</h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="paragraph">
+<p>To create an execution environment with <code>ansible-builder</code>, we need an execution environment definition file.
+The file name will be <code>execution-environment.yml</code></p>
+</div>
+<div class="paragraph">
+<p>Go to the <code>TERMINAL</code>  tab at the top of the lab to open the terminal prompt.
+You will be in the <code>/home/rhel</code> folder</p>
+</div>
+<div class="paragraph">
+<p>Change to the folder named <code>/home/rhel/terraform-ee</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>cd /home/rhel/terraform-ee</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Two empty file already exist in this folder,  <code>execution-environment.yml</code> and <code>requirements.yml</code> files.</p>
+</div>
+<div class="paragraph">
+<p>Modify the <code>execution-environment.yml</code> file and paste into it the following contents: Use <code>vi</code> or <code>vim</code> or <code>nano</code> to modify the <code>execution-environment.yml</code> file.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>vim execution-environment.yml</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---
+version: 3
+
+images:
+  base_image:
+    name: registry.redhat.io/ansible-automation-platform-25/ee-minimal-rhel8:latest
+
+dependencies:
+  galaxy: requirements.yml
+
+options:
+  package_manager_path: /usr/bin/microdnf
+
+additional_build_steps:
+  prepend_base:
+    - RUN $PYCMD -m pip install --upgrade pip setuptools
+  append_base:
+    - RUN curl "https://releases.hashicorp.com/terraform/1.12.2/terraform_1.12.2_linux_amd64.zip" -o "/terraform.zip"
+    - RUN unzip /terraform.zip -d /terraform
+    - RUN mv /terraform/terraform /bin</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This file defines the rules <code>ansible-builder</code> should use to create the execution environment container, including:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>version</code>: the version of ansible-builder to use</p>
+</li>
+<li>
+<p><code>images</code>: here you define the base image to use for the container.
+<strong><em>You are using the  <code>ee-minimal-rhel8:latest</code> base image for the build process</em></strong></p>
+</li>
+<li>
+<p><code>dependencies</code>: in this section you can declare dependencies for optionally galaxy (ansible collections), python, and other system dependencies.
+Notice this section includes a statement <code>galaxy: requirements.yml</code>, this is the file used to define dependent collections found on Ansible Galaxy to be included within the Execution Environment being built</p>
+</li>
+<li>
+<p><code>additional_build_steps</code>: here we can list commands to be inserted into the Dockerfile/Containerfile to be executed.
+In this example, we are downloading and installing Terraform because the Terraform binary is needed for Ansible Automation Platform for playbook execution, specifically playbooks that trigger Terraform.
+<code>prepend_base</code> is to include commands to be used <code>before</code> the main build steps.
+<code>append_base</code> is to include commands to be used <code>after</code> the main build steps.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Modify the file called <code>requirements.yml</code> and paste the following contents: Use <code>vi</code> or <code>nano</code> to modify the <code>requirements.yml</code> file.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>vim requirements.yml</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---
+collections:
+  - name: amazon.aws
+  - name: cloud.terraform
+  - name: google.cloud</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This file defines the Ansible content collections you want to include in your execution environment.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Include the <code>amazon.aws</code>, <code>cloud.terraform</code>, and <code>google.cloud</code> collections</p>
+</li>
+<li>
+<p>This will allow Ansible playbooks to perform automation on cloud infrastructure on AWS and GCP using Terraform and Ansible Automation Platform</p>
+</li>
+<li>
+<p>If  additional collections are desired, one would include them in the <code>requirements.yml</code> file as well</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Please move ahead to the next task.</p>
+</div>
+</div>
+</div>
+<h1 id="_task_2_run_ansible_builder" class="sect0"><a class="anchor" href="#_task_2_run_ansible_builder"></a>☑️ Task 2 - Run ansible-builder</h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="paragraph">
+<p>Run <code>ansible-builder</code> to build the execution environment container.</p>
+</div>
+<div class="paragraph">
+<p>From the terminal prompt run the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>ansible-builder build -v 3 --tag terraform-ee</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will build the container image tagged with <code>terraform-ee</code>.
+This will take a few minutes, and you should see output similar to the following: <span class="image"><img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/eesuccess.png?raw=true" alt="eesuccess"></span></p>
+</div>
+<div class="paragraph">
+<p>To see the newly created image run the following command.
+This image was built locally.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>podman images</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>At this point, you would typically push the container image to a registry such as <code>Quay</code> or <code>Dockerhub</code> or your own <code>Private Automation Hub</code>.
+If you have a Quay or Dockerhub account already, feel free to create a repository, push the image as you normally would, and use it in the following steps, <strong><em>otherwise we have a pre-existing image you can pull.</em></strong></p>
+</div>
+<div class="paragraph">
+<p><strong><em>Example commands</em></strong> on how to tag and then push the Execution Environment image to Quay.io</p>
+</div>
+<div class="paragraph">
+<p><code>podman tag localhost/terraform-ee  quay.io/[username]/terraform-ee</code></p>
+</div>
+<div class="paragraph">
+<p><code>podman login --username [username] --password [mypassowrd] quay.io</code></p>
+</div>
+<div class="paragraph">
+<p><code>podman push quay.io/[username]/terraform-ee</code></p>
+</div>
+</div>
+</div>
+<h1 id="_task_3_add_the_terraform_execution_environment_to_ansible_automation_platform" class="sect0"><a class="anchor" href="#_task_3_add_the_terraform_execution_environment_to_ansible_automation_platform"></a>☑️ Task 3 - Add the Terraform Execution Environment to Ansible Automation Platform</h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="paragraph">
+<p>Now you will add an execution environment to Ansible Automation Platform.</p>
+</div>
+<div class="paragraph">
+<p>Click on the <code>Ansible Automation Platform</code> tab at the top of lab.
+(if not already)</p>
+</div>
+<div class="paragraph">
+<p>Log in using the following credentials: + <em>Login credentials:</em>&lt;p&gt; <code>User:  admin</code> &lt;p&gt; <code>Password:  ansible123!</code> &lt;p&gt;&#8201;&#8212;&#8201;</p>
+</div>
+<div class="paragraph">
+<p>Expand the <code>Automation Execution</code> menu on the left.</p>
+</div>
+<div class="paragraph">
+<p>Navigate to  <code>Automation Execution</code> -&gt; <code>Infrastructure</code> -&gt;<code> Execution Environments</code>.</p>
+</div>
+<div class="paragraph">
+<p>Click on <code>+ Create execution environment</code> and enter the following information.</p>
+</div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -164,439 +402,49 @@
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Username</th>
-<th class="tableblock halign-left valign-top">Password</th>
+<th class="tableblock halign-left valign-top">Field</th>
+<th class="tableblock halign-left valign-top">Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ansible123!</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">myTerraform EE</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Image</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">quay.io/acme_corp/terraform_ee</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pull</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Only pull the image if not present before running</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Registry credential</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quay Registry Credential</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_lab_exercises"><a class="anchor" href="#_lab_exercises"></a>Lab Exercises</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_exercise_1_gathering_server_information"><a class="anchor" href="#_exercise_1_gathering_server_information"></a>Exercise 1: Gathering Server Information</h3>
+<div class="quoteblock">
+<blockquote>
 <div class="paragraph">
-<p>Let&#8217;s start by collecting detailed system facts from individual servers using Ansible&#8217;s built-in capabilities.</p>
+<p>[!NOTE] <strong>Since this image on Quay.io is public you don&#8217;t need to create a Registry credential</strong></p>
 </div>
-<div class="sect3">
-<h4 id="_step_1_access_the_inventory"><a class="anchor" href="#_step_1_access_the_inventory"></a>Step 1: Access the Inventory</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Navigate to your lab <code>aap</code> tab and login using the credentials above</p>
-</li>
-<li>
-<p>Navigate to <strong>Automation Execution</strong> → <strong>Infrastructure</strong> → <strong>Inventories</strong></p>
-</li>
-<li>
-<p>Select the <strong>Video Platform Inventory</strong></p>
-</li>
-<li>
-<p>Click on the <strong>Hosts</strong> tab</p>
-</li>
-</ol>
+</blockquote>
 </div>
 <div class="paragraph">
-<p>This inventory contains the systems we&#8217;ll be automating. You should see several hosts already configured for you.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/node01-setup.png" alt="Node Setup Interface">
-</div>
-<div class="title">Figure 1. Node Setup View</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_step_2_run_ad_hoc_commands"><a class="anchor" href="#_step_2_run_ad_hoc_commands"></a>Step 2: Run Ad-hoc Commands</h4>
-<div class="paragraph">
-<p>We&#8217;ll use Ansible Automation Platform&#8217;s ad-hoc command feature to gather system facts:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Select the host <code>node01</code></p>
-</li>
-<li>
-<p>Click on <strong>Run command</strong></p>
-</li>
-<li>
-<p>From the module dropdown list, select the <strong>Setup</strong> module</p>
-</li>
-<li>
-<p>Click <strong>Next</strong></p>
-</li>
-</ol>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/setup.png" alt="Setup Module Interface">
-</div>
-<div class="title">Figure 2. Setup Module Selection</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_step_3_configure_execution_environment"><a class="anchor" href="#_step_3_configure_execution_environment"></a>Step 3: Configure Execution Environment</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Select the <strong>Default execution environment</strong> from the dropdown</p>
-</li>
-<li>
-<p>Click <strong>Next</strong></p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_step_4_choose_credentials"><a class="anchor" href="#_step_4_choose_credentials"></a>Step 4: Choose Credentials</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Select the <strong>Application Nodes</strong> credential</p>
-</li>
-<li>
-<p>Click <strong>Next</strong></p>
-</li>
-<li>
-<p>Click <strong>Finish</strong> to execute the command</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_step_5_review_system_facts"><a class="anchor" href="#_step_5_review_system_facts"></a>Step 5: Review System Facts</h4>
-<div class="paragraph">
-<p>Once the command executes, you&#8217;ll see comprehensive system facts displayed. This includes all the information Ansible can automatically gather from the target system.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/setup-output.png" alt="Setup Output Results">
-</div>
-<div class="title">Figure 3. System Facts Output</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>The Setup module collects extensive system information including hardware details, network configuration, installed packages, and operating system specifics. This data forms the foundation for infrastructure automation and reporting.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_exercise_2_generating_infrastructure_reports_at_scale"><a class="anchor" href="#_exercise_2_generating_infrastructure_reports_at_scale"></a>Exercise 2: Generating Infrastructure Reports at Scale</h3>
-<div class="paragraph">
-<p>Now let&#8217;s leverage Ansible&#8217;s templating capabilities to create dynamic reports based on collected facts and task results.</p>
-</div>
-<div class="sect3">
-<h4 id="_understanding_infrastructure_awareness"><a class="anchor" href="#_understanding_infrastructure_awareness"></a>Understanding Infrastructure Awareness</h4>
-<div class="paragraph">
-<p>Infrastructure awareness is crucial for effective IT operations. Ansible makes this easy by combining fact collection with Jinja templating to generate comprehensive, dynamic reports.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_step_1_generate_application_server_report"><a class="anchor" href="#_step_1_generate_application_server_report"></a>Step 1: Generate Application Server Report</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Navigate to <strong>Automation Execution</strong> → <strong>Templates</strong></p>
-</li>
-<li>
-<p>Execute the <strong>Application Server Report</strong> template</p>
-</li>
-<li>
-<p>When prompted with options, click <strong>All</strong></p>
-</li>
-</ol>
+<p>Click on <code>Create execution environment</code> to save this new Execution Environmnet.
+Yes, Yes, we&#8217;re using the same image we already have, but remember, this is just to demnstrate how you would add your own created Execution Environment to Ansible Automation Platform.
+<span class="image"><img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/create-ee.png?raw=true" alt="create ee"></span></p>
 </div>
 <div class="paragraph">
-<p>This template will collect information from all your application servers and generate a comprehensive report.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_step_2_view_the_generated_report"><a class="anchor" href="#_step_2_view_the_generated_report"></a>Step 2: View the Generated Report</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Once the template execution completes, navigate to the <strong>Report Server</strong> tab</p>
-</li>
-<li>
-<p>Refresh the page to see the newly generated report</p>
-</li>
-</ol>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/srv-report.png" alt="Server Report Dashboard">
-</div>
-<div class="title">Figure 4. Server Report Overview</div>
-</div>
-<div class="paragraph">
-<p>Notice that the report includes backup information alongside system details, providing a holistic view of your infrastructure status.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/backup-data.png" alt="Backup Report Section">
-</div>
-<div class="title">Figure 5. Backup Data Integration</div>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>You can re-run the report template and select different options to create targeted reports for specific criteria or server subsets.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_exercise_3_compliance_reporting_with_openscap"><a class="anchor" href="#_exercise_3_compliance_reporting_with_openscap"></a>Exercise 3: Compliance Reporting with OpenSCAP</h3>
-<div class="paragraph">
-<p>Security compliance is a critical requirement for most organizations. Let&#8217;s generate a compliance report using OpenSCAP integration.</p>
-</div>
-<div class="sect3">
-<h4 id="_background_why_compliance_reports_matter"><a class="anchor" href="#_background_why_compliance_reports_matter"></a>Background: Why Compliance Reports Matter</h4>
-<div class="paragraph">
-<p>Information Security teams require regular compliance reports to ensure systems meet organizational and regulatory requirements. Ansible can automate OpenSCAP scans to provide these reports consistently and at scale.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_step_1_generate_compliance_report"><a class="anchor" href="#_step_1_generate_compliance_report"></a>Step 1: Generate Compliance Report</h4>
-<div class="paragraph">
-<p>Security has specifically requested a compliance report for <code>Node02</code>. Let&#8217;s fulfill this request:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Navigate to <strong>Automation Execution</strong> → <strong>Templates</strong></p>
-</li>
-<li>
-<p>Execute the <strong>OpenSCAP Report</strong> template</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_step_2_access_compliance_results"><a class="anchor" href="#_step_2_access_compliance_results"></a>Step 2: Access Compliance Results</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Once the job completes, navigate to the <strong>Compliance Report</strong> tab</p>
-</li>
-<li>
-<p>You&#8217;ll see the generated compliance report files</p>
-</li>
-</ol>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/compliance_report_folder.png" alt="Compliance Report Folder">
-</div>
-<div class="title">Figure 6. Compliance Report Directory</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_step_3_review_detailed_results"><a class="anchor" href="#_step_3_review_detailed_results"></a>Step 3: Review Detailed Results</h4>
-<div class="paragraph">
-<p>Click on the report file to view the detailed compliance results, including:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Security control assessments</p>
-</li>
-<li>
-<p>Pass/fail status for each check</p>
-</li>
-<li>
-<p>Remediation recommendations</p>
-</li>
-<li>
-<p>Risk severity levels</p>
-</li>
-</ul>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/compliance_report.png" alt="Compliance Report Details">
-</div>
-<div class="title">Figure 7. Detailed Compliance Report</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_code_reference"><a class="anchor" href="#_code_reference"></a>Code Reference</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_openscap_automation_implementation"><a class="anchor" href="#_openscap_automation_implementation"></a>OpenSCAP Automation Implementation</h3>
-<div class="paragraph">
-<p>Here&#8217;s the key Ansible code used for automated compliance reporting:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">tasks:
-  - name: Check if the system is RHEL 8
-    ansible.builtin.debug:
-      msg: "This playbook is not compatible with {{ inventory_hostname }} (not RHEL 8)"
-    when: ansible_distribution != "RedHat" or ansible_distribution_major_version != "8"
-    failed_when: false
-
-  - name: Run compliance tasks on RHEL 8 systems only
-    when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
-    block:
-      - name: Get our facts straight
-        ansible.builtin.set_fact:
-          _profile: '{{ compliance_profile | replace("pci_dss", "pci-dss") }}'
-          _report_dir: /tmp/oscap-reports
-
-      - name: Ensure OpenSCAP tools are installed
-        ansible.builtin.dnf:
-          name: '{{ openscap_packages }}'
-          state: present
-
-      - name: Configure httpd
-        when: use_httpd | bool
-        block:
-          - name: Install httpd
-            ansible.builtin.dnf:
-              name: httpd
-              state: present
-            notify: Restart httpd
-
-          - name: Override report directory
-            ansible.builtin.set_fact:
-              _report_dir: /var/www/html/oscap-reports
-
-          - name: Gather service facts
-            ansible.builtin.service_facts:
-
-          - name: Enable firewall http service
-            ansible.posix.firewalld:
-              service: http
-              state: enabled
-              immediate: true
-              permanent: true
-            when: "'firewalld.service' in ansible_facts.services"
-
-          - name: Disable httpd welcome page
-            ansible.builtin.file:
-              path: /etc/httpd/conf.d/welcome.conf
-              state: absent
-            notify: Restart httpd
-
-      - name: Create report on Report Server
-        block:
-          - name: Ensure report directory exists
-            ansible.builtin.file:
-              path: '{{ _report_dir }}/{{ _profile }}'
-              state: directory
-              owner: root
-              group: root
-              mode: 0755
-
-          - name: Set report name
-            ansible.builtin.set_fact:
-              _report: '{{ _report_dir }}/{{ _profile }}/report-{{ inventory_hostname }}-{{ ansible_date_time.iso8601 }}.html'
-
-          - name: Generate compliance report
-            ansible.builtin.command: &gt;-
-              oscap xccdf eval --profile {{ _profile }} --report {{ _report }}
-              /usr/share/xml/scap/ssg/content/ssg-rhel{{ ansible_distribution_major_version }}-ds.xml
-            args:
-              creates: '{{ _report }}'
-            register: _oscap
-            failed_when: _oscap.rc not in [0, 2]
-
-          - name: Set report permissions
-            ansible.builtin.file:
-              path: '{{ _report }}'
-              owner: root
-              group: root
-              mode: 0644</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_key_takeaways"><a class="anchor" href="#_key_takeaways"></a>Key Takeaways</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>You&#8217;ve successfully completed the infrastructure data gathering exercises! You now understand how to:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>✅ <strong>Collect System Facts</strong>: Use Ansible&#8217;s Setup module to gather comprehensive system information</p>
-</li>
-<li>
-<p>✅ <strong>Generate Dynamic Reports</strong>: Leverage Jinja templating to create infrastructure reports at scale</p>
-</li>
-<li>
-<p>✅ <strong>Automate Compliance Audits</strong>: Implement OpenSCAP integration for security compliance reporting</p>
-</li>
-<li>
-<p>✅ <strong>Scale Data Collection</strong>: Apply these techniques across multiple systems simultaneously</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_next_steps"><a class="anchor" href="#_next_steps"></a>Next Steps</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>With these foundational skills in infrastructure data gathering, you&#8217;re ready to:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Implement regular automated reporting schedules</p>
-</li>
-<li>
-<p>Expand compliance scanning to additional security frameworks</p>
-</li>
-<li>
-<p>Create custom reports tailored to your organization&#8217;s specific needs</p>
-</li>
-<li>
-<p>Build more complex automation workflows using the collected system data</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>This infrastructure awareness foundation will serve as the basis for more advanced automation scenarios throughout your Ansible journey.</p>
+<p>This Execution Environment is now available for use in Ansible Automation Platform.</p>
 </div>
 </div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="module-01.html" class="query-params-link">1. Automated Backups</a></span>
-  <span class="next"><a href="module-03.html" class="query-params-link">3. Windows Reports</a></span>
+  <span class="prev"><a href="module-01.html" class="query-params-link">1. Terraform and Ansible Automation Platform 2.5</a></span>
+  <span class="next"><a href="module-03.html" class="query-params-link">3. OPTIONAL - Terraform Basics</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
