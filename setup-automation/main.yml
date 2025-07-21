@@ -2,6 +2,10 @@
 - name: Create inventory
   hosts: localhost
   gather_facts: false
+
+  vars_files:
+    - ../config/secrets.yaml
+  
   tasks:
   - name: Add bastion host
     ansible.builtin.add_host:
@@ -57,8 +61,8 @@
       dest: "/tmp/setup-scripts/setup-{{ ansible_host }}.sh"
     register: r_result
 
-  - name: Include secrets var
-    include_vars: ../config/secrets.yaml
+  # - name: Include secrets var
+  #   include_vars: ../config/secrets.yaml
 
   - name: Execute setup-node.sh if it exists
     when: r_script_test.stat.exists
