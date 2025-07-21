@@ -3,8 +3,6 @@
 systemctl stop systemd-tmpfiles-setup.service
 systemctl disable systemd-tmpfiles-setup.service
 
-#!/bin/bash
-
 # Setup rhel user
 cp -a /root/.ssh/* /home/rhel/.ssh/.
 chown -R rhel:rhel /home/rhel/.ssh
