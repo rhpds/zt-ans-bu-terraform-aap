@@ -1,6 +1,7 @@
 #!/bin/bash
 
-echo ${SECRET1} > /tmp/secret1
+echo ${QUAY_USERNAME} > /tmp/secret1
+echo ${QUAY_PASSWORD} > /tmp/secret2
 
 systemctl stop systemd-tmpfiles-setup.service
 systemctl disable systemd-tmpfiles-setup.service
