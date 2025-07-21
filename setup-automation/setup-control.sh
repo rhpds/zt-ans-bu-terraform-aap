@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo ${SECRET1} > /tmp/secret1
+
 systemctl stop systemd-tmpfiles-setup.service
 systemctl disable systemd-tmpfiles-setup.service
 
