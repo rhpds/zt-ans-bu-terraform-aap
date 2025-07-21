@@ -206,6 +206,24 @@ tee /tmp/setup.yml << EOF
       state: present
     register: aws_inventory_source_result
 
+    - name: Add a Containger Regisry Credential to automation controller
+      ansible.controller.credential:
+        name: Quay Registry Credential
+        description: Creds to be able to access Quay
+        organization: "Default"
+        state: present
+        credential_type: "Container Registry"
+        controller_username: "{{ username }}"
+        controller_password: "{{ admin_password }}"
+        controller_host: "https://{{ ansible_host }}"
+        validate_certs: false
+        inputs:
+          username: "{{ quay_username }}" 
+          password: "{{ quay_password }}"
+          host: "quay.io"
+      register: controller_try
+      retries: 10
+      until: controller_try is not failed
     
   - name: Add EE to the controller instance
     ansible.controller.execution_environment:
