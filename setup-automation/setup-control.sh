@@ -159,6 +159,8 @@ tee /tmp/setup.yml << EOF
     aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') | default('AWS_ACCESS_KEY_ID_NOT_FOUND', true) }}"
     aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') | default('AWS_SECRET_ACCESS_KEY_NOT_FOUND', true) }}"
     aws_default_region: "{{ lookup('env', 'AWS_DEFAULT_REGION') | default('AWS_DEFAULT_REGION_NOT_FOUND', true) }}"
+    quay_username: "{{ lookup('env'), 'QUAY_USERNAME')"
+    quay_password: "{{ lookup('env', 'QUAY_PASSWORD')"
   tasks:
 
   - name: Add AWS credential
