@@ -2,33 +2,27 @@
 
 '''
 
-slug: tf-basics id: hxexl35cteyj type: challenge title: OPTIONAL - Terraform Basics teaser: Terraform is a fantastic tool used to provision immutable infrastructure.
+OPTIONAL - Terraform Basics teaser: Terraform is a fantastic tool used to provision immutable infrastructure.
 It is widely used for its declarative nature in Infrastructure as Code (IaC).
 notes:
 
-* type: text contents: |-   # OPTIONAL - Terraform Basics
-+
-image:https://github.com/HichamMourad/terraform-aap/blob/main/images/main.png?raw=true[]   Welcome!!!
+# OPTIONAL - Terraform Basics
 
  ** Grab a Coffee/Tea
  ** Sit back and relax
  ** You can get your hands dirty in a few minutes
 
-+
-*Please be patient as we build and connect all the components of this lab together* tabs:
+*Please be patient as we build and connect all the components of this lab together* 
 
-* id: u1hjnye78oak title: Terminal type: terminal hostname: devhost workdir: /home/rhel/lab_exercises cmd: su - rhel
-* id: 75vhtqmbajye title: VSCode type: service hostname: devhost path: /editor/?folder=/home/rhel/lab_exercises port: 443
-* id: dkltlhdmk5km title: AWS Console type: service hostname: cloud-client path: / port: 80 difficulty: "" timelimit: 9000 enhanced_loading: null -- 👋 Challenge 3 introduction.
-===
-+
+👋 Challenge 3 introduction.
+
+
 = *_OPTIONAL CHALLENGE_*
-+
-[discrete]
-==== Estimated time to complete: _15 minutes_<p>
-+
+
+Estimated time to complete: _15 minutes_
+
 == OPTIONAL - Terraform Basics
-+
+
 In this challenge you will learn
 * Basic use of Terraform to deploy cloud infrastructure in AWS cloud
 
@@ -40,12 +34,13 @@ build, change, and destroy these infrastructure resources.
 This challenge will introduce you to some basic Terraform concepts and to give you some experience in using Terraform to create and destroy cloud infrastructure resources.
 
 ____
-[!NOTE] You can perform the following steps at the TERMINAL, or in Visual Studio Code (VSCode).
+`[NOTE]` You can perform the following steps at the TERMINAL, or in Visual Studio Code (VSCode).
 In VSCode you can open a terminal prompt.
 Choose either the `TERMINAL` tab, or the `VSCODE` tab from the top of the lab screen.
 We will walk through the steps using the `TERMINAL` but please feel free to do this in the `VSCODE` tab if you are more comfortable there!
 ____
 
+[[task1]]
 = ☑️ Task 1 - Initialize a Terraform Project
 
 Open the `Terminal` tab from the top of the lab.
@@ -106,6 +101,7 @@ You will see the following has been created:
 
 Now that you have initialized this Terraform Project, go ahead and build the resource(s)!
 
+[[task2]]
 = ☑️ Task 2 - Plan and Apply the Terraform Project
 
 From the project folder you have already initialized Terraform and you can now deploy, by running the `terraform plan`, then `terraform apply` commands
@@ -136,7 +132,7 @@ aws ec2 describe-instances --filters "Name=instance-type,Values=t2.micro" --quer
 image::https://github.com/HichamMourad/terraform-aap/blob/main/images/basics1.png?raw=true[]
 
 ____
-[!NOTE] *Note that you may see more than 1 instance, and that's becasue of the infrastructure you created in earlier challenges in this lab.*
+`[NOTE]` *Note that you may see more than 1 instance, and that's becasue of the infrastructure you created in earlier challenges in this lab.*
 ____
 
 Now, if you wanted to get detailed information about the AWS instance from Terraform you can look in the Terraform state file.
@@ -150,6 +146,7 @@ This file provides you with a wealth of information regarding the infrastructure
 
 *_OPTIONAL:  Login to the `AWS Console` using the tab at the top of the lab to view the resource(s) created in AWS._*
 
+[[task3]]
 = ☑️ Task 3 - Make Changes to the Terraform Project
 
 You have created and deployed your first AWS instance with a simple Terraform project.
@@ -209,6 +206,7 @@ Terraform will make changes and add the additional resources specified by your `
 *_OPTIONAL:  Login to the `AWS Console` using the tab at the top of the lab to view the modifications that took place.
 The addition of the security group and the ingress / egress ports._*
 
+[[task4]]
 = ☑️ Task 4 - Deprovisioning resources of a Terraform Project
 
 Terraform makes it really simple to `clean up / remove / deprovision` the project resources.

@@ -2,26 +2,26 @@
 
 '''
 
-slug: tf-basics-certified id: mdjcxiwmpms0 type: challenge title: OPTIONAL - Terraform and the Certified Collection for Terraform teaser: Several years ago Red Hat released a certified collection for Terraform, in   this exercise you will use some of the components at the Command Line notes:
+OPTIONAL - Terraform and the Certified Collection for Terraform teaser
 
-* type: text contents: |-   # OPTIONAL - Terraform and the Certified Collection for Terraform   image:https://github.com/HichamMourad/terraform-aap/blob/main/images/main.png?raw=true[]   Welcome!!!
+Several years ago Red Hat released a certified collection for Terraform, in   this exercise you will use some of the components at the Command Line
+
+# OPTIONAL - Terraform and the Certified Collection for Terraform
+
+Welcome!!!
  ** Grab a Coffee/Tea
  ** Sit back and relax
  ** You can get your hands dirty in a few minutes
 
-+
-*Please be patient as we build and connect all the components of this lab together* tabs:
-* id: xq3dimvgtnhw title: Terminal type: terminal hostname: devhost workdir: /home/rhel/lab_exercises/ cmd: su - rhel
-* id: h4shebiyjafa title: VSCode type: service hostname: devhost path: /editor/?folder=/home/rhel/lab_exercises port: 443
-* id: ymresn5vwmfw title: AWS Console type: service hostname: cloud-client path: / port: 80
-* id: jifkfild53fz title: Ansible Automation Platform type: service hostname: controller port: 443 difficulty: "" timelimit: 900 enhanced_loading: null -- 👋 Challenge introduction.
-===
-+
+
+*Please be patient as we build and connect all the components of this lab together*
+
+👋 Challenge introduction.
+
 = *_OPTIONAL CHALLENGE_*
-+
-[discrete]
-==== Estimated time to complete: _30 minutes_<p>
-+
+
+==== Estimated time to complete: _30 minutes_
+
 == OPTIONAL - Terraform and the Red Hat Certified Collection for Terraform, from Ansible
 * In this challenge you will learn
  ** How to install the Red Hat certified collection for Terraform locally (`cloud.terraform`)
@@ -48,6 +48,7 @@ Choose either the `TERMINAL` tab, or the `VSCODE` tab from the top of the lab sc
 We will walk through the steps using the `TERMINAL` but please feel free to do this in the `VSCODE` tab if you are more comfortable there!
 ____
 
+[[task1]]
 = ☑️ Task 1 - Install the Red Hat certified collection for Terraform (cloud.terraform)
 
 To get access to the Red Hat Certifed collection for Terraform, you will need to install it.
@@ -135,6 +136,7 @@ In summary, Ansible just performed the following while using the `cloud.terrafor
 
 *_If you recall in the first challenge we performed similar tasks from the Ansible Automation Platform user interface._*
 
+[[task2]]
 = ☑️ Task 2 - Terraform Provider for Ansible *(OPTIONAL)*
 
 *_(This is an OPTIONAL task)_*
@@ -349,6 +351,7 @@ You will no longer see the host(s) details:
 
 You can now take off the Terraform hat, and put on your Red Hat as we move to the next section and work with Ansible Automation Platform.
 
+[[task3]]
 = ☑️ Task 3 - The Terraform Provider for Ansible Automation Platform
 
 The updated *Terraform Provider for Ansible Automation Platform (AAP)* allows users to send host information from Terraform into Ansible Automation Platform.
@@ -434,7 +437,7 @@ Please remember, Terraform created the ec2 instance, and using the Terraform Pro
 
 Click on the `Ansible Automation Platform` tab at the top of lab.
 
-Log in using the following credentials: + _Login credentials:_<p> `User:  admin` <p> `Password:  ansible123!` <p> --
+Log in using the following credentials: _Login credentials:_ `User:  admin`  `Password:  ansible123!`
 
 Expand the `Automation Execution` menu on the left.
 `Automation Execution` \-> `Infrastructure` \->`` Inventories``.

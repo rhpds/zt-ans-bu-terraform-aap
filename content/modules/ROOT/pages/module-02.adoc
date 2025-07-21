@@ -2,27 +2,25 @@
 
 '''
 
-slug: tf-aap-ee id: 6rxwhe0js6j3 type: challenge title: Create a Terraform-enabled Execution Environment teaser: In this challenge you will create an Execution Environment that will enable   Terraform usage in Ansible Automation Platform notes:
+Create a Terraform-enabled Execution Environment teaser: In this challenge you will create an Execution Environment that will enable   Terraform usage in Ansible Automation Platform notes:
 
-* type: text contents: |-   # Create a Terraform-enabled Execution Environment
-+
+# Create a Terraform-enabled Execution Environment
+
 ## What is an Execution Environment?
 All automation in Red Hat Ansible Automation Platform runs on container images called automation execution environments.
 Automation execution environments create a common language for communicating automation dependencies, and offer a standard way to build and distribute the automation environment.
-+
+
 In the previous challenge an Execution Environment called `Terraform Execution Environment` was already created for you.
-+
+
 *To use Terraform in YOUR Ansible Automation Platform environment you must create and Execution Environment* that includes the Cloud Terraform collection, the Terraform binary, other cloud collections, and other dependencies.
 *Hence, why you will learn how to create an Execution Environment.*
-+
-The tool needed to create an `execution environment` is called `ansible-builder` tabs:
 
-* id: yq147g6hvt3w title: Terminal type: terminal hostname: devhost workdir: /home/rhel/ cmd: su - rhel
-* id: r8uvoriehkdo title: VSCode type: service hostname: devhost path: /editor/?folder=/home/rhel/terraform-ee port: 443
-* id: qo3m858hdeff title: Ansible Automation Platform type: service hostname: controller port: 443 difficulty: "" timelimit: 0 enhanced_loading: null -- 👋 Challenge introduction.
-===
-+
-==== Estimated time to complete: _30 minutes_<p>
+The tool needed to create an `execution environment` is called `ansible-builder`
+
+👋 Challenge introduction.
+
+Estimated time to complete: _30 minutes_
+
 * In this challenge you will learn
  ** How to create the necessary configuration files needed to create an execution environment
  ** How to create the execution environment container image using the `ansbile-builder` tool
@@ -36,12 +34,13 @@ This is easy to do using https://docs.redhat.com/en/documentation/red_hat_ansibl
 In this challenge you will create an execution environment containing everything you need to run Terraform from the Ansible Automation Platform.
 
 ____
-[!NOTE] You can perform the following steps at the TERMINAL, or in Visual Studio Code (VSCode).
+`[NOTE]` You can perform the following steps at the TERMINAL, or in Visual Studio Code (VSCode).
 In VSCode you can open a terminal prompt.
 Choose either the `TERMINAL` tab, or the `VSCODE` tab from the top of the lab screen.
 We will walk through the steps using the `TERMINAL` but please feel free to do this in the `VSCODE` tab if you are more comfortable there!
 ____
 
+[[task1]]
 = ☑️ Task 1 - Create the configuration files for the execution environment
 
 To create an execution environment with `ansible-builder`, we need an execution environment definition file.
@@ -121,6 +120,7 @@ This file defines the Ansible content collections you want to include in your ex
 
 Please move ahead to the next task.
 
+[[task2]]
 = ☑️ Task 2 - Run ansible-builder
 
 Run `ansible-builder` to build the execution environment container.
@@ -152,6 +152,7 @@ If you have a Quay or Dockerhub account already, feel free to create a repositor
 
 `podman push quay.io/[username]/terraform-ee`
 
+[[task3]]
 = ☑️ Task 3 - Add the Terraform Execution Environment to Ansible Automation Platform
 
 Now you will add an execution environment to Ansible Automation Platform.
@@ -159,7 +160,7 @@ Now you will add an execution environment to Ansible Automation Platform.
 Click on the `Ansible Automation Platform` tab at the top of lab.
 (if not already)
 
-Log in using the following credentials: + _Login credentials:_<p> `User:  admin` <p> `Password:  ansible123!` <p> --
+Log in using the following credentials: _Login credentials:_ `User:  admin` `Password:  ansible123!`
 
 Expand the `Automation Execution` menu on the left.
 
@@ -184,7 +185,7 @@ Click on `+ Create execution environment` and enter the following information.
 |===
 
 ____
-[!NOTE] *Since this image on Quay.io is public you don't need to create a Registry credential*
+`[NOTE]` *Since this image on Quay.io is public you don't need to create a Registry credential*
 ____
 
 Click on `Create execution environment` to save this new Execution Environmnet.
