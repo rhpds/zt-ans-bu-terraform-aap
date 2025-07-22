@@ -5,13 +5,16 @@ antora:
   dir: www
   modules:
     - name: module-01
-      label: "Backup and Snapshots"
+      label: "Terraform and Ansible Automation Platform 2.5"
       solveButton: false
     - name: module-02
-      label: "Infrastructure Reporting"
+      label: "Create a Terraform-enabled Execution Environment"
       solveButton: false
     - name: module-03
-      label: "Windows Reporting"
+      label: "OPTIONAL - Terraform Basics"
+      solveButton: false
+    - name: module-04
+      label: "OPTIONAL - Terraform and the Certified Collection for Terraform"
       solveButton: false
 
 tabs:
