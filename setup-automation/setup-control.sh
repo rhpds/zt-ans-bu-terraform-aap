@@ -99,7 +99,7 @@ chmod 600 /home/rhel/aws/credentials
 
 cat > /home/rhel/aws/config << EOF
 [default]
-region = $AWS_ACCESS_KEY_ID
+region = us-east-1
 EOF
 
 # Set proper ownership and permissions
