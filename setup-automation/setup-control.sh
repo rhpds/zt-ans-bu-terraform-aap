@@ -99,7 +99,7 @@ chmod 600 /home/rhel/aws/credentials
 
 cat > /home/rhel/aws/config << EOF
 [default]
-region = us-east-1
+region = $AWS_DEFAULT_REGION
 EOF
 
 # Set proper ownership and permissions
@@ -108,7 +108,7 @@ chmod 600 /home/rhel/aws/config
 
 #
 #Create the DEFAULT AWS VPC
-aws ec2 create-default-vpc --region us-east-1
+aws ec2 create-default-vpc --region $AWS_DEFAULT_REGION
 #
 #
 #Create the S3 bucket for the users of this AAP / Terraform lab
@@ -116,12 +116,12 @@ aws ec2 create-default-vpc --region us-east-1
 BUCKET_PREFIX="aap-tf-bucket"  # Change this to your desired bucket prefix
 RANDOM_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')  # Generate a random UUID and convert to lowercase
 BUCKET_NAME="${BUCKET_PREFIX}-${RANDOM_ID}"
-AWS_REGION="us-east-1"  # Change this to your desired AWS region
+AWS_REGION="$AWS_DEFAULT_REGION"  # Change this to your desired AWS region
 #
 #
 # Create the S3 STORAGE BUCKET NEEDED BY THE AAP 2.X CHALLENGE
-echo "Creating S3 bucket: $BUCKET_NAME in region $AWS_REGION"
-aws s3api create-bucket --bucket $BUCKET_NAME --region $AWS_REGION
+echo "Creating S3 bucket: $BUCKET_NAME in region $AWS_DEFAULT_REGION"
+aws s3api create-bucket --bucket $BUCKET_NAME --region $AWS_DEFAULT_REGION
 #
 ## ansible home
 mkdir /home/$USER/ansible
