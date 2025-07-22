@@ -83,6 +83,7 @@ chown rhel:rhel /home/rhel/lab_exercises/4.Terraform_AAP_Provider/main.tf
 #
 #
 
+
 # Create directory if it doesn't exist
 mkdir -p /home/rhel/aws
 
@@ -123,20 +124,20 @@ AWS_REGION="$AWS_DEFAULT_REGION"  # Change this to your desired AWS region
 echo "Creating S3 bucket: $BUCKET_NAME in region $AWS_DEFAULT_REGION"
 aws s3api create-bucket --bucket $BUCKET_NAME --region $AWS_DEFAULT_REGION
 #
-## ansible home
-mkdir /home/$USER/ansible
-## ansible-files dir
-mkdir /home/$USER/ansible-files
+# ## ansible home
+# mkdir /home/$USER/ansible
+# ## ansible-files dir
+# mkdir /home/$USER/ansible-files
 
-## ansible.cfg
-echo "[defaults]" > /home/$USER/.ansible.cfg
-echo "inventory = /home/$USER/ansible-files/hosts" >> /home/$USER/.ansible.cfg
-echo "host_key_checking = False" >> /home/$USER/.ansible.cfg
+# ## ansible.cfg
+# echo "[defaults]" > /home/$USER/.ansible.cfg
+# echo "inventory = /home/$USER/ansible-files/hosts" >> /home/$USER/.ansible.cfg
+# echo "host_key_checking = False" >> /home/$USER/.ansible.cfg
 
-## chown and chmod all files in rhel user home
-chown -R rhel:rhel /home/$USER/ansible
-chmod 777 /home/$USER/ansible
-chown -R rhel:rhel /home/$USER/ansible-files
+# ## chown and chmod all files in rhel user home
+# chown -R rhel:rhel /home/$USER/ansible
+# chmod 777 /home/$USER/ansible
+# chown -R rhel:rhel /home/$USER/ansible-files
 
 ## install python3 libraries needed for the Cloud Report
 dnf install -y python3-pip python3-libsemanage
