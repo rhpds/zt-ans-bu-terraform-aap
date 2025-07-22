@@ -85,17 +85,17 @@ chown rhel:rhel /home/rhel/lab_exercises/4.Terraform_AAP_Provider/main.tf
 
 
 # Create directory if it doesn't exist
-mkdir -p /home/rhel/aws
+mkdir -p /home/rhel/.aws
 
 # Create the credentials file
-cat > /home/rhel/aws/credentials << EOF
+cat > /home/rhel/.aws/credentials << EOF
 [default]
 aws_access_key_id = $AWS_ACCESS_KEY_ID
 aws_secret_access_key = $AWS_SECRET_ACCESS_KEY
 EOF
 
 # Set proper ownership and permissions
-chown rhel:rhel /home/rhel/aws/credentials
+chown rhel:rhel /home/rhel/.aws/credentials
 chmod 600 /home/rhel/aws/credentials
 
 cat > /home/rhel/aws/config << EOF
