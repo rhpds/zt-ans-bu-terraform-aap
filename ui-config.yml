@@ -21,7 +21,7 @@ tabs:
   - name: aap
     url: https://control-${guid}.${domain}/
   - name: vscode
-    url: https://vscode-${guid}.${domain}/
+    url: https://vscode-${guid}.${domain}:8080/
     external: false
   - name: ">_ control"
     url: /wetty
