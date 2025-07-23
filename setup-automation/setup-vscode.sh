@@ -152,20 +152,21 @@ su - rhel -c "curl -fsSL https://code-server.dev/install.sh | sh"
 
 # Enable and start the service
 su - rhel -c "sudo systemctl enable --now code-server@rhel"
+su - rhel -c "sudo systemctl start --now code-server@rhel"
 
-# Create config directory if it doesn't exist
-su - rhel -c "mkdir -p /home/rhel/.config/code-server"
+# # Create config directory if it doesn't exist
+# su - rhel -c "mkdir -p /home/rhel/.config/code-server"
 
-# Create config file
-cat > /home/rhel/.config/code-server/config.yaml << EOF
-bind-addr: 0.0.0.0:80
-auth: password
-password: ansible123!
-cert: false
-EOF
+# # Create config file
+# cat > /home/rhel/.config/code-server/config.yaml << EOF
+# bind-addr: 0.0.0.0:80
+# auth: password
+# password: ansible123!
+# cert: false
+# EOF
 
-# Fix ownership
-chown -R rhel:rhel /home/rhel/.config/code-server/
+# # Fix ownership
+# chown -R rhel:rhel /home/rhel/.config/code-server/
 
 # Restart the service
 sudo systemctl start code-server@rhel
