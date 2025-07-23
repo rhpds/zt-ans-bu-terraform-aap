@@ -184,11 +184,23 @@ virtualmachines:
             protocol: TCP
             targetPort: 80
             name: vscode
+      - name: vscode-8080
+        ports:
+          - port: 8080
+            protocol: TCP
+            targetPort: 8080
+            name: vscode
     routes:
       - name: vscode-80
         host: vscode
         service: vscode-80
         targetPort: 80
+        tls: true  ## To resolve https/http Framing
+        tls_termination: Edge ## To resolve https/http Framing
+      - name: vscode-8080
+        host: vscode
+        service: vscode-8080
+        targetPort: 8080
         tls: true  ## To resolve https/http Framing
         tls_termination: Edge ## To resolve https/http Framing
     userdata: |-
