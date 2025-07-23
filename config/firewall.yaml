@@ -11,9 +11,7 @@ ingress:
   - protocol: TCP
     port: 22
   - protocol: TCP
-    port: 5986
-  - protocol: TCP
-    port: 3389
+    port: 8080
 egress:
 - ports:
   - protocol: TCP
@@ -25,6 +23,5 @@ egress:
   - protocol: TCP
     port: 22
   - protocol: TCP
-    port: 5986
-  - protocol: TCP
-    port: 3389
+    port: 8080
+
