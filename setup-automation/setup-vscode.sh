@@ -147,10 +147,16 @@ su - rhel -c "aws s3api create-bucket --bucket $BUCKET_NAME --region $AWS_DEFAUL
 
 ## install python3 libraries needed for the Cloud Report
 dnf install -y python3-pip python3-libsemanage
+# Install code-server as rhel user
+su - rhel -c "curl -fsSL https://code-server.dev/install.sh | sh"
 
-su - rhel -c curl -fsSL https://code-server.dev/install.sh | sh
-su - rhel -c sudo systemctl enable --now code-server@rhel
+# Enable and start the service
+su - rhel -c "sudo systemctl enable --now code-server@rhel"
 
+# Create config directory if it doesn't exist
+su - rhel -c "mkdir -p /home/rhel/.config/code-server"
+
+# Create config file
 cat > /home/rhel/.config/code-server/config.yaml << EOF
 bind-addr: 0.0.0.0:80
 auth: password
@@ -158,4 +164,8 @@ password: ansible123!
 cert: false
 EOF
 
-sudo systemctl restart code-server@rhel
+# Fix ownership
+chown -R rhel:rhel /home/rhel/.config/code-server/
+
+# Restart the service
+sudo systemctl start code-server@rhel
