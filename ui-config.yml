@@ -24,7 +24,7 @@ tabs:
     url: https://code-server-${guid}.${domain}:8080/
     external: true
   - name: vscode
-    url: https://vscode-${guid}.${domain}/
+    url: https://vscode-${guid}.${domain}:8080/
     external: true
   - name: ">_ control"
     url: /wetty
