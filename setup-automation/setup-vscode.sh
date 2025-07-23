@@ -199,7 +199,7 @@ cat > /tmp/test.yml << EOF
 
 ---
 - name: Install VS Code Server on RHEL
-  hosts: rhel_servers
+  hosts: localhost
   become: yes
   vars:
     vscode_server_version: "4.22.1"
@@ -296,14 +296,6 @@ cat > /tmp/test.yml << EOF
     - name: Reload systemd daemon
       systemd:
         daemon_reload: yes
-
-    - name: Open firewall port for VS Code Server
-      firewalld:
-        port: "{{ vscode_server_port }}/tcp"
-        permanent: yes
-        state: enabled
-        immediate: yes
-      ignore_errors: yes
 
     - name: Enable and start VS Code Server service
       systemd:
