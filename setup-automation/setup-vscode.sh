@@ -149,7 +149,7 @@ su - rhel -c "aws s3api create-bucket --bucket $BUCKET_NAME --region $AWS_DEFAUL
 dnf install -y python3-pip python3-libsemanage
 
 su - rhel -c curl -fsSL https://code-server.dev/install.sh | sh
-sudo systemctl enable --now code-server@rhel
+su - rhel -c sudo systemctl enable --now code-server@rhel
 
 cat > /home/rhel/.config/code-server/config.yaml << EOF
 bind-addr: 0.0.0.0:80
