@@ -148,40 +148,32 @@ su - rhel -c "aws s3api create-bucket --bucket $BUCKET_NAME --region $AWS_DEFAUL
 ## install python3 libraries needed for the Cloud Report
 dnf install -y python3-pip python3-libsemanage ansible-core
 
-ansible-galaxy install git+https://github.com/redhat-cop/agnosticd.git,development,vscode-server
+# ansible-galaxy install git+https://github.com/redhat-cop/agnosticd.git,development,vscode-server
 
-cat > /tmp/vscode.yml << EOF
-- hosts: localhost
-  become: true
-  tasks:
-   - include_role:
-        name: vscode-server
-     vars:
-      vscode_user_name: rhel
-      vscode_user_password: ansible123!
-      vscode_server_hostname: vscode
-      email: devops@opentlc.com
-      vscode_server_nginx_conf: ./files/nginx.conf
-      # vscode_server_extension_urls:
-      #    - http://www.example.com/vscode-extension1.vsix
-      #    - http://www.example.com/vscode-extension2.vsix
-EOF
-
-
+# cat > /tmp/vscode.yml << EOF
+# - hosts: localhost
+#   become: true
+#   tasks:
+#    - include_role:
+#         name: vscode-server
+#      vars:
+#       vscode_user_name: rhel
+#       vscode_user_password: ansible123!
+#       vscode_server_hostname: vscode
+#       email: devops@opentlc.com
+#       vscode_server_nginx_conf: ./files/nginx.conf
+#       # vscode_server_extension_urls:
+#       #    - http://www.example.com/vscode-extension1.vsix
+#       #    - http://www.example.com/vscode-extension2.vsix
+# EOF
 
 
 
 
-
-
-
-
-
-
-# Install code-server as rhel user
+# # Install code-server as rhel user
 # su - rhel -c "curl -fsSL https://code-server.dev/install.sh | sh"
 
-# # Enable and start the service
+# # # Enable and start the service
 # su - rhel -c "sudo systemctl enable --now code-server@rhel"
 # su - rhel -c "sudo systemctl start --now code-server@rhel"
 
