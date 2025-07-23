@@ -205,7 +205,7 @@ cat > /tmp/test.yml << EOF
     vscode_server_version: "4.22.1"
     vscode_server_user: "vscode"
     vscode_server_password: "ansible123!"
-    vscode_server_port: 8080
+    vscode_server_port: 80
     vscode_server_home: "/opt/code-server"
 
   tasks:
@@ -318,5 +318,5 @@ cat > /tmp/test.yml << EOF
 
 EOF
 
-
+su - rhel -c '/tmp/ansible-playbook test.yml'
 
