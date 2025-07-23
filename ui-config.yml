@@ -21,13 +21,10 @@ tabs:
   - name: aap
     url: https://control-${guid}.${domain}/
   - name: code
-    url: https://code-server-${guid}.${domain}:8080/
-    external: true
-  - name: vscode8080
-    url: https://vscode-${guid}.${domain}:8080/
+    url: https://code-server-${guid}.${domain}/
     external: true
   - name: vscode80
-    url: https://vscode-${guid}.${domain}:8080/
+    url: https://vscode-${guid}.${domain}
     external: true
   - name: ">_ control"
     url: /wetty
