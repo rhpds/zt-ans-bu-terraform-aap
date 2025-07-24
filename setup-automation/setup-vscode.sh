@@ -98,10 +98,34 @@ EOF
 #
 chown rhel:rhel /home/rhel/lab_exercises/4.Terraform_AAP_Provider/main.tf
 #
+
+# Create directory if it doesn't exist
+mkdir -p /home/rhel/.aws
+
+# Create the credentials file
+cat > /home/rhel/.aws/credentials << EOF
+[default]
+aws_access_key_id = $AWS_ACCESS_KEY_ID
+aws_secret_access_key = $AWS_SECRET_ACCESS_KEY
+EOF
+
+# Set proper ownership and permissions
+chown rhel:rhel /home/rhel/.aws/credentials
+chmod 600 /home/rhel/aws/credentials
+
+cat > /home/rhel/aws/config << EOF
+[default]
+region = $AWS_DEFAULT_REGION
+EOF
+
+# Set proper ownership and permissions
+chown rhel:rhel /home/rhel/aws/config
+chmod 600 /home/rhel/aws/config
+
 #
 #
 #Create the DEFAULT AWS VPC
-aws ec2 create-default-vpc --region us-east-1
+aws ec2 create-default-vpc --region $AWS_DEFAULT_REGION
 #
 #
 #Create the S3 bucket for the users of this AAP / Terraform lab
@@ -109,7 +133,7 @@ aws ec2 create-default-vpc --region us-east-1
 BUCKET_PREFIX="aap-tf-bucket"  # Change this to your desired bucket prefix
 RANDOM_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')  # Generate a random UUID and convert to lowercase
 BUCKET_NAME="${BUCKET_PREFIX}-${RANDOM_ID}"
-AWS_REGION="${AWS_DEFAULT_REGION}"  # Change this to your desired AWS region
+AWS_REGION="$AWS_DEFAULT_REGION"  # Change this to your desired AWS region
 #
 #
 # Create the S3 STORAGE BUCKET NEEDED BY THE AAP 2.X CHALLENGE
