@@ -171,47 +171,35 @@ virtualmachines:
           uEOWpQhGYHMC0A==
           -----END CERTIFICATE-----
 
-  # - name: "vscode"
-  #   image: "rhel-8.7"
-  #   memory: "4G"
-  #   cores: 2
-  #   image_size: "15Gi"
-  #   tags:
-  #     - key: "AnsibleGroup"
-  #       value: "isolated"
-  #   networks:
-  #     - default
-  #   services:
-  #     - name: vscode-80
-  #       ports:
-  #         - port: 80
-  #           protocol: TCP
-  #           targetPort: 80
-  #           name: vscode
-  #     - name: vscode-8080
-  #       ports:
-  #         - port: 8080
-  #           protocol: TCP
-  #           targetPort: 8080
-  #           name: vscode
-  #   routes:
-  #     - name: vscode-80
-  #       host: vscode
-  #       service: vscode-80
-  #       targetPort: 80
-  #       tls: true  ## To resolve https/http Framing
-  #       tls_termination: Edge ## To resolve https/http Framing
-  #     - name: vscode-8080
-  #       host: vscode
-  #       service: vscode-8080
-  #       targetPort: 8080
-  #       tls: true  ## To resolve https/http Framing
-  #       tls_termination: Edge ## To resolve https/http Framing
-  #   userdata: |-
-  #     #cloud-config
-  #     user: rhel
-  #     password: ansible123!
-  #     chpasswd: { expire: False }
-  #     runcmd:
-  #       - sed -i "s/PasswordAuthentication no/PasswordAuthentication yes/" /etc/ssh/sshd_config
-  #       - systemctl reload sshd
+  - name: "vscode"
+    image: "rhel-9.5"
+    memory: "4G"
+    cores: 2
+    image_size: "15Gi"
+    tags:
+      - key: "AnsibleGroup"
+        value: "isolated"
+    networks:
+      - default
+    services:
+      - name: vscode-8080
+        ports:
+          - port: 8080
+            protocol: TCP
+            targetPort: 8080
+            name: vscode
+    routes:
+      - name: vscode-8080
+        host: vscode
+        service: vscode-8080
+        targetPort: 8080
+        tls: true  ## To resolve https/http Framing
+        tls_termination: Edge ## To resolve https/http Framing
+    userdata: |-
+      #cloud-config
+      user: rhel
+      password: ansible123!
+      chpasswd: { expire: False }
+      runcmd:
+        - sed -i "s/PasswordAuthentication no/PasswordAuthentication yes/" /etc/ssh/sshd_config
+        - systemctl reload sshd
