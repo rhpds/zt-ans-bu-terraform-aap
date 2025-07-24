@@ -6,6 +6,12 @@ rpm -Uhv https://${SATELLITE_URL}/pub/katello-ca-consumer-latest.noarch.rpm
 subscription-manager register --org=${SATELLITE_ORG} --activationkey=${SATELLITE_ACTIVATIONKEY}
 setenforce 0
 
+
+systemctl start code-server
+
+
+
+
 # cat > /tmp/requirements.yml << EOF
 # ---
 # - name: vscode-server
