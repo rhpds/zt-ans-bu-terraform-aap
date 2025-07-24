@@ -18,6 +18,8 @@ auth: none
 cert: false
 EOF
 
+systemctl atart code-server
+
 chown rhel:rhel /home/rhel/.config/code-server/config.yaml
 chmod 644 /home/rhel/.config/code-server/config.yaml
 # Setup rhel user
