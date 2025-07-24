@@ -12,13 +12,14 @@ systemctl stop firewalld
 systemctl stop code-server
 mv /home/rhel/.config/code-server/config.yaml /home/rhel/.config/code-server/config.bk.yaml
 
-cat /home/rhel/.config/code-server/config.yaml << EOF
+tee /home/rhel/.config/code-server/config.yaml << EOF
 bind-addr: 0.0.0.0:8080
 auth: none
 cert: false
 EOF
 
 systemctl start code-server
+dnf install unzip nano git -y 
 
 chown rhel:rhel /home/rhel/.config/code-server/config.yaml
 chmod 644 /home/rhel/.config/code-server/config.yaml
@@ -98,22 +99,19 @@ EOF
 #
 chown rhel:rhel /home/rhel/lab_exercises/4.Terraform_AAP_Provider/main.tf
 #
-
 # Create directory if it doesn't exist
 mkdir -p /home/rhel/.aws
-
-# Create the credentials file
-cat > /home/rhel/.aws/credentials << EOF
+# Crate the credentials file
+tee > /home/rhel/.aws/credentials << EOF
 [default]
 aws_access_key_id = $AWS_ACCESS_KEY_ID
 aws_secret_access_key = $AWS_SECRET_ACCESS_KEY
 EOF
-
 # Set proper ownership and permissions
 chown rhel:rhel /home/rhel/.aws/credentials
 chmod 600 /home/rhel/aws/credentials
 
-cat > /home/rhel/aws/config << EOF
+tee > /home/rhel/aws/config << EOF
 [default]
 region = $AWS_DEFAULT_REGION
 EOF
@@ -122,8 +120,6 @@ EOF
 chown rhel:rhel /home/rhel/aws/config
 chmod 600 /home/rhel/aws/config
 
-#
-#
 #Create the DEFAULT AWS VPC
 aws ec2 create-default-vpc --region $AWS_DEFAULT_REGION
 #
@@ -139,5 +135,4 @@ AWS_REGION="$AWS_DEFAULT_REGION"  # Change this to your desired AWS region
 # Create the S3 STORAGE BUCKET NEEDED BY THE AAP 2.X CHALLENGE
 echo "Creating S3 bucket: $BUCKET_NAME in region $AWS_REGION"
 aws s3api create-bucket --bucket $BUCKET_NAME --region $AWS_REGION
-#
-#
+
