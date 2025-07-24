@@ -23,7 +23,7 @@ tabs:
   # - name: code
   #   url: https://code-server-${guid}.${domain}/
   #   external: true
-  - name: codeserver
+  - name: vscode
     url: https://vscode-${guid}.${domain}/
     external: true
   - name: ">_ control"
