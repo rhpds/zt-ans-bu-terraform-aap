@@ -136,9 +136,11 @@ virtualmachines:
           -----END CERTIFICATE-----
   - name: "vscode"
     image: "devtools-ansible"
-    memory: "4G"
+    memory: "8G"
     cores: 2
     image_size: "20Gi"
+    disk_type: "scsi"
+    bootloader: "efi"
     tags:
       - key: "AnsibleGroup"
         value: "isolated"
