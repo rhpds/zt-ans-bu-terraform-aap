@@ -66,8 +66,8 @@ containers:
 
   - name: code-server
     image: quay.io/nmartins/vscode-srv-fedora
-    command: [ "code-server" ]
-    args: [ "--auth", "none", "--user-data-dir", "/home/coder/.local/share/code-server", "--extensions-dir", "/home/coder/.local/share/code-server/extensions", "--bind-addr", "0.0.0.0:8080", "/home/coder/project" ]
+    # command: [ "code-server" ]
+    # args: [ "--auth", "none", "--user-data-dir", "/home/coder/.local/share/code-server", "--extensions-dir", "/home/coder/.local/share/code-server/extensions", "--bind-addr", "0.0.0.0:8080", "/home/coder/project" ]
     ports:
       - name: code-server
         containerPort: 8080
