@@ -23,9 +23,9 @@ tabs:
   - name: code
     url: https://code-server-${guid}.${domain}/
     external: true
-  - name: codeserver
-    url: https://vscode-${guid}.${domain}/
-    external: true
+  # - name: codeserver
+  #   url: https://vscode-${guid}.${domain}/
+  #   external: true
   - name: ">_ control"
     url: /wetty
   - name: Cloud (PoC)
