@@ -20,6 +20,8 @@ antora:
 tabs:
   - name: aap
     url: https://control-${guid}.${domain}/
+  - name: vscode
+    url: https://vscode-${guid}.${domain}/editor/
   - name: ">_ control"
     url: /wetty
   - name: Cloud (PoC)
