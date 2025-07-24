@@ -18,7 +18,7 @@ auth: none
 cert: false
 EOF
 
-systemctl atart code-server
+systemctl start code-server
 
 chown rhel:rhel /home/rhel/.config/code-server/config.yaml
 chmod 644 /home/rhel/.config/code-server/config.yaml
@@ -41,10 +41,8 @@ chown -R rhel:rhel /home/rhel/lab_exercises/
 chown rhel:rhel /home/rhel/.terraform.d/plugin-cache
 chmod -R 777 /home/rhel/lab_exercises/
 #
-firewall-cmd --permanent --add-port=8043/tcp
-firewall-cmd --reload
 #
-yum install -y unzip
+#yum install -y unzip
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip -qq awscliv2.zip
 sudo ./aws/install
