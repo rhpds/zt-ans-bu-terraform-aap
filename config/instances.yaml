@@ -64,42 +64,6 @@ containers:
         tls: true
         tls_termination: Edge
 
-  # - name: code-server
-  #   image: quay.io/nmartins/vscode-srv-fedora
-  #   # command: [ "code-server" ]
-  #   # args: [ "--auth", "none", "--user-data-dir", "/home/coder/.local/share/code-server", "--extensions-dir", "/home/coder/.local/share/code-server/extensions", "--bind-addr", "0.0.0.0:8080", "/home/coder/project" ]
-  #   ports:
-  #     - name: code-server
-  #       containerPort: 8080
-  #       protocol: TCP
-  #   volumeMounts:
-  #     - name: code-storage
-  #       mountPath: /home/coder/
-  #   volumes:
-  #     - name: code-storage
-  #       emptyDir: {}
-  #   memory: 2Gi
-  #   environment:
-  #     HOME: "/home/coder"
-  #   services:
-  #     - name: code-server
-  #       ports:
-  #         - port: 8080
-  #           protocol: TCP
-  #           targetPort: 8080
-  #           name: code-server
-  #   routes:
-  #     - name: code-server
-  #       host: code-server
-  #       service: code-server
-  #       targetPort: 8080
-  #       tls: true
-  #       tls_termination: Edge
-  #   commands:
-  #     - git clone http://gitea:gitea@gitea:3000/student/aap25-roadshow-content.git /home/coder/project
-  #     - git config --global user.name codeserver
-  #     - git config --global user.email code@server.com
-
 virtualmachines:
   - name: "control"
     image: "base-zero-aap-2.5-container-ce"
@@ -170,36 +134,3 @@ virtualmachines:
           fH5qke1XR5LFGpndX1GuSVBhdZq94x0aGXWTQCDNIPQ3QtrQ64PBF1vRFdJ6o/FI
           uEOWpQhGYHMC0A==
           -----END CERTIFICATE-----
-
-  - name: "vscode"
-    image: "rhel-9.5"
-    memory: "4G"
-    cores: 2
-    image_size: "15Gi"
-    tags:
-      - key: "AnsibleGroup"
-        value: "isolated"
-    networks:
-      - default
-    services:
-      - name: vscode-8080
-        ports:
-          - port: 8080
-            protocol: TCP
-            targetPort: 8080
-            name: vscode
-    routes:
-      - name: vscode-8080
-        host: vscode
-        service: vscode-8080
-        targetPort: 8080
-        tls: true  ## To resolve https/http Framing
-        tls_termination: Edge ## To resolve https/http Framing
-    userdata: |-
-      #cloud-config
-      user: rhel
-      password: ansible123!
-      chpasswd: { expire: False }
-      runcmd:
-        - sed -i "s/PasswordAuthentication no/PasswordAuthentication yes/" /etc/ssh/sshd_config
-        - systemctl reload sshd
