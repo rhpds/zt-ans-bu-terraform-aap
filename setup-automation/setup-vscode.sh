@@ -318,4 +318,4 @@ cat > /tmp/test.yml << EOF
 
 EOF
 
-ansible-playbook /tmp/test.yml
+#ansible-playbook /tmp/test.yml
