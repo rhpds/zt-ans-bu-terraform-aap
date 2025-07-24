@@ -241,7 +241,7 @@ tee /tmp/setup.yml << EOF
         organization: "Default"
         state: present
         scm_type: git
-        scm_url: https://github.com/HichamMourad/terraform-aap
+        scm_url: https://gitea:3000/terraform-aap.git
         default_environment: "Terraform Execution Environment"
         controller_username: admin
         controller_password: ansible123!
