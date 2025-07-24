@@ -64,45 +64,45 @@ containers:
         tls: true
         tls_termination: Edge
 
-  - name: code-server
-    image: codercom/code-server:latest
-    command: [ "code-server" ]
-    args: [ "--auth", "none", "--user-data-dir", "/home/coder/.local/share/code-server", "--extensions-dir", "/home/coder/.local/share/code-server/extensions", "--bind-addr", "0.0.0.0:8080", "/home/coder/project" ]
-    ports:
-      - name: code-server
-        containerPort: 8080
-        protocol: TCP
-    volumeMounts:
-      - name: code-storage
-        mountPath: /home/coder/
-    volumes:
-      - name: code-storage
-        emptyDir: {}
-    memory: 2Gi
-    environment:
-      HOME: "/home/coder"
-    services:
-      - name: code-server
-        ports:
-          - port: 8080
-            protocol: TCP
-            targetPort: 8080
-            name: code-server
-    routes:
-      - name: code-server
-        host: code-server
-        service: code-server
-        targetPort: 8080
-        tls: true
-        tls_termination: Edge
-    commands:
-      - git clone http://gitea:gitea@gitea:3000/student/aap25-roadshow-content.git /home/coder/project
-      - sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
-      - wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
-      - echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-      - sudo apt update && sudo apt-get install terraform
-      - git config --global user.name codeserver
-      - git config --global user.email code@server.com
+  # - name: code-server
+  #   image: codercom/code-server:latest
+  #   command: [ "code-server" ]
+  #   args: [ "--auth", "none", "--user-data-dir", "/home/coder/.local/share/code-server", "--extensions-dir", "/home/coder/.local/share/code-server/extensions", "--bind-addr", "0.0.0.0:8080", "/home/coder/project" ]
+  #   ports:
+  #     - name: code-server
+  #       containerPort: 8080
+  #       protocol: TCP
+  #   volumeMounts:
+  #     - name: code-storage
+  #       mountPath: /home/coder/
+  #   volumes:
+  #     - name: code-storage
+  #       emptyDir: {}
+  #   memory: 2Gi
+  #   environment:
+  #     HOME: "/home/coder"
+  #   services:
+  #     - name: code-server
+  #       ports:
+  #         - port: 8080
+  #           protocol: TCP
+  #           targetPort: 8080
+  #           name: code-server
+  #   routes:
+  #     - name: code-server
+  #       host: code-server
+  #       service: code-server
+  #       targetPort: 8080
+  #       tls: true
+  #       tls_termination: Edge
+  #   commands:
+  #     - git clone http://gitea:gitea@gitea:3000/student/aap25-roadshow-content.git /home/coder/project
+  #     - sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
+  #     - wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+  #     - echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+  #     - sudo apt update && sudo apt-get install terraform
+  #     - git config --global user.name codeserver
+  #     - git config --global user.email code@server.com
 
 virtualmachines:
   - name: "control"
