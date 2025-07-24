@@ -6,62 +6,62 @@ rpm -Uhv https://${SATELLITE_URL}/pub/katello-ca-consumer-latest.noarch.rpm
 subscription-manager register --org=${SATELLITE_ORG} --activationkey=${SATELLITE_ACTIVATIONKEY}
 setenforce 0
 
-cat > /tmp/requirements.yml << EOF
----
-- name: vscode-server
-  src: https://github.com/redhat-cop/agnosticd
-  scm: git
-  version: development
-  path: ansible/roles/vscode-server
-EOF
+# cat > /tmp/requirements.yml << EOF
+# ---
+# - name: vscode-server
+#   src: https://github.com/redhat-cop/agnosticd
+#   scm: git
+#   version: development
+#   path: ansible/roles/vscode-server
+# EOF
 
 
-cat >> /tmp/vscode.yml << EOF
-- hosts: localhost
-  become: true
-  tasks:
-    - name: Configure VS Code Server
-      include_role:
-        name: vscode-server
-      vars:
-        vscode_server_version: "4.95.3"
-        vscode_server_rpm_url: >-
-          https://github.com/coder/code-server/releases/download/v{{ vscode_server_version }}/code-server-{{ vscode_server_version }}-amd64.rpm
-        install_vscode_server: true
-        vscode_server_install_nginx: true
-        vscode_use_automationcontroller_nginx: false
-        vscode_server_nginx_https_port: 8443
-        vscode_server_ansible_become: true
-        vscode_user_workspace_path: "/home/{{ student_name }}"
-        vscode_auth_type: password
-        vscode_user_name: "{{ student_name }}"
-        vscode_user_password: "{{ common_password }}"
-        vscode_server_hostname: "{{ groups['bastions'][0].split('.')[0] }}.{{ guid }}.{{ sandbox_zone }}"
-        vscode_ansible_python_interpreter: /usr/libexec/platform-python
-        vscode_server_default_extensions: []
-        vscode_server_extension_urls:
-          - https://github.com/ansible/workshops/raw/devel/files/bierner.markdown-preview-github-styles-0.1.6.vsix
-          - https://github.com/ansible/workshops/raw/devel/files/hnw.vscode-auto-open-markdown-preview-0.0.4.vsix
-          - https://github.com/ansible/workshops/raw/devel/files/redhat.ansible-0.4.5.vsix
-        vscode_server_additional_settings: |
-          "files.exclude": {
-            "**/.git": true,
-            "**/.kube": true,
-            "**/.bash*": true,
-            "**/.vim*": true,
-            "**/.ssh": true,
-            "**/.vscode": true,
-            "**/.local": true,
-            "**/.config": true,
-            "**/.ansible": true,
-            "**/.cache": true },
-          "security.workspace.trust.enabled": false
-EOF
+# cat >> /tmp/vscode.yml << EOF
+# - hosts: localhost
+#   become: true
+#   tasks:
+#     - name: Configure VS Code Server
+#       include_role:
+#         name: vscode-server
+#       vars:
+#         vscode_server_version: "4.95.3"
+#         vscode_server_rpm_url: >-
+#           https://github.com/coder/code-server/releases/download/v{{ vscode_server_version }}/code-server-{{ vscode_server_version }}-amd64.rpm
+#         install_vscode_server: true
+#         vscode_server_install_nginx: true
+#         vscode_use_automationcontroller_nginx: false
+#         vscode_server_nginx_https_port: 8443
+#         vscode_server_ansible_become: true
+#         vscode_user_workspace_path: "/home/{{ student_name }}"
+#         vscode_auth_type: password
+#         vscode_user_name: "{{ student_name }}"
+#         vscode_user_password: "{{ common_password }}"
+#         vscode_server_hostname: "{{ groups['bastions'][0].split('.')[0] }}.{{ guid }}.{{ sandbox_zone }}"
+#         vscode_ansible_python_interpreter: /usr/libexec/platform-python
+#         vscode_server_default_extensions: []
+#         vscode_server_extension_urls:
+#           - https://github.com/ansible/workshops/raw/devel/files/bierner.markdown-preview-github-styles-0.1.6.vsix
+#           - https://github.com/ansible/workshops/raw/devel/files/hnw.vscode-auto-open-markdown-preview-0.0.4.vsix
+#           - https://github.com/ansible/workshops/raw/devel/files/redhat.ansible-0.4.5.vsix
+#         vscode_server_additional_settings: |
+#           "files.exclude": {
+#             "**/.git": true,
+#             "**/.kube": true,
+#             "**/.bash*": true,
+#             "**/.vim*": true,
+#             "**/.ssh": true,
+#             "**/.vscode": true,
+#             "**/.local": true,
+#             "**/.config": true,
+#             "**/.ansible": true,
+#             "**/.cache": true },
+#           "security.workspace.trust.enabled": false
+# EOF
 
-dnf install ansible-core nano git -y
+# dnf install ansible-core nano git -y
 
-ansible-galaxy install -r /tmp/requirements.yml
-ansible-playbook /tmp/vscode.yml
+# ansible-galaxy install -r /tmp/requirements.yml
+# ansible-playbook /tmp/vscode.yml
 
 
 
