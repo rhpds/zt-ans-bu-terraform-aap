@@ -64,41 +64,41 @@ containers:
         tls: true
         tls_termination: Edge
 
-  - name: code-server
-    image: quay.io/nmartins/vscode-srv-fedora
-    # command: [ "code-server" ]
-    # args: [ "--auth", "none", "--user-data-dir", "/home/coder/.local/share/code-server", "--extensions-dir", "/home/coder/.local/share/code-server/extensions", "--bind-addr", "0.0.0.0:8080", "/home/coder/project" ]
-    ports:
-      - name: code-server
-        containerPort: 8080
-        protocol: TCP
-    volumeMounts:
-      - name: code-storage
-        mountPath: /home/coder/
-    volumes:
-      - name: code-storage
-        emptyDir: {}
-    memory: 2Gi
-    environment:
-      HOME: "/home/coder"
-    services:
-      - name: code-server
-        ports:
-          - port: 8080
-            protocol: TCP
-            targetPort: 8080
-            name: code-server
-    routes:
-      - name: code-server
-        host: code-server
-        service: code-server
-        targetPort: 8080
-        tls: true
-        tls_termination: Edge
-    commands:
-      - git clone http://gitea:gitea@gitea:3000/student/aap25-roadshow-content.git /home/coder/project
-      - git config --global user.name codeserver
-      - git config --global user.email code@server.com
+  # - name: code-server
+  #   image: quay.io/nmartins/vscode-srv-fedora
+  #   # command: [ "code-server" ]
+  #   # args: [ "--auth", "none", "--user-data-dir", "/home/coder/.local/share/code-server", "--extensions-dir", "/home/coder/.local/share/code-server/extensions", "--bind-addr", "0.0.0.0:8080", "/home/coder/project" ]
+  #   ports:
+  #     - name: code-server
+  #       containerPort: 8080
+  #       protocol: TCP
+  #   volumeMounts:
+  #     - name: code-storage
+  #       mountPath: /home/coder/
+  #   volumes:
+  #     - name: code-storage
+  #       emptyDir: {}
+  #   memory: 2Gi
+  #   environment:
+  #     HOME: "/home/coder"
+  #   services:
+  #     - name: code-server
+  #       ports:
+  #         - port: 8080
+  #           protocol: TCP
+  #           targetPort: 8080
+  #           name: code-server
+  #   routes:
+  #     - name: code-server
+  #       host: code-server
+  #       service: code-server
+  #       targetPort: 8080
+  #       tls: true
+  #       tls_termination: Edge
+  #   commands:
+  #     - git clone http://gitea:gitea@gitea:3000/student/aap25-roadshow-content.git /home/coder/project
+  #     - git config --global user.name codeserver
+  #     - git config --global user.email code@server.com
 
 virtualmachines:
   - name: "control"
