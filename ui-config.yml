@@ -22,7 +22,7 @@ tabs:
     url: https://control-${guid}.${domain}/
   - name: vscode
     url: https://vscode-${guid}.${domain}
-    external: true
+    external: false
   - name: ">_ control"
     url: /wetty
   - name: Cloud (PoC)
