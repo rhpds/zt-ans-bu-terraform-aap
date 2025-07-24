@@ -135,27 +135,27 @@ virtualmachines:
           uEOWpQhGYHMC0A==
           -----END CERTIFICATE-----
   - name: "vscode"
-    image: "rhel-9.5"
+    image: "devtools-ansible"
     memory: "4G"
     cores: 2
-    image_size: "30Gi"
+    image_size: "20Gi"
     tags:
       - key: "AnsibleGroup"
         value: "isolated"
     networks:
       - default
     services:
-      - name: vscode-8443
+      - name: vscode-htpp
         ports:
-          - port: 8443
+          - port: 80
             protocol: TCP
-            targetPort: 8443
+            targetPort: 80
             name: vscode
     routes:
-      - name: vscode-8443
+      - name: vscode-http
         host: vscode
-        service: vscode-8443
-        targetPort: 8443
+        service: vscode-http
+        targetPort: 80
         tls: true
         tls_termination: Edge
     userdata: |-
