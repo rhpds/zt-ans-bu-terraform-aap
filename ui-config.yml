@@ -21,7 +21,7 @@ tabs:
   - name: aap
     url: https://control-${guid}.${domain}/
   - name: vscode
-    url: https://vscode-${guid}.${domain}:8080/editor/
+    url: https://vscode-${guid}.${domain}
   - name: ">_ control"
     url: /wetty
   - name: Cloud (PoC)
