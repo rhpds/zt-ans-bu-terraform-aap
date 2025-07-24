@@ -63,6 +63,7 @@ containers:
         targetPort: 3000
         tls: true
         tls_termination: Edge
+
   - name: code-server
     image: codercom/code-server:latest
     command: [ "code-server" ]
@@ -96,6 +97,9 @@ containers:
         tls_termination: Edge
     commands:
       - git clone http://gitea:gitea@gitea:3000/student/aap25-roadshow-content.git /home/coder/project
+      - git config --global user.name codeserver
+      - git config --global user.email code@server.com
+
 virtualmachines:
   - name: "control"
     image: "base-zero-aap-2.5-container-ce"
