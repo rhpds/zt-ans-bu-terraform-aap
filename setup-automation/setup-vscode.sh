@@ -318,5 +318,4 @@ cat > /tmp/test.yml << EOF
 
 EOF
 
-su - rhel -c '/tmp/ansible-playbook test.yml'
-
+ansible-playbook /tmp/test.yml
