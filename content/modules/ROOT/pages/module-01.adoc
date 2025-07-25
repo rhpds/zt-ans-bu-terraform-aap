@@ -1,7 +1,7 @@
 = Terraform & Red Hat Ansible Automation Platform 2.5 Lab Guide
 :doctype: book
 :toc: left
-:toclevels: 3
+:toclevels: 1
 :sectanchors:
 :sectlinks:
 :sectnums:
