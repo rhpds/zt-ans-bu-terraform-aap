@@ -19,7 +19,11 @@ cert: false
 EOF
 
 systemctl start code-server
-dnf install unzip nano git -y 
+dnf install unzip nano git podman -y 
+
+## Configure sudoers for rhel user
+echo "%rhel ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/rhel_sudoers
+chmod 440 /etc/sudoers.d/rhel_sudoers
 
 # Setup rhel user
 cp -a /root/.ssh/* /home/rhel/.ssh/.
@@ -156,4 +160,5 @@ su - rhel -c "aws s3api create-bucket --bucket $BUCKET_NAME --region $AWS_DEFAUL
 ########
 ## install python3 libraries needed for the Cloud Report
 dnf install -y python3-pip python3-libsemanage
+
 
