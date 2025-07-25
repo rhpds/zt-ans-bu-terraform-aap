@@ -2,7 +2,7 @@
 echo "Starting module called module-04" >> /tmp/progress.log
 
 #
-wget https://raw.githubusercontent.com/HichamMourad/terraform-aap/refs/heads/main/images/2main.tf -P /tmp/
+wget https://raw.githubusercontent.com/ansible-tmm/terraform-aap/refs/heads/main/images/2main.tf -P /tmp/
 mv /tmp/2main.tf /home/rhel/lab_exercises/2.Terraform_Ansible/main.tf
 #
 #
