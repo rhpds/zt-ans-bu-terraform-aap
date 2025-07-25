@@ -183,7 +183,7 @@ RUNAS="sudo -u rhel"
 cd /tmp || exit 1
 #Runs bash with commands in the here-document as the `rhel` user
 $RUNAS bash<<'EOF'
-podman login --username lab-aapongcp --password ansible123! registry.redhat.io
+podman login --username $REG_USER --password $REG_PASS registry.redhat.io
 podman pull registry.redhat.io/ansible-automation-platform-25/ee-minimal-rhel8:latest
 loginctl enable-linger rhel
 EOF
