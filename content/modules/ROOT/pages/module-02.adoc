@@ -1,6 +1,7 @@
 = Creating a Terraform-enabled Execution Environment in Ansible Automation Platform
 :doctype: book
 :toc:
+:toclevels: 1
 :toc-title: Table of Contents
 :source-highlighter: rouge
 :icons: font
