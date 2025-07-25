@@ -1,68 +1,593 @@
+= Terraform & Red Hat Ansible Automation Platform 2.5 Lab Guide
 :doctype: book
+:toc: left
+:toclevels: 1
+:sectanchors:
+:sectlinks:
+:sectnums:
+:source-highlighter: highlight.js
+
+[.text-center]
+image:https://github.com/HichamMourad/terraform-aap/blob/main/images/main.png?raw=true[Main Image,600,align="center",style="border: 2px solid black"]
+
+[.text-center]
+*Welcome! Grab a coffee or tea, sit back and relax. You can get your hands dirty in a few minutes.*
+
+[IMPORTANT]
+====
+Please be patient as we build and connect all the components of this lab together.
+====
+
+== Overview
+
+Terraform is a powerful tool for deploying cloud infrastructure using Infrastructure as Code (IaC). It allows us to define infrastructure and then build, change, and destroy these resources systematically.
+
+While Terraform is excellent for infrastructure deployment, adding Ansible to the mix brings Configuration as Code (CaC) to the party, adding significant value to your automation journey!
+
+[.text-center]
+image:https://github.com/HichamMourad/terraform-aap/blob/main/images/main.png?raw=true[Terraform and Ansible Integration,800,align="center",style="border: 2px solid black"]
+
+[.lab-info]
+--
+*Estimated time to complete:* 45 minutes
+--
+
+== Lab Objectives
+
+Welcome to the `Terraform and Ansible Automation Platform` lab. In the following challenges and tasks, we will guide you through using Ansible Automation Platform and Terraform together to trigger Terraform infrastructure creation from a central automation tool (Ansible Automation Platform).
+
+By the end of this lab, you will learn:
+
+* How to configure the Terraform Backend Credential in Ansible Automation Platform
+* How to configure the Terraform Inventory
+* How to create Ansible job templates and run them to create AWS resources using Terraform
+* How to integrate Terraform with Ansible Automation Platform for seamless infrastructure management
 
 '''
 
-Create a Terraform-enabled Execution Environment teaser: In this challenge you will create an Execution Environment that will enable   Terraform usage in Ansible Automation Platform notes:
+== Task 1: Configure the Terraform Backend Credential in Ansible Automation Platform
 
-# Create a Terraform-enabled Execution Environment
+=== Understanding the Terraform Backend Credential Type
 
-## What is an Execution Environment?
-All automation in Red Hat Ansible Automation Platform runs on container images called automation execution environments.
-Automation execution environments create a common language for communicating automation dependencies, and offer a standard way to build and distribute the automation environment.
+The `Terraform Backend Credential Type` enables secure storage of configuration for any remote Terraform backend in Ansible Automation Platform. This allows Ansible Automation Platform to access the Terraform State File wherever you choose to store it.
 
-In the previous challenge an Execution Environment called `Terraform Execution Environment` was already created for you.
+In this lab, you will store the Terraform State File on an AWS S3 storage bucket.
 
-*To use Terraform in YOUR Ansible Automation Platform environment you must create and Execution Environment* that includes the Cloud Terraform collection, the Terraform binary, other cloud collections, and other dependencies.
-*Hence, why you will learn how to create an Execution Environment.*
+=== Step 1: Login to AWS and Retrieve the S3 Bucket Name
 
-The tool needed to create an `execution environment` is called `ansible-builder`
+Before configuring the `Terraform Backend Credential` in Ansible Automation Platform, we need to identify the S3 bucket name where the Terraform state files will be stored.
 
-👋 Challenge introduction.
+**1.** Click on the `AWS Console` tab at the top of the lab.
 
-Estimated time to complete: _30 minutes_
+**2.** Note your temporary AWS account details (you'll need these now and later).
 
-* In this challenge you will learn
- ** How to create the necessary configuration files needed to create an execution environment
- ** How to create the execution environment container image using the `ansbile-builder` tool
- ** How to add the new execution environment to Ansible Automation Platform
+[.text-center]
+image::https://github.com/HichamMourad/terraform-aap/blob/main/images/awsconsole.png?raw=true[AWS Console Tab,800,align="center",style="border: 2px solid black"]
 
-== Execution Environments
+**3.** Launch the AWS console from the `Account ID` launch link.
 
-*_To run Terraform commands from within Ansible Automation Platform, you will need to create an execution environment that contains the Terraform binary and the Red Hat certified collection for Terraform.
-This is easy to do using https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/latest/html/creating_and_using_execution_environments/assembly-using-builder[ansible-builder]._*
+**4.** Login with the provided AWS credentials.
 
-In this challenge you will create an execution environment containing everything you need to run Terraform from the Ansible Automation Platform.
+[.text-center]
+image::https://github.com/HichamMourad/terraform-aap/blob/main/images/awslogin.png?raw=true[AWS Login,800,align="center",style="border: 2px solid black"]
 
-____
-`[NOTE]` You can perform the following steps at the TERMINAL, or in Visual Studio Code (VSCode).
-In VSCode you can open a terminal prompt.
-Choose either the `TERMINAL` tab, or the `VSCODE` tab from the top of the lab screen.
-We will walk through the steps using the `TERMINAL` but please feel free to do this in the `VSCODE` tab if you are more comfortable there!
-____
+**5.** Upon login to AWS, type `S3` in the search field and select the S3 service.
 
-[[task1]]
-= ☑️ Task 1 - Create the configuration files for the execution environment
+**6.** In the S3 service, you will see the existing S3 storage bucket that we've already created for you.
 
-To create an execution environment with `ansible-builder`, we need an execution environment definition file.
-The file name will be `execution-environment.yml`
+**7.** Make note of the bucket name - it will start with `aap-tf-bucket-###aLongListofCharacters###`.
 
-Go to the `TERMINAL`  tab at the top of the lab to open the terminal prompt.
-You will be in the `/home/rhel` folder
+[TIP]
+====
+We will need this bucket name shortly for the backend configuration.
+====
 
-Change to the folder named `/home/rhel/terraform-ee`
+[.text-center]
+image:https://github.com/HichamMourad/terraform-aap/blob/main/images/awss3name.png?raw=true[S3 Bucket Name,800,align="center",style="border: 2px solid black"]
 
+=== Step 2: Create the Terraform Backend Credential in Ansible Automation Platform
+
+**1.** Click on the `Ansible Automation Platform` tab at the top of the lab.
+
+**2.** Log in using the following credentials:
+   * *Username:* `admin`
+   * *Password:* `ansible123!`
+
+[NOTE]
+====
+Credentials are utilized for authentication when launching jobs against machines, synchronizing with inventory sources, and importing project content from version control systems.
+
+In this lab, we have created several different credentials:
+
+* `AWS_Credential` - AWS credential for performing actions on AWS cloud (creating VPCs, instances, etc.)
+* `SSH Controller Credentials` - SSH key for the Ansible Automation Platform
+====
+
+**3.** Navigate to credentials by expanding the `Automation Execution` menu on the left.
+
+**4.** Go to `Automation Execution` → `Infrastructure` → `Credentials`.
+
+**5.** Click on the `Credentials` link and examine the pre-configured credentials.
+
+[IMPORTANT]
+====
+The keys are encrypted, so no one (not even administrators) can see the keys once placed in Ansible Automation Platform as a credential.
+====
+
+**6.** Click on `+ Create credential`.
+
+**7.** Configure the credential with the following details:
+   * *Name:* `Terraform Backend Credential`
+   * *Credential Type:* `Terraform backend configuration` (from dropdown)
+
+**8.** In the `Backend configuration` section, enter the following details (you MUST update lines 1, 2, 4, and 5 with your specific details):
+
+[source,hcl]
+----
+bucket = "aap-tf-bucket-ALONG-LISTOF-CHARACTERS-CHANGE-ME"
+key = "YOURNAME/tfstatefile"
+region = "us-east-1"
+access_key = "YOUR-LAB-awsaccesskey-CHANGE-ME"
+secret_key = "YOUR-LAB-awssecretkey-CHANGE-ME"
+----
+
+[.text-center]
+image::https://github.com/HichamMourad/terraform-aap/blob/main/images/tfbackendcred.png?raw=true[Terraform Backend Credential,800,align="center",style="border: 2px solid black"]
+
+[WARNING]
+====
+Before clicking `Create credential`, ensure your configuration looks SIMILAR to the following example BUT WITH YOUR SPECIFIC AWS ENVIRONMENT DETAILS:
+
+[source,hcl]
+----
+bucket = "aap-tf-bucket-cfe5d5cb-b3fa-5555-555c-blahblahblah"
+key = "johnsmith/tfstatefile"
+region = "us-east-1"
+access_key = "AKBCDEBLAHBLAHBLAH"
+secret_key = "Oz8vqJsY6zFFFq83xblahblahblahblahblah"
+----
+====
+
+**9.** Click on `Create credential` to save the credential.
+
+'''
+
+== Task 2: Configure Terraform Inventory
+
+=== Understanding Terraform Inventory in Ansible Automation Platform
+
+An Inventory is a collection of hosts against which automation jobs may be launched. You can source your inventory data from external sources and cloud providers. In this case, we will be sourcing our data from Terraform, which is why we'll create a Terraform Inventory Source.
+
+=== Step 1: Create the Terraform Inventory Source
+
+**1.** Click on the `Ansible Automation Platform` tab at the top of the lab (if not already there).
+
+**2.** Navigate to inventories by expanding the `Automation Execution` menu on the left.
+
+**3.** Go to `Automation Execution` → `Infrastructure` → `Inventories`.
+
+**4.** Notice the inventory we've created for you called `Terraform Inventory`.
+
+[.text-center]
+image:https://github.com/HichamMourad/terraform-aap/blob/main/images/tfinventory1.png?raw=true[Terraform Inventory,800,align="center",style="border: 2px solid black"]
+
+**5.** Click on this inventory, then select the `Sources` tab.
+
+**6.** Click the `+ Create Source` button and enter the following details:
+
+[cols="1,2"]
+|===
+| Field | Value
+
+| Name
+| Terraform Source
+
+| Execution environment
+| Terraform Execution Environment
+
+| Source
+| Terraform State
+
+| Credential
+| Terraform Backend Credential
+
+| Verbosity
+| 0 (Warning)
+
+| Overwrite
+| ✓ Check this box
+
+| Update on launch
+| ✓ Check this box
+
+| Cache timeout (seconds)
+| 0
+
+| Source variables
+| backend_type: s3
+|===
+
+**7.** Click on `Create source` to save this new Inventory Source.
+
+**8.** Select the `Launch inventory update` button at the top to test the Terraform inventory source and the credential you created.
+
+[.text-center]
+image:https://github.com/HichamMourad/terraform-aap/blob/main/images/tfinventorysource1.png?raw=true[Terraform Inventory Source,800,align="center",style="border: 2px solid black"]
+
+**9.** Click the `Launch inventory update` button to validate the correct configuration of this inventory source.
+
+**10.** Wait for the Status to show `Success`.
+
+[.text-center]
+image:https://github.com/HichamMourad/terraform-aap/blob/main/images/tfinventorysource2.png?raw=true[Inventory Update Success,800,align="center",style="border: 2px solid black"]
+
+[NOTE]
+====
+If the inventory update doesn't succeed, please re-check and update the Terraform Backend Credential configuration.
+====
+
+'''
+
+== Task 3: Create a Job Template for Terraform AWS Provider
+
+In this task, we will create an Ansible Job Template that will kick off a Terraform project. The Terraform project will leverage the AWS provider to create an EC2 instance in your AWS cloud account.
+
+[NOTE]
+====
+Please note that you can also perform this same process with Azure and Google Cloud providers.
+====
+
+=== Step 1: Create and Launch the Job Template
+
+**1.** Click on the `Ansible Automation Platform` tab at the top of the lab (if not already there).
+
+**2.** Navigate to templates by expanding the `Automation Execution` menu on the left.
+
+**3.** Go to `Automation Execution` → `Templates`.
+
+**4.** Click on `+ Create Template`.
+
+[.text-center]
+image::https://github.com/HichamMourad/terraform-aap/blob/main/images/create_templates1st.png?raw=true[Create Template,800,align="center",style="border: 2px solid black"]
+
+**5.** Fill out the following fields:
+
+[cols="1,2"]
+|===
+| Field | Value
+
+| Name
+| Deploy AWS resources using Terraform AWS provider
+
+| Inventory
+| Terraform Inventory
+
+| Project
+| Terraform Demos Project
+
+| Playbook
+| playbooks/1deploy-terraform-aws-provider.yml
+
+| Execution environment
+| Terraform Execution Environment
+
+| Credentials
+| "AWS_Credential" AND "Terraform Backend Credential"
+|===
+
+**6.** Scroll to the bottom and click the blue `Create Job Template` button to save the job template.
+
+[.text-center]
++++<img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/create_templates2.png?raw=true" style="width:800px;margin-left:0px;border: 2px solid black">+++
+
+**7.** Launch the `Deploy AWS resources using Terraform AWS provider` job template by selecting it and clicking on `🚀 Launch template`, or by clicking the `Rocket Launcher` 🚀 icon.
+
+**8.** The job status will show `Running` momentarily.
+
+**9.** Observe the output of the Job Template run.
+
+[.text-center]
++++<img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/jtresult1.png?raw=true" style="width:800px;margin-left:0px;border: 2px solid black">+++
+
+=== Step 2: Manually Synchronize the Terraform Inventory Source
+
+**1.** Return to the `Inventories` menu in Ansible Automation Platform.
+
+**2.** Select the `Terraform Inventory`, then click on the `Hosts` menu.
+
+**3.** Notice that there is NO Terraform inventory available yet.
+
+[.text-center]
++++<img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/tfinventoryhosts1.png?raw=true" style="width:800px;margin-left:0px;border: 2px solid black">+++
+
+**4.** Click on the `Sources` menu and click on the `🚀 Launch Inventory Update` icon.
+
+[.text-center]
++++<img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/tfinventorysource3.png?raw=true" style="width:800px;margin-left:0px;border: 2px solid black">+++
+
+**5.** Return to the `Hosts` menu and notice that you now have an EC2 instance created by Terraform as part of your inventory.
+
+[.text-center]
++++<img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/tfinventoryhosts2.png?raw=true" style="width:800px;margin-left:0px;border: 2px solid black">+++
+
+[NOTE]
+====
+The inventory updates can occur automatically, but we performed this manually so you could see the before and after results in the `Hosts` tab of the `Terraform Inventory`.
+====
+
+=== Task 3 Summary
+
+In this task, you created an AAP Job Template that kicks off a Terraform Project. The Terraform Project uses the Terraform Provider for AWS to trigger the creation of AWS resources. You then synchronized the inventory source that pulled in the inventory created by Terraform. This demonstrates an excellent way to trigger Terraform Projects from Ansible Automation Platform - **A BETTER TOGETHER STORY!**
+
+=== The Terraform Project Configuration
+
+Here's the Terraform main.tf project file that was launched using Ansible Automation Platform:
+
+[source,hcl]
+----
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.2.0"
+    }
+  }
+  backend "s3" {}
+}
+
+provider "aws" {
+  region = "us-east-1"
+}
+
+# Fetch the default VPC
+data "aws_vpc" "default" {
+  default = true
+}
+
+resource "aws_instance" "tf-demo-aws-ec2-instance-1" {
+  ami           = "ami-0005e0cfe09cc9050"
+  instance_type = "t2.micro"
+  tags = {
+    Name = "tf-demo-aws-ec2-instance-1"
+  }
+}
+----
+
+'''
+
+== Task 4: Create a Job Template for Terraform AWS & AAP Providers
+
+In this task, we will create an Ansible Job Template that kicks off a Terraform project using both AWS and Ansible Automation Platform providers. **The Terraform project will create AWS resources and leverage the Ansible Automation Platform provider to push the Terraform inventory (EC2 hosts) directly into the Ansible Automation Platform inventory.**
+
+[NOTE]
+====
+Please note that you can also perform this with Azure and Google Cloud providers in the same way as demonstrated here with AWS.
+====
+
+=== Step 1: Create and Launch the Job Template
+
+**1.** Click on the `Ansible Automation Platform` tab at the top of the lab (if not already there).
+
+**2.** Navigate to templates by expanding the `Automation Execution` menu on the left.
+
+**3.** Go to `Automation Execution` → `Templates`.
+
+**4.** Click on `+ Create Template`, then scroll down and click `Create job template`.
+
+[.text-center]
++++<img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/create_templates.png?raw=true" style="width:800px;margin-left:0px;border: 2px solid black">+++
+
+**5.** Fill out the following fields:
+
+[cols="1,2"]
+|===
+| Field | Value
+
+| Name
+| Deploy AWS resources using Terraform AWS & ANSIBLE-AAP provider
+
+| Inventory
+| Terraform Inventory
+
+| Project
+| Terraform Demos Project
+
+| Playbook
+| playbooks/2deploy-terraform-ansible-provider.yml
+
+| Execution environment
+| Terraform Execution Environment
+
+| Credentials
+| "AWS_Credential" AND "Terraform Backend Credential"
+|===
+
+**6.** Scroll to the bottom and click the blue `Create Job Template` button to save the job template.
+
+**7.** Launch the `Deploy AWS resources using Terraform AWS & ANSIBLE-AAP provider` job template by selecting it and clicking on `🚀 Launch template`, or by clicking the `Rocket Launcher` 🚀 icon.
+
+**8.** The job status will show `Running` momentarily.
+
+**9.** Observe the output of the Job Template run.
+
+=== Step 2: View the Terraform Inventory
+
+**1.** Return to the `Inventories` menu in Ansible Automation Platform.
+
+**2.** Select the `Terraform Inventory`, then click on the `Hosts` menu.
+
+**3.** Notice that you now have an additional EC2 instance created by Terraform as part of your inventory.
+
+[TIP]
+====
+**The Terraform Provider for Ansible Automation Platform automatically pushed the EC2 hosts created into the Ansible Automation Platform inventory.**
+====
+
+[.text-center]
++++<img src="https://github.com/HichamMourad/terraform-aap/blob/main/images/tfinventoryhosts3.png?raw=true" style="width:800px;margin-left:0px;border: 2px solid black">+++
+
+=== Task 4 Summary
+
+In this task, you created an AAP Job Template that kicks off a Terraform Project using the Terraform Provider for Ansible Automation Platform to create AWS resources. Terraform (via the Terraform Provider for AAP) then automatically pushed the created resources into the Ansible Automation Platform Inventory.
+
+The Terraform Provider for AAP is typically used at the Terraform command line by Terraform users. Here you saw how to use it within Ansible Automation Platform. The Terraform Provider for Ansible Automation Platform can also trigger Ansible Automation Platform Job Templates, further enhancing the **BETTER TOGETHER STORY** and providing more options and choices for automators and infrastructure operators!
+
+=== The Terraform Project Configuration
+
+Here's the Terraform main.tf project file that was launched using Ansible Automation Platform:
+
+[source,hcl]
+----
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.2.0"
+    }
+
+    aap = {
+      source = "ansible/aap"
+    }
+  }
+  backend "s3" {}
+}
+
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "aws_instance" "tf-demo-aws-ec2-instance-2" {
+  ami           = "ami-0005e0cfe09cc9050"
+  instance_type = "t2.micro"
+  tags = {
+    Name = "tf-demo-aws-ec2-instance-2"
+  }
+}
+
+provider "aap" {
+  host     = "https://controller"
+  username = "admin"
+  password = "ansible123!"
+  insecure_skip_verify = true
+}
+
+resource "aap_host" "tf-demo-aws-ec2-instance-2" {
+  inventory_id = 2
+  name = "aws_instance_tf-demo-aws-ec2-instance-2"
+  description = "An EC2 instance created by Terraform"
+  variables = jsonencode(aws_instance.tf-demo-aws-ec2-instance-2)
+}
+----
+
+'''
+
+== Next Steps
+
+Congratulations! You have successfully completed the Terraform and Ansible Automation Platform integration lab. You have learned how to:
+
+✅ Configure Terraform Backend Credentials in Ansible Automation Platform
+✅ Set up Terraform Inventory sources
+✅ Create and execute job templates that trigger Terraform projects
+✅ Integrate AWS resources with Ansible Automation Platform using Terraform providers
+
+=== What You've Accomplished
+
+* **Infrastructure as Code (IaC):** You've seen how Terraform enables infrastructure provisioning through code
+* **Configuration as Code (CaC):** You've experienced how Ansible brings configuration management to the automation workflow
+* **Better Together:** You've witnessed the powerful combination of Terraform and Ansible Automation Platform working in harmony
+
+=== Additional Exploration
+
+Consider exploring these advanced topics:
+
+* Using Terraform with Azure and Google Cloud providers
+* Implementing more complex Terraform configurations
+* Leveraging Ansible Automation Platform workflows for multi-step automation
+* Exploring additional Terraform providers for comprehensive infrastructure management
+
+[IMPORTANT]
+====
+Remember to clean up any AWS resources created during this lab to avoid unnecessary charges.
+====
+
+'''
+
+== Challenge: Create a Terraform-enabled Execution Environment
+
+=== Challenge Overview
+
+In this challenge, you will create an Execution Environment that will enable Terraform usage in Ansible Automation Platform.
+
+[.lab-info]
+--
+*Estimated time to complete:* 30 minutes
+--
+
+=== What is an Execution Environment?
+
+All automation in Red Hat Ansible Automation Platform runs on container images called automation execution environments. Automation execution environments create a common language for communicating automation dependencies and offer a standard way to build and distribute the automation environment.
+
+In the previous tasks, an Execution Environment called `Terraform Execution Environment` was already created for you.
+
+[IMPORTANT]
+====
+To use Terraform in YOUR Ansible Automation Platform environment, you must create an Execution Environment that includes the Cloud Terraform collection, the Terraform binary, other cloud collections, and other dependencies. This is why you will learn how to create an Execution Environment.
+====
+
+The tool needed to create an `execution environment` is called `ansible-builder`.
+
+=== Challenge Objectives
+
+By the end of this challenge, you will learn:
+
+* How to create the necessary configuration files needed to create an execution environment
+* How to create the execution environment container image using the `ansible-builder` tool  
+* How to add the new execution environment to Ansible Automation Platform
+
+=== Execution Environments Overview
+
+*To run Terraform commands from within Ansible Automation Platform, you will need to create an execution environment that contains the Terraform binary and the Red Hat certified collection for Terraform. This is easy to do using https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/latest/html/creating_and_using_execution_environments/assembly-using-builder[ansible-builder].*
+
+In this challenge, you will create an execution environment containing everything you need to run Terraform from the Ansible Automation Platform.
+
+[NOTE]
+====
+You can perform the following steps at the TERMINAL or in Visual Studio Code (VSCode). In VSCode, you can open a terminal prompt. Choose either the `TERMINAL` tab or the `VSCODE` tab from the top of the lab screen. We will walk through the steps using the `TERMINAL`, but please feel free to use the `VSCODE` tab if you are more comfortable there!
+====
+
+'''
+
+== Task A: Create the Configuration Files for the Execution Environment
+
+To create an execution environment with `ansible-builder`, we need an execution environment definition file. The file name will be `execution-environment.yml`.
+
+=== Step 1: Navigate to the Working Directory  
+
+**1.** Go to the `TERMINAL` tab at the top of the lab to open the terminal prompt.
+
+**2.** You will be in the `/home/rhel` folder by default.
+
+**3.** Change to the folder named `/home/rhel/terraform-ee`:
+
+[source,bash]
 ----
 cd /home/rhel/terraform-ee
 ----
 
-Two empty file already exist in this folder,  `execution-environment.yml` and `requirements.yml` files.
+**4.** Note that two empty files already exist in this folder: `execution-environment.yml` and `requirements.yml`.
 
-Modify the `execution-environment.yml` file and paste into it the following contents: Use `vi` or `vim` or `nano` to modify the `execution-environment.yml` file.
+=== Step 2: Create the Execution Environment Definition File
 
+**1.** Modify the `execution-environment.yml` file using `vi`, `vim`, or `nano`:
+
+[source,bash]
 ----
 vim execution-environment.yml
 ----
 
+**2.** Paste the following contents into the file:
+
+[source,yaml]
 ----
 ---
 version: 3
@@ -88,22 +613,25 @@ additional_build_steps:
 
 This file defines the rules `ansible-builder` should use to create the execution environment container, including:
 
-. `version`: the version of ansible-builder to use
-. `images`: here you define the base image to use for the container.
-*_You are using the  `ee-minimal-rhel8:latest` base image for the build process_*
-. `dependencies`: in this section you can declare dependencies for optionally galaxy (ansible collections), python, and other system dependencies.
-Notice this section includes a statement `galaxy: requirements.yml`, this is the file used to define dependent collections found on Ansible Galaxy to be included within the Execution Environment being built
-. `additional_build_steps`: here we can list commands to be inserted into the Dockerfile/Containerfile to be executed.
-In this example, we are downloading and installing Terraform because the Terraform binary is needed for Ansible Automation Platform for playbook execution, specifically playbooks that trigger Terraform.
-`prepend_base` is to include commands to be used `before` the main build steps.
-`append_base` is to include commands to be used `after` the main build steps.
+* **version:** The version of ansible-builder to use
+* **images:** Here you define the base image to use for the container. *You are using the `ee-minimal-rhel8:latest` base image for the build process*
+* **dependencies:** In this section, you can declare dependencies for optionally galaxy (ansible collections), python, and other system dependencies. Notice this section includes a statement `galaxy: requirements.yml` - this is the file used to define dependent collections found on Ansible Galaxy to be included within the Execution Environment being built
+* **additional_build_steps:** Here we can list commands to be inserted into the Dockerfile/Containerfile to be executed. In this example, we are downloading and installing Terraform because the Terraform binary is needed for Ansible Automation Platform for playbook execution, specifically playbooks that trigger Terraform.
+  - `prepend_base` includes commands to be used *before* the main build steps
+  - `append_base` includes commands to be used *after* the main build steps
 
-Modify the file called `requirements.yml` and paste the following contents: Use `vi` or `nano` to modify the `requirements.yml` file.
+=== Step 3: Create the Requirements File
 
+**1.** Modify the file called `requirements.yml`:
+
+[source,bash]
 ----
 vim requirements.yml
 ----
 
+**2.** Paste the following contents into the file:
+
+[source,yaml]
 ----
 ---
 collections:
@@ -112,69 +640,95 @@ collections:
   - name: google.cloud
 ----
 
-This file defines the Ansible content collections you want to include in your execution environment.
+This file defines the Ansible content collections you want to include in your execution environment:
 
-. Include the `amazon.aws`, `cloud.terraform`, and `google.cloud` collections
-. This will allow Ansible playbooks to perform automation on cloud infrastructure on AWS and GCP using Terraform and Ansible Automation Platform
-. If  additional collections are desired, one would include them in the `requirements.yml` file as well
+* Include the `amazon.aws`, `cloud.terraform`, and `google.cloud` collections
+* This will allow Ansible playbooks to perform automation on cloud infrastructure on AWS and GCP using Terraform and Ansible Automation Platform
+* If additional collections are desired, you would include them in the `requirements.yml` file as well
 
-Please move ahead to the next task.
+'''
 
-[[task2]]
-= ☑️ Task 2 - Run ansible-builder
+== Task B: Run ansible-builder
 
-Run `ansible-builder` to build the execution environment container.
+Now you will run `ansible-builder` to build the execution environment container.
 
-From the terminal prompt run the following:
+=== Step 1: Build the Execution Environment
 
+**1.** From the terminal prompt, run the following command:
+
+[source,bash]
 ----
 ansible-builder build -v 3 --tag terraform-ee
 ----
 
-This will build the container image tagged with `terraform-ee`.
-This will take a few minutes, and you should see output similar to the following: image:https://github.com/HichamMourad/terraform-aap/blob/main/images/eesuccess.png?raw=true[]
+**2.** This will build the container image tagged with `terraform-ee`.
 
-To see the newly created image run the following command.
-This image was built locally.
+**3.** This process will take a few minutes, and you should see output similar to the following:
 
+[.text-center]
+image:https://github.com/HichamMourad/terraform-aap/blob/main/images/eesuccess.png?raw=true[Execution Environment Build Success,800,align="center",style="border: 2px solid black"]
+
+=== Step 2: Verify the Image Creation
+
+**1.** To see the newly created image, run the following command:
+
+[source,bash]
 ----
 podman images
 ----
 
-At this point, you would typically push the container image to a registry such as `Quay` or `Dockerhub` or your own `Private Automation Hub`.
-If you have a Quay or Dockerhub account already, feel free to create a repository, push the image as you normally would, and use it in the following steps, *_otherwise we have a pre-existing image you can pull._*
+**2.** This image was built locally and is now available for use.
 
-*_Example commands_* on how to tag and then push the Execution Environment image to Quay.io
+[TIP]
+====
+At this point, you would typically push the container image to a registry such as `Quay`, `Dockerhub`, or your own `Private Automation Hub`. If you have a Quay or Dockerhub account already, feel free to create a repository, push the image as you normally would, and use it in the following steps. *Otherwise, we have a pre-existing image you can use.*
+====
 
-`podman tag localhost/terraform-ee  quay.io/[username]/terraform-ee`
+=== Example Commands for Registry Push
 
-`podman login --username [username] --password [mypassowrd] quay.io`
+If you want to push to a registry like Quay.io, here are example commands:
 
-`podman push quay.io/[username]/terraform-ee`
+[source,bash]
+----
+podman tag localhost/terraform-ee quay.io/[username]/terraform-ee
+podman login --username [username] --password [mypassword] quay.io  
+podman push quay.io/[username]/terraform-ee
+----
 
-[[task3]]
-= ☑️ Task 3 - Add the Terraform Execution Environment to Ansible Automation Platform
+'''
+
+== Task C: Add the Terraform Execution Environment to Ansible Automation Platform
 
 Now you will add an execution environment to Ansible Automation Platform.
 
-Click on the `Ansible Automation Platform` tab at the top of lab.
-(if not already)
+=== Step 1: Access Ansible Automation Platform
 
-Log in using the following credentials: _Login credentials:_ `User:  admin` `Password:  ansible123!`
+**1.** Click on the `Ansible Automation Platform` tab at the top of the lab (if not already there).
 
-Expand the `Automation Execution` menu on the left.
+**2.** Log in using the following credentials:
+   * *Username:* `admin`
+   * *Password:* `ansible123!`
 
-Navigate to  `Automation Execution` \-> `Infrastructure` \->`` Execution Environments``.
+=== Step 2: Navigate to Execution Environments
 
-Click on `+ Create execution environment` and enter the following information.
+**1.** Expand the `Automation Execution` menu on the left.
 
+**2.** Navigate to `Automation Execution` → `Infrastructure` → `Execution Environments`.
+
+=== Step 3: Create the New Execution Environment
+
+**1.** Click on `+ Create execution environment`.
+
+**2.** Enter the following information:
+
+[cols="1,2"]
 |===
 | Field | Value
 
 | Name
 | myTerraform EE
 
-| Image
+| Image  
 | quay.io/acme_corp/terraform_ee
 
 | Pull
@@ -184,12 +738,29 @@ Click on `+ Create execution environment` and enter the following information.
 | Quay Registry Credential
 |===
 
-____
-`[NOTE]` *Since this image on Quay.io is public you don't need to create a Registry credential*
-____
+[NOTE]
+====
+Since this image on Quay.io is public, you don't need to create a Registry credential.
+====
 
-Click on `Create execution environment` to save this new Execution Environmnet.
-Yes, Yes, we're using the same image we already have, but remember, this is just to demnstrate how you would add your own created Execution Environment to Ansible Automation Platform.
-image:https://github.com/HichamMourad/terraform-aap/blob/main/images/create-ee.png?raw=true[]
+**3.** Click on `Create execution environment` to save this new Execution Environment.
 
-This Execution Environment is now available for use in Ansible Automation Platform.
+[TIP]
+====
+Yes, we're using the same image we already have, but remember, this is just to demonstrate how you would add your own created Execution Environment to Ansible Automation Platform.
+====
+
+[.text-center]
+image:https://github.com/HichamMourad/terraform-aap/blob/main/images/create-ee.png?raw=true[Create Execution Environment,800,align="center",style="border: 2px solid black"]
+
+**4.** This Execution Environment is now available for use in Ansible Automation Platform.
+
+=== Challenge Summary
+
+Congratulations! You have successfully:
+
+✅ Created the necessary configuration files for an execution environment
+✅ Built a custom execution environment using `ansible-builder`
+✅ Added the new execution environment to Ansible Automation Platform
+
+You now have the knowledge and skills to create custom execution environments tailored to your specific automation needs, including Terraform integration with Ansible Automation Platform.
