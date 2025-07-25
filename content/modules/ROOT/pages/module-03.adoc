@@ -1,66 +1,55 @@
+= Optional Challenge: Terraform Basics
 :doctype: book
+:toc:
+:toclevels: 1
+:toc-title: Table of Contents
+:source-highlighter: rouge
+:icons: font
 
-'''
+[abstract]
+This optional challenge introduces the fundamental concepts of Terraform. You will use basic Terraform commands to deploy, modify, and destroy cloud infrastructure in AWS.
 
-OPTIONAL - Terraform Basics teaser: Terraform is a fantastic tool used to provision immutable infrastructure.
-It is widely used for its declarative nature in Infrastructure as Code (IaC).
-notes:
+---
 
-# OPTIONAL - Terraform Basics
+== Overview
 
- ** Grab a Coffee/Tea
- ** Sit back and relax
- ** You can get your hands dirty in a few minutes
+Terraform is a powerful Infrastructure as Code (IaC) tool used to define, build, and manage infrastructure resources in a declarative way. This exercise will give you hands-on experience with its core workflow.
 
-*Please be patient as we build and connect all the components of this lab together* 
+👋 *Welcome!*
 
-👋 Challenge 3 introduction.
+*Estimated time to complete: 15 minutes*
 
+.In this challenge, you will learn:
+* Basic Terraform commands like `init`, `plan`, `apply`, and `destroy`.
+* How to use Terraform to deploy simple cloud infrastructure in AWS.
 
-= *_OPTIONAL CHALLENGE_*
+NOTE: You can perform the following steps in the `TERMINAL` or within the `VSCODE` tab. This guide uses the `TERMINAL`, but the commands are identical for both.
 
-Estimated time to complete: _15 minutes_
+---
 
-== OPTIONAL - Terraform Basics
+== Task 1: Initialize the Project
 
-In this challenge you will learn
-* Basic use of Terraform to deploy cloud infrastructure in AWS cloud
+The first step in any Terraform project is initialization. This process downloads the necessary provider plugins that your configuration requires.
 
-== Terraform Basics (OPTIONAL)
-
-Terraform is a great tool that uses Infrastructure as Code (IaC) to define infrastructure;
-build, change, and destroy these infrastructure resources.
-
-This challenge will introduce you to some basic Terraform concepts and to give you some experience in using Terraform to create and destroy cloud infrastructure resources.
-
-____
-`[NOTE]` You can perform the following steps at the TERMINAL, or in Visual Studio Code (VSCode).
-In VSCode you can open a terminal prompt.
-Choose either the `TERMINAL` tab, or the `VSCODE` tab from the top of the lab screen.
-We will walk through the steps using the `TERMINAL` but please feel free to do this in the `VSCODE` tab if you are more comfortable there!
-____
-
-[[task1]]
-= ☑️ Task 1 - Initialize a Terraform Project
-
-Open the `Terminal` tab from the top of the lab.
-
-Change to the `/home/rhel/lab_exercises/1.Terraform_Basics` folder
-
+. **Navigate to the exercise directory.**
++
+**Open** the `TERMINAL` tab and **change** to the `1.Terraform_Basics` folder.
++
+[source,bash]
 ----
 cd /home/rhel/lab_exercises/1.Terraform_Basics
 ----
 
-Here you will find a `main.tf` file which has been created for you.
-
-Take a quick look at this file
-
+. **Examine the configuration file.**
++
+A `main.tf` file has been created for you. **View** its contents.
++
+[source,bash]
 ----
 cat main.tf
 ----
-
-It's content will look like the following:
-
++
+[source,terraform]
 ----
 # Use AWS provider for Terraform
 provider "aws" {
@@ -70,158 +59,169 @@ provider "aws" {
 resource "aws_instance" "basic_rhel" {
   ami           = "ami-0005e0cfe09cc9050"
   instance_type = "t2.micro"
-
-  }
+}
 ----
++
+This simple configuration declares two main blocks:
++
+* `provider "aws"`: Tells Terraform you intend to work with resources in Amazon Web Services.
+* `resource "aws_instance" ...`: Declares a resource to be created—in this case, an EC2 instance using a specific Amazon Machine Image (AMI) and instance type.
 
-In this simple example, the `main.tf` file will declare a few things.
-
-* A *provider* for Terraform to work with.
-In this example the Terraform Provider in use is for AWS (Terraform Provider for AWS)
-* A *resource* to indicate the type of infrastructure resource, what AWS Machine Image (ami), and what instance type to use
-
-Initialize the Terraform Project using the following command
-
+. **Initialize Terraform.**
++
+**Run** the `terraform init` command in your terminal.
++
+[source,bash]
 ----
 terraform init
 ----
++
+Terraform will download the AWS provider and create a `.terraform` directory to store its files and a `.terraform.lock.hcl` file to lock the provider versions.
 
-This will get Terraform to download and provision the backend with what it needs for the chosen AWS provider.
+---
 
-Once this is done, run the following command
+== Task 2: Plan and Apply the Infrastructure
 
-----
-ls -al
-----
+Once initialized, you can create an execution plan and apply it to build the infrastructure.
 
-You will see the following has been created:
-
-* _.terraform_  _- This provides the backend requirements for Terraform_
-* _.terraform.lock.hcl_ - _This is the dependency lock file_
-
-Now that you have initialized this Terraform Project, go ahead and build the resource(s)!
-
-[[task2]]
-= ☑️ Task 2 - Plan and Apply the Terraform Project
-
-From the project folder you have already initialized Terraform and you can now deploy, by running the `terraform plan`, then `terraform apply` commands
-
+. **Create an execution plan.**
++
+The `terraform plan` command lets you preview the changes Terraform will make without actually applying them. The `-out` flag saves the plan to a file.
++
+**Run** the following command:
++
+[source,bash]
 ----
 terraform plan -out myMagicalInstance
 ----
++
+The output shows all the resources that will be added (`+`), changed (`~`), or destroyed (`-`).
 
-This creates a plan of your build based on the `main.tf` file you have.
-You can look at the output and see all the components being added (+) to the infrastructure plan.
-
-Next let's get Terraform to provision this plan
-
+. **Apply the plan.**
++
+Now, **execute** the plan to create the resources in AWS.
++
+[source,bash]
 ----
 terraform apply myMagicalInstance
 ----
++
+Terraform will create the EC2 instance as defined in your configuration.
 
-Terraform will now create the infrastructure you have defined in your manifest.
-You will notice that the number of resources created should reflect the number of resources specified.
-
-Run the following AWS cli command to check for running instances and to get the `instance ID`.
-Simply copy and paste this command to the terminal prompt
-
+. **Verify the instance creation.**
++
+You can **use** the AWS CLI to confirm the instance is running and get its ID.
++
+[source,bash]
 ----
 aws ec2 describe-instances --filters "Name=instance-type,Values=t2.micro" --query "Reservations[*].Instances[*].[InstanceId]" --output table --region "us-east-1"
 ----
++
+image::https://github.com/HichamMourad/terraform-aap/blob/main/images/basics1.png?raw=true[AWS CLI output showing instance ID, opts="border"]
++
+NOTE: You may see more than one instance if you have completed other challenges in this lab.
 
-image::https://github.com/HichamMourad/terraform-aap/blob/main/images/basics1.png?raw=true[]
-
-____
-`[NOTE]` *Note that you may see more than 1 instance, and that's becasue of the infrastructure you created in earlier challenges in this lab.*
-____
-
-Now, if you wanted to get detailed information about the AWS instance from Terraform you can look in the Terraform state file.
-
+. **Inspect the state file.**
++
+Terraform records the resources it manages in a state file named `terraform.tfstate`. **Examine** this file to see detailed information about the infrastructure you just provisioned.
++
+[source,bash]
 ----
 cat terraform.tfstate
 ----
 
-Here you will see only the resources created (1 ec2 instance) by this Terraform project.
-This file provides you with a wealth of information regarding the infrastructure that was just provisioned.
+TIP: You can also log in to the `AWS Console` using the tab at the top of the lab to visually confirm that the new EC2 instance has been created.
 
-*_OPTIONAL:  Login to the `AWS Console` using the tab at the top of the lab to view the resource(s) created in AWS._*
+---
 
-[[task3]]
-= ☑️ Task 3 - Make Changes to the Terraform Project
+== Task 3: Modify the Infrastructure
 
-You have created and deployed your first AWS instance with a simple Terraform project.
-What if you want to make a change of some sort?
+Making changes is a core part of the IaC lifecycle. Let's add a security group to the project.
 
-Edit the `main.tf` file and add more resources.
-*Add a security group for example, and specify ports for ingess and egress.*.
-
+. **Edit the configuration file.**
++
+**Open** `main.tf` with a text editor like `vim` and **add** the following `aws_security_group` resource block to the file.
++
+[source,bash]
 ----
 vim main.tf
 ----
-
++
+[source,terraform]
 ----
 resource "aws_security_group" "terraform_group" {
   name = "myMagicalSecGroup"
-  ingress {
-	from_port = 22
-	to_port = 22
-	protocol = "tcp"
-	cidr_blocks = ["0.0.0.0/0"]
-}
 
   ingress {
-	from_port = 80
-	to_port = 80
-	protocol = "tcp"
-	cidr_blocks = ["0.0.0.0/0"]
-}
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   egress {
-	from_port = 0
-	to_port = 0
-	protocol = "-1"
-	cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
-}
 ----
 
-Once you have made the these ADDITIONS, you will need to run `terraform plan` to update the plan.
-This will output the needed changes.
-
+. **Plan and apply the changes.**
++
+Just as before, **create** a new plan to see the intended changes and then **apply** it.
++
+[source,bash]
 ----
-terraform plan --out myMagicalInstance
+terraform plan -out myMagicalInstance
 ----
-
-You will notice in the summary that the changes have been indicated with - and + for what has been added taken away.
-Please go ahead and apply the change.
-
-Example output:  `Plan: 1 to add, 0 to change, 0 to destroy.`
-
++
+The plan summary will show `1 to add, 0 to change, 0 to destroy.`.
++
+[source,bash]
 ----
 terraform apply myMagicalInstance
 ----
++
+Terraform will create and associate the new security group.
 
-Terraform will make changes and add the additional resources specified by your `main.tf` file changes/additions.
+TIP: You can log back into the `AWS Console` to see the new security group and its ingress/egress rules.
 
-*_OPTIONAL:  Login to the `AWS Console` using the tab at the top of the lab to view the modifications that took place.
-The addition of the security group and the ingress / egress ports._*
+---
 
-[[task4]]
-= ☑️ Task 4 - Deprovisioning resources of a Terraform Project
+== Task 4: Destroy the Infrastructure
 
-Terraform makes it really simple to `clean up / remove / deprovision` the project resources.
-Since you no longer need these resources, please destroy the infrastructure resources created by the Terraform project.
-Terraform will use the build files which act as a source of truth to de-provision all infrastructure and resources.
+Terraform makes it just as easy to tear down resources as it does to create them.
 
+. **Run the destroy command.**
++
+Since these resources are no longer needed, **run** `terraform destroy`. Terraform uses the state file as a source of truth to identify and remove all managed resources.
++
+[source,bash]
 ----
 terraform destroy
 ----
++
+Terraform will ask for confirmation. **Type** `yes` and **press Enter** to proceed.
 
-You will be prompted if you want to continue, please enter `yes`.
+. **Confirm the destruction.**
++
+You will see output confirming that the EC2 instance and the security group have been destroyed.
++
+image::https://github.com/HichamMourad/terraform-aap/blob/main/images/basics2.png?raw=true[Terraform destroy output, opts="border"]
 
-Momentarily you will see confirmation of the resources destruction (1 ec2 instance, and 1 security group).
-image:https://github.com/HichamMourad/terraform-aap/blob/main/images/basics2.png?raw=true[]
+TIP: For final validation, you can check the `AWS Console` to see that the resources have been deleted.
 
-*_OPTIONAL:  Login to the `AWS Console` and validate that the AWS resource(s) have been deleted._*
+---
 
-This concludes the Terraform Basics challenge
+== Conclusion
+
+This concludes the optional Terraform Basics challenge. You have successfully used the core Terraform workflow to initialize a project, create a plan, apply changes to build and modify cloud resources, and finally destroy them.
