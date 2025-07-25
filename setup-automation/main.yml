@@ -76,6 +76,8 @@
       AWS_DEFAULT_REGION: "{{ lookup('env', 'AWS_DEFAULT_REGION') | default('AWS_DEFAULT_REGION_NOT_FOUND', true) }}"
       QUAY_USERNAME: "{{ username }}"
       QUAY_PASSWORD: "{{ password }}"
+      REG_KEY: "{{ reg_username }}"
+      REG_PASS: "{{ reg_password }}"
 
   - name: Output script result
     ansible.builtin.debug:
