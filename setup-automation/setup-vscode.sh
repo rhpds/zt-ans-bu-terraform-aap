@@ -45,7 +45,7 @@ chown rhel:rhel /home/rhel/.terraform.d/plugin-cache
 chmod -R 777 /home/rhel/lab_exercises/
 
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip -qq awscliv2.zip
+unzip -o awscliv2.zip
 sudo ./aws/install
 chown -R rhel:rhel /home/rhel/lab_exercises
 chmod -R 777 /home/rhel/lab_exercises
