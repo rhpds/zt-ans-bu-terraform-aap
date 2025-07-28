@@ -7,12 +7,6 @@
 Terraform is a fantastic tool used to provision immutable infrastructure.
 It is widely used for its declarative nature in Infrastructure as Code (IaC).
 
-* Grab a Coffee/Tea
-* Sit back and relax
-* You can get your hands dirty in a few minutes
-
-*Please be patient as we build and connect all the components of this lab together*
-
 👋 Challenge 3 introduction.
 
 
@@ -45,7 +39,7 @@ Open the `Terminal` tab from the top of the lab.
 
 Change to the `/home/rhel/lab_exercises/1.Terraform_Basics` folder
 
-[source,bash]
+[source,bash,role=execute]
 ----
 cd /home/rhel/lab_exercises/1.Terraform_Basics
 ----
@@ -54,7 +48,7 @@ Here you will find a `main.tf` file which has been created for you.
 
 Take a quick look at this file
 
-[source,bash]
+[source,bash,role=execute]
 ----
 cat main.tf
 ----
@@ -83,7 +77,7 @@ In this example the Terraform Provider in use is for AWS (Terraform Provider for
 
 Initialize the Terraform Project using the following command
 
-[source,bash]
+[source,bash,role=execute]
 ----
 terraform init
 ----
@@ -92,7 +86,7 @@ This will get Terraform to download and provision the backend with what it needs
 
 Once this is done, run the following command
 
-[source,bash]
+[source,bash,role=execute]
 ----
 ls -al
 ----
@@ -110,7 +104,7 @@ Now that you have initialized this Terraform Project, go ahead and build the res
 
 From the project folder you have already initialized Terraform and you can now deploy, by running the `terraform plan`, then `terraform apply` commands
 
-[source,bash]
+[source,bash,role=execute]
 ----
 terraform plan -out myMagicalInstance
 ----
@@ -120,7 +114,7 @@ You can look at the output and see all the components being added (+) to the inf
 
 Next let's get Terraform to provision this plan
 
-[source,bash]
+[source,bash,role=execute]
 ----
 terraform apply myMagicalInstance
 ----
@@ -131,7 +125,7 @@ You will notice that the number of resources created should reflect the number o
 Run the following AWS cli command to check for running instances and to get the `instance ID`.
 Simply copy and paste this command to the terminal prompt
 
-[source,bash]
+[source,bash,role=execute]
 ----
 aws ec2 describe-instances --filters "Name=instance-type,Values=t2.micro" --query "Reservations[*].Instances[*].[InstanceId]" --output table --region "us-east-1"
 ----
@@ -142,7 +136,7 @@ NOTE: *Note that you may see more than 1 instance, and that's becasue of the inf
 
 Now, if you wanted to get detailed information about the AWS instance from Terraform you can look in the Terraform state file.
 
-[source,bash]
+[source,bash,role=execute]
 ----
 cat terraform.tfstate
 ----
@@ -167,7 +161,7 @@ Edit the `main.tf` file and add more resources.
 vim main.tf
 ----
 
-[source,terraform]
+[source,terraform,role=execute]
 ----
 resource "aws_security_group" "terraform_group" {
   name = "myMagicalSecGroup"
@@ -197,7 +191,7 @@ resource "aws_security_group" "terraform_group" {
 Once you have made the these ADDITIONS, you will need to run `terraform plan` to update the plan.
 This will output the needed changes.
 
-[source,bash]
+[source,bash,role=execute]
 ----
 terraform plan --out myMagicalInstance
 ----
@@ -207,7 +201,7 @@ Please go ahead and apply the change.
 
 Example output:  `Plan: 1 to add, 0 to change, 0 to destroy.`
 
-[source,bash]
+[source,bash,role=execute]
 ----
 terraform apply myMagicalInstance
 ----
@@ -225,7 +219,7 @@ Terraform makes it really simple to `clean up / remove / deprovision` the projec
 Since you no longer need these resources, please destroy the infrastructure resources created by the Terraform project.
 Terraform will use the build files which act as a source of truth to de-provision all infrastructure and resources.
 
-[source,bash]
+[source,bash,role=execute]
 ----
 terraform destroy
 ----

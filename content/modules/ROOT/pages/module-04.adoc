@@ -6,13 +6,6 @@
 
 Several years ago Red Hat released a certified collection for Terraform, in   this exercise you will use some of the components at the Command Line.
 
-Welcome!!!
-* Grab a Coffee/Tea
-* Sit back and relax
-* You can get your hands dirty in a few minutes
-
-*Please be patient as we build and connect all the components of this lab together*
-
 👋 Challenge introduction.
 
 
@@ -22,9 +15,10 @@ Estimated time to complete: _30 minutes_
 
 === OPTIONAL - Terraform and the Red Hat Certified Collection for Terraform, from Ansible
 In this challenge you will learn:
+
 * How to install the Red Hat certified collection for Terraform locally (`cloud.terraform`)
 * Use `ansible-playbook` command line tool and run an Ansible playbook that will kick off a Terraform project
-* About the Terraform Provider for Ansible, and the Terraform Provider for Ansible Automation Platform
+* About the `Terraform Provider for Ansible`, and the `Terraform Provider for Ansible Automation Platform`
 
 === Certified Collections
 
@@ -54,7 +48,7 @@ Open the `Terminal` tab from the top of the lab.
 From the terminal prompt run the following command to install the `cloud.terraform` collection.
 This will pull down the collection and install it on your local machine.
 
-[source,bash]
+[source,bash,role=execute]
 ----
 ansible-galaxy collection install cloud.terraform
 ----
@@ -64,14 +58,14 @@ Please create a playbook called `deploy.yml`.
 
 Be sure you are in the following folder `/home/rhel/lab_exercises/2.Terraform_Ansible`
 
-[source,bash]
+[source,bash,role=execute]
 ----
 cd /home/rhel/lab_exercises/2.Terraform_Ansible
 ----
 
 Create the `deploy.yml` file and paste in the following text.
 
-[source,yaml]
+[source,yaml,role=execute]
 ----
 ---
 - name: Infrastructure Deployment
@@ -101,7 +95,7 @@ Create the `deploy.yml` file and paste in the following text.
 Once saved, run this playbook.
 This will create infrastructure in AWS using the Terraform manifest file provided in the current folder `/home/rhel/lab_exercises/2.Terraform_Ansible`.
 
-[source,bash]
+[source,bash,role=execute]
 ----
 ansible-playbook deploy.yml
 ----
@@ -121,7 +115,7 @@ NOTE: Please see that many resources have been created in AWS as a result of thi
 
 To remove the infrastrucre resources that were recently created by Terraform, you can simply run the Ansible playbook with the `remove` tag.
 
-[source,bash]
+[source,bash,role=execute]
 ----
 ansible-playbook deploy.yml --tags remove
 ----
@@ -149,7 +143,7 @@ Open the `Terminal` tab from the top of the lab.
 
 Change to the `/home/rhel/lab_exercises/3.Terraform_Provider` folder
 
-[source,bash]
+[source,bash,role=execute]
 ----
 cd /home/rhel/lab_exercises/3.Terraform_Provider
 ----
@@ -177,7 +171,7 @@ Feel free to use `vi` or `nano` to modify the `main.tf` file.
 
 *_AFTER_*
 
-[source,terraform]
+[source,terraform,role=execute]
 ----
 terraform {
   required_providers {
@@ -196,7 +190,7 @@ terraform {
 In the SSH key resource section you need to add your public key.
 To retrieve the public key run this at the terminal prompt:
 
-[source,bash]
+[source,bash,role=execute]
 ----
 cat  ~/.ssh/id_rsa.pub
 ----
@@ -216,7 +210,7 @@ resource "aws_key_pair"  "my_key"  {
 
 *_AFTER_*
 
-[source,terraform]
+[source,terraform,role=execute]
 ----
 # Add key for ssh connection
 resource "aws_key_pair" "my_key" {
@@ -228,7 +222,7 @@ resource "aws_key_pair" "my_key" {
 Once you have specified the Ansible provider details and added your SSH key, you need to add the Ansible host inventory details into the `main.tf`.
 Add the following section to the end of the `main.tf` file
 
-[source,terraform]
+[source,terraform,role=execute]
 ----
 resource "ansible_host" "my_ec2" {
   name   = aws_instance.my_ec2.public_dns
@@ -254,7 +248,7 @@ plugin: cloud.terraform.terraform_provider
 Let's tie it all up with a simple shell script!
 Create a `deploy.sh` bash script with the following content:
 
-[source,bash]
+[source,bash,role=execute]
 ----
 #!/bin/sh
 
@@ -279,14 +273,14 @@ This script combines a number of steps
 
 Before running the script don't forget to make it executable by running the following command at the terminal prompt:
 
-[source,bash]
+[source,bash,role=execute]
 ----
 chmod +x deploy.sh
 ----
 
 Run the shell script:
 
-[source,bash]
+[source,bash,role=execute]
 ----
  ./deploy.sh
 ----
@@ -322,7 +316,7 @@ Commercial support is available at
 
 Once the script has finished, check the Ansible inventory:
 
-[source,bash]
+[source,bash,role=execute]
 ----
 ansible-inventory -i inventory.yml --graph --vars
 ----
@@ -345,7 +339,7 @@ Using the Terraform Provider for Ansible the Ansible inventory was updated with 
 
 Clean up by issuing a `terraform destroy` command:
 
-[source,bash]
+[source,bash,role=execute]
 ----
 terraform destroy
 ----
@@ -354,7 +348,7 @@ Whem prompted to `Enter a value:` please enter `yes`
 
 Once that is done let's check the inventory again:
 
-[source,bash]
+[source,bash,role=execute]
 ----
 ansible-inventory -i inventory.yml --graph --vars
 ----
@@ -379,7 +373,7 @@ Open the `Terminal` tab from the top of the lab.
 
 Change to the `/home/rhel/lab_exercises/4.Terraform_AAP_Provider` folder
 
-[source,bash]
+[source,bash,role=execute]
 ----
 cd /home/rhel/lab_exercises/4.Terraform_AAP_Provider
 ----
@@ -398,7 +392,7 @@ Modify the `main.tf` file.
 
 *_SIMPLY UNCOMMENT THE SECTION_*
 
-[source,terraform]
+[source,terraform,role=execute]
 ----
 terraform {
   required_providers {
@@ -417,7 +411,7 @@ You need to configure the `provider` block so you can send the relevant host inf
 
 *_SIMPLY UNCOMMENT THE SECTION_*
 
-[source,terraform]
+[source,terraform,role=execute]
 ----
 provider "aap" {
   host     = "https://controller"
@@ -431,7 +425,7 @@ Next, add the `resource` block into the manifest which is what we will push to t
 
 *_SIMPLY UNCOMMENT THE SECTION_* at the very bottom of the file.
 
-[source,terraform]
+[source,terraform,role=execute]
 ----
 resource "aap_host" "tf-instance-aap-provider" {
   inventory_id = 2
@@ -445,17 +439,17 @@ Save the `main.tf` file.
 
 Now, please ``init``ialize the Terraform project, then `plan`, and lastly `apply`.
 
-[source,bash]
+[source,bash,role=execute]
 ----
 terraform init
 ----
 
-[source,bash]
+[source,bash,role=execute]
 ----
 terraform plan -out myInstanceForAAP
 ----
 
-[source,bash]
+[source,bash,role=execute]
 ----
 terraform apply myInstanceForAAP
 ----
@@ -466,10 +460,13 @@ Please remember, Terraform created the ec2 instance, and using the Terraform Pro
 
 Click on the `Ansible Automation Platform` tab at the top of lab.
 
-Log in using the following credentials: _Login credentials:_ `User:  admin`  `Password:  ansible123!`
+Log in using the following *Login Credentials:*
+
+* `User:  admin`  
+* `Password:  ansible123!`
 
 Expand the `Automation Execution` menu on the left.
-`Automation Execution` -> `Infrastructure` ->` Inventories``.
+`Automation Execution` -> `Infrastructure` -> `Inventories`.
 
 Select the `Terraform Inventory`, and then click on the `Hosts` menu.
 

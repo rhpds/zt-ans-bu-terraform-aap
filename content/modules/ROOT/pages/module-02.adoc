@@ -50,7 +50,7 @@ You will be in the `/home/rhel` folder
 
 Change to the folder named `/home/rhel/terraform-ee`
 
-[source,bash]
+[source,bash,role=execute]
 ----
 cd /home/rhel/terraform-ee
 ----
@@ -59,12 +59,12 @@ Two empty file already exist in this folder,  `execution-environment.yml` and `r
 
 Modify the `execution-environment.yml` file and paste into it the following contents: Use `vi` or `vim` or `nano` to modify the `execution-environment.yml` file.
 
-[source,bash]
+[source,bash,role=execute]
 ----
 vim execution-environment.yml
 ----
 
-[source,yaml]
+[source,yaml,role=execute]
 ----
 ---
 version: 3
@@ -102,12 +102,12 @@ In this example, we are downloading and installing Terraform because the Terrafo
 
 Modify the file called `requirements.yml` and paste the following contents: Use `vi` or `nano` to modify the `requirements.yml` file.
 
-[source,bash]
+[source,bash,role=execute]
 ----
 vim requirements.yml
 ----
 
-[source,yaml]
+[source,yaml,role=execute]
 ----
 ---
 collections:
@@ -132,7 +132,7 @@ Run `ansible-builder` to build the execution environment container.
 
 From the terminal prompt run the following:
 
-[source,bash]
+[source,bash,role=execute]
 ----
 ansible-builder build -v 3 --tag terraform-ee
 ----
@@ -145,7 +145,7 @@ image::https://github.com/HichamMourad/terraform-aap/blob/main/images/eesuccess.
 To see the newly created image run the following command.
 This image was built locally.
 
-[source,bash]
+[source,bash,role=execute]
 ----
 podman images
 ----
@@ -155,10 +155,12 @@ If you have a Quay or Dockerhub account already, feel free to create a repositor
 
 *_Example commands_* on how to tag and then push the Execution Environment image to Quay.io
 
-[source,bash]
+[source,bash,role=execute]
 ----
 podman tag localhost/terraform-ee  quay.io/[username]/terraform-ee
+
 podman login --username [username] --password [mypassowrd] quay.io
+
 podman push quay.io/[username]/terraform-ee
 ----
 
@@ -171,11 +173,14 @@ Now you will add an execution environment to Ansible Automation Platform.
 Click on the `Ansible Automation Platform` tab at the top of lab.
 (if not already)
 
-Log in using the following credentials: _Login credentials:_ `User:  admin` `Password:  ansible123!`
+Log in using the following *Login Credentials:*
+
+* `User:  admin` 
+* `Password:  ansible123!`
 
 Expand the `Automation Execution` menu on the left.
 
-Navigate to  `Automation Execution` -> `Infrastructure` ->` Execution Environments``.
+Navigate to  `Automation Execution` -> `Infrastructure` -> `Execution Environments`.
 
 Click on `+ Create execution environment` and enter the following information.
 
