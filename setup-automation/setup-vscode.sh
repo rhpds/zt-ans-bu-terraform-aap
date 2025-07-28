@@ -7,6 +7,10 @@ subscription-manager register --org=${SATELLITE_ORG} --activationkey=${SATELLITE
 setenforce 0
 echo "%rhel ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/rhel_sudoers
 chmod 440 /etc/sudoers.d/rhel_sudoers
+sudo -u rhel mkdir -p /home/rhel/.ssh
+sudo -u rhel chmod 700 /home/rhel/.ssh
+sudo -u rhel ssh-keygen -t ed25519 -C "rhel@$(hostname)" -f /home/rhel/.ssh/id_ed25519 -N ""
+sudo -u rhel chmod 600 /home/rhel/.ssh/id_ed25519*
 
 systemctl stop firewalld
 systemctl stop code-server
