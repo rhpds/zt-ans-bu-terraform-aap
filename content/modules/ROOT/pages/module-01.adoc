@@ -3,18 +3,13 @@
 '''
 
 = *Terraform & Red Hat Ansible Automation Platform 2.5*
-image:https://github.com/HichamMourad/terraform-aap/blob/main/images/main.png?raw=true[,600]
+image:https://github.com/HichamMourad/terraform-aap/blob/main/images/main.png?raw=true[]
 
-Welcome!!! Grab a Coffee/Tea, Sit back and relax, You can get your hands dirty in a few minutes
-
-
-*Please be patient as we build and connect all the components of this lab together*
+Welcome!!! 
 
 Terraform is a great tool you can use for deploying cloud infrastructure using Infrastructure as Code (IaC).
 It allows us to define infrastructure and then build, change and destroy these resources.
 Terraform can be a simple way to deploy infrastructure, however if you add Ansible into the mix you can bring Configuration as Code (CaC) to the party! and bring spice to your automation journey!
-
-image:https://github.com/HichamMourad/terraform-aap/blob/main/images/main.png?raw=true[]
 
 Estimated time to complete: _45 minutes_
 
@@ -62,7 +57,10 @@ image:https://github.com/HichamMourad/terraform-aap/blob/main/images/awss3name.p
 
 Click on the `Ansible Automation Platform` tab at the top of lab.
 
-Log in using the following credentials:  _Login credentials:_ `User:  admin` `Password:  ansible123!`
+Log in using the following *Login Credentials:*  
+
+* `User:  admin`
+* `Password:  ansible123!`
 
 Credentials are utilized for authentication when launching Jobs against machines, synchronizing with inventory sources, and importing project content from a version control system.
 In this lab, we have created some different credentials, for example.
@@ -74,7 +72,7 @@ Pretty much anything you need to perform in AWS.
 Often you will also have SSH machine credentials to gain SSH access to the Operating systems like RHEL.
 
 Expand the `Automation Execution` menu on the left.
-`Automation Execution` -> `Infrastructure` ->` Credentials``.
+`Automation Execution` -> `Infrastructure` -> `Credentials`.
 Click on the `Credentials` link and examine some of pre-configured credentials
 
 NOTE: The keys are encrypted so no one, not even an administrator, can see the keys once placed in Ansible Automation Platfrom as a credential.
@@ -87,6 +85,7 @@ NOTE: The keys are encrypted so no one, not even an administrator, can see the k
 . Update the `bucket`, `key`, `access_key`, and `secret_key` lines for your specific details
 . Click on `Create credential` to save the credential
 
+[source,sh,role=execute]
 ----
 bucket = "aap-tf-bucket-ALONG-LISTOF-CHARACTERS-CHANGE-ME"
 key = "YOURNAME/tfstatefile"
@@ -99,6 +98,7 @@ image::https://github.com/HichamMourad/terraform-aap/blob/main/images/tfbackendc
 
 WARNING: *Before you click on `Create credential` to save the `Backend configuration` section, yours will look SIMILAR to the following BUT WITH YOUR SPECIFIC AWS ENVIRONMENT DETAILS.*
 
+[source,sh]
 ----
 bucket = "aap-tf-bucket-cfe5d5cb-b3fa-5555-555c-blahblahblah"
 key = "johnsmith/tfstatefile"
@@ -123,7 +123,7 @@ Click on the `Ansible Automation Platform` tab at the top of lab.
 (if not already)
 
 Expand the `Automation Execution` menu on the left.
-`Automation Execution` -> `Infrastructure` ->` Inventories``.
+`Automation Execution` -> `Infrastructure` -> `Inventories`.
 
 Notice that there is an inventory that we've created for you called `Terraform Inventory`.
 
@@ -214,7 +214,7 @@ Fill out the following fields:
 | Terraform Execution Environment
 
 | Credentials
-| "AWS_Credential"  AND  "Terraform Backend Credential"
+| "AWS_Credential" *AND* "Terraform Backend Credential"
 |===
 
 Scroll to the bottom Click the blue `Create Job Template` button to **save** the job template.
@@ -323,7 +323,7 @@ Fill out the following fields:
 | Terraform Execution Environment
 
 | Credentials
-| "AWS_Credential"  AND  "Terraform Backend Credential"
+| "AWS_Credential"  *AND*  "Terraform Backend Credential"
 |===
 
 
