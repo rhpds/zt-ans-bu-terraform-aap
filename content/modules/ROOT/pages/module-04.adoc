@@ -414,7 +414,7 @@ You need to configure the `provider` block so you can send the relevant host inf
 [source,terraform,role=execute]
 ----
 provider "aap" {
-  host     = "https://controller"
+  host     = "https://control"
   username = "admin"
   password = "ansible123!"
   insecure_skip_verify = true

@@ -156,7 +156,7 @@ What if you want to make a change of some sort?
 Edit the `main.tf` file and add more resources.
 *Add a security group for example, and specify ports for ingess and egress.*.
 
-[source,bash]
+[source,bash,role=execute]
 ----
 vim main.tf
 ----
