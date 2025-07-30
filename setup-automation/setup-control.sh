@@ -179,45 +179,45 @@ tee /tmp/setup.yml << EOF
           username: "{{ aws_access_key }}"
           password: "{{ aws_secret_key }}"
 
-    - name: Remove Demo Inventory
-      ansible.controller.inventory:
-        controller_host: "https://localhost"
-        controller_username: admin
-        controller_password: ansible123!
-        validate_certs: false
-        name: "Demo Inventory"
-        organization: Default
-        state: absent
+    # - name: Remove Demo Inventory
+    #   ansible.controller.inventory:
+    #     controller_host: "https://localhost"
+    #     controller_username: admin
+    #     controller_password: ansible123!
+    #     validate_certs: false
+    #     name: "Demo Inventory"
+    #     organization: Default
+    #     state: absent
 
-    - name: Ensure inventory exists
-      ansible.controller.inventory:
-        controller_host: "https://localhost"
-        controller_username: admin
-        controller_password: ansible123!
-        validate_certs: false
-        name: "AWS Inventory example"
-        organization: Default
-        state: present
-      register: aws_inventory_result
+    # - name: Ensure inventory exists
+    #   ansible.controller.inventory:
+    #     controller_host: "https://localhost"
+    #     controller_username: admin
+    #     controller_password: ansible123!
+    #     validate_certs: false
+    #     name: "AWS Inventory example"
+    #     organization: Default
+    #     state: present
+    #   register: aws_inventory_result
 
-    - name: Ensure AWS EC2 inventory source exists
-      ansible.controller.inventory_source:
-        controller_host: "https://localhost"
-        controller_username: admin
-        controller_password: ansible123!
-        validate_certs: false
-        name: "AWS EC2 Instances Source"
-        inventory: "AWS Inventory example"
-        source: ec2
-        credential: "AWS Credential"
-        source_vars:
-          regions: ["{{ aws_default_region }}"]
-        overwrite: true
-        overwrite_vars: true
-        update_on_launch: true
-        update_cache_timeout: 300
-        state: present
-      register: aws_inventory_source_result
+    # - name: Ensure AWS EC2 inventory source exists
+    #   ansible.controller.inventory_source:
+    #     controller_host: "https://localhost"
+    #     controller_username: admin
+    #     controller_password: ansible123!
+    #     validate_certs: false
+    #     name: "AWS EC2 Instances Source"
+    #     inventory: "AWS Inventory example"
+    #     source: ec2
+    #     credential: "AWS Credential"
+    #     source_vars:
+    #       regions: ["{{ aws_default_region }}"]
+    #     overwrite: true
+    #     overwrite_vars: true
+    #     update_on_launch: true
+    #     update_cache_timeout: 300
+    #     state: present
+    #   register: aws_inventory_source_result
 
     - name: Add a Container Registry Credential to automation controller
       ansible.controller.credential:
