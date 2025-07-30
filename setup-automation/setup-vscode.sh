@@ -86,14 +86,14 @@ resource "aws_instance" "tf-instance-aap-provider" {
 }
 ####### UNCOMMENT the lines BELOW #######
 #provider "aap" {
-#  host     = "https://controller"
+#  host     = "https://control"
 #  username = "admin"
 #  password = "ansible123!"
 #  insecure_skip_verify = true
 #}
 ####### UNCOMMENT the lines BELOW #######
 #resource "aap_host" "tf-instance-aap-provider" {
-#  inventory_id = 2
+#  inventory_id = 3
 #  name = "aws_instance_tf"
 #  description = "An EC2 instance created by Terraform"
 #  variables = jsonencode(aws_instance.tf-instance-aap-provider)
