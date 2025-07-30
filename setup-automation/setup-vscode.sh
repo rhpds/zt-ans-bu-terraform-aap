@@ -93,7 +93,7 @@ resource "aws_instance" "tf-instance-aap-provider" {
 #}
 ####### UNCOMMENT the lines BELOW #######
 #resource "aap_host" "tf-instance-aap-provider" {
-#  inventory_id = 3
+#  inventory_id = 2
 #  name = "aws_instance_tf"
 #  description = "An EC2 instance created by Terraform"
 #  variables = jsonencode(aws_instance.tf-instance-aap-provider)
