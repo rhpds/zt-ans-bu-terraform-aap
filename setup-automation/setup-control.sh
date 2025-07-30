@@ -179,6 +179,16 @@ tee /tmp/setup.yml << EOF
           username: "{{ aws_access_key }}"
           password: "{{ aws_secret_key }}"
 
+    - name: Remove Demo Inventory
+      ansible.controller.inventory:
+        controller_host: "https://localhost"
+        controller_username: admin
+        controller_password: ansible123!
+        validate_certs: false
+        name: "Demo Inventory"
+        organization: Default
+        state: absent
+
     - name: Ensure inventory exists
       ansible.controller.inventory:
         controller_host: "https://localhost"
