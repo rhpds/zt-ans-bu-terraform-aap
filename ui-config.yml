@@ -18,14 +18,14 @@ antora:
       solveButton: false
 
 tabs:
-  - name: aap
+  - name: Ansible Automation Platform
     url: https://control-${guid}.${domain}/
   # - name: gitea
   #   url: https://gitea-${guid}.${domain}/
-  - name: vscode
+  - name: VS Ccode
     url: https://vscode-${guid}.${domain}
     external: false
-  - name: ">_ vscode"
+  - name: "TERMINAL"
     url: /wetty_vscode
-  - name: Cloud (PoC)
+  - name: Cloud (AWS)
     url: /cloud
