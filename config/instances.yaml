@@ -309,37 +309,37 @@ virtualmachines:
         - echo "PasswordAuthentication yes" > /etc/ssh/sshd_config.d/50-cloud-init.conf
         - systemctl reload sshd
 
-  # - name: "vault"
-  #   image: "vault-rhel-image-1"
-  #   memory: "16G"
-  #   cores: 2
-  #   image_size: "20Gi"
-  #   # disk_type: "scsi"
-  #   # bootloader: "efi"
-  #   tags:
-  #     - key: "AnsibleGroup"
-  #       value: "isolated"
-  #   networks:
-  #     - default
-  #   services:
-  #     - name: vault-8200
-  #       ports:
-  #         - port: 8200
-  #           protocol: TCP
-  #           targetPort: 8200
-  #           name: vault
-  #   routes:
-  #     - name: vault-8200
-  #       host: vault
-  #       service: vault-8200
-  #       targetPort: 8200
-  #       tls: true
-  #       tls_termination: Edge
-  #   userdata: |-
-  #     #cloud-config
-  #     user: rhel
-  #     password: ansible123!
-  #     chpasswd: { expire: False }
-  #     runcmd:
-  #       - echo "PasswordAuthentication yes" > /etc/ssh/sshd_config.d/50-cloud-init.conf
-  #       - systemctl reload sshd
+  - name: "vault"
+    image: "vault-rhel-image-1"
+    memory: "16G"
+    cores: 2
+    image_size: "20Gi"
+    # disk_type: "scsi"
+    # bootloader: "efi"
+    tags:
+      - key: "AnsibleGroup"
+        value: "isolated"
+    networks:
+      - default
+    services:
+      - name: vault-8200
+        ports:
+          - port: 8200
+            protocol: TCP
+            targetPort: 8200
+            name: vault
+    routes:
+      - name: vault-8200
+        host: vault
+        service: vault-8200
+        targetPort: 8200
+        tls: true
+        tls_termination: Edge
+    userdata: |-
+      #cloud-config
+      user: rhel
+      password: ansible123!
+      chpasswd: { expire: False }
+      runcmd:
+        - echo "PasswordAuthentication yes" > /etc/ssh/sshd_config.d/50-cloud-init.conf
+        - systemctl reload sshd
