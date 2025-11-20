@@ -277,7 +277,7 @@ virtualmachines:
     image: "tfe-rhel-image-1"
     memory: "16G"
     cores: 2
-    image_size: "20Gi"
+    image_size: "120Gi"
     # disk_type: "scsi"
     # bootloader: "efi"
     tags:
