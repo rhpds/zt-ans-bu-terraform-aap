@@ -207,7 +207,7 @@ virtualmachines:
         - echo "PasswordAuthentication yes" > /etc/ssh/sshd_config.d/50-cloud-init.conf
         - systemctl reload sshd
         
- - name: "vscode"
+  - name: "vscode"
     image: "devtools-ansible"
     memory: "8G"
     cores: 2
