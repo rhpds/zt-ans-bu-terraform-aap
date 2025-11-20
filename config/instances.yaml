@@ -135,10 +135,9 @@ virtualmachines:
           fH5qke1XR5LFGpndX1GuSVBhdZq94x0aGXWTQCDNIPQ3QtrQ64PBF1vRFdJ6o/FI
           uEOWpQhGYHMC0A==
           -----END CERTIFICATE-----
-
   - name: "terraform"
     image: "tfe-rhel-image-1"
-    memory: "16G"yaml
+    memory: "16G"
     cores: 2
     image_size: "120Gi"
     # disk_type: "scsi"
