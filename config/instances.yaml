@@ -154,7 +154,7 @@ virtualmachines:
           - port: 443
             protocol: TCP
             targetPort: 443
-            name: tfe-https
+            name: terraform
     routes:
       - name: tfe-https
         host: terraform
